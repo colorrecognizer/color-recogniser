@@ -5,7 +5,7 @@ import { ThemeService } from "src/app/shared/theme.service";
   selector: "app-navbar",
   templateUrl: "./navbar.component.html",
   styleUrls: ["./navbar.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class NavbarComponent {
   constructor(private $theme: ThemeService) {}

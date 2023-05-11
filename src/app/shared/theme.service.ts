@@ -18,7 +18,7 @@ export class ThemeService {
     private $ngf: NgForage
   ) {
     $ngf.getItem<boolean>(SYSTEM_THEME_USED_KEY).then((systemThemeUsed) => {
-      this._systemThemeUsed = systemThemeUsed || true;
+      this._systemThemeUsed = systemThemeUsed !== null ? systemThemeUsed : true;
       this.initTheme();
     });
   }
@@ -39,8 +39,6 @@ export class ThemeService {
   }
 
   async switchTheme() {
-    if (this._systemThemeUsed) return;
-
     if (this._theme === "light-theme") {
       this._theme = "dark-theme";
     } else {
@@ -71,6 +69,7 @@ export class ThemeService {
 
   toggleSystemThemeUsed() {
     this._systemThemeUsed = !this._systemThemeUsed;
+    this.$ngf.setItem(SYSTEM_THEME_USED_KEY, this._systemThemeUsed);
     this.initTheme();
   }
 }
