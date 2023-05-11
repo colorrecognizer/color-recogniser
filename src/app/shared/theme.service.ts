@@ -1,5 +1,5 @@
 import { DOCUMENT } from "@angular/common";
-import { Inject, Injectable, OnInit } from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 import { NgForage } from "ngforage";
 
 const THEME_KEY = "settings_theme";
