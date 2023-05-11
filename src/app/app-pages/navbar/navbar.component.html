@@ -49,7 +49,7 @@
           <i class="pi pi-angle-down ml-auto lg:ml-3"></i>
         </a>
         <ul
-          class="list-none py-3 px-6 m-0 lg:px-0 lg:py-0 border-round shadow-0 lg:shadow-2 lg:border-1 border-50 lg:absolute surface-overlay hidden origin-top w-full lg:w-15rem cursor-pointer"
+          class="list-none py-0 px-6 m-0 lg:px-0 lg:py-0 border-round shadow-0 lg:shadow-2 lg:border-1 border-50 lg:absolute surface-overlay hidden origin-top w-full lg:w-15rem cursor-pointer"
         >
           <li>
             <a
@@ -76,7 +76,7 @@
               <i class="pi pi-angle-down ml-auto lg:-rotate-90"></i>
             </a>
             <ul
-              class="list-none py-3 pl-3 m-0 lg:px-0 lg:py-0 border-round shadow-0 lg:shadow-2 lg:border-1 border-50 lg:absolute surface-overlay hidden origin-top w-full lg:w-15rem cursor-pointer left-100 top-0"
+              class="list-none py-0 pl-3 m-0 lg:px-0 lg:py-0 border-round shadow-0 lg:shadow-2 lg:border-1 border-50 lg:absolute surface-overlay hidden origin-top w-full lg:w-15rem cursor-pointer left-100 top-0"
             >
               <li>
                 <a
@@ -144,11 +144,16 @@
           <span class="block lg:hidden font-medium">Notifications</span>
         </a>
       </li>
-      <li>
+      <li class="lg:relative">
         <a
           pRipple
           class="flex px-6 p-3 lg:px-3 lg:py-2 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-colors transition-duration-150"
-          (click)="toggleTheme()"
+          pStyleClass="@next"
+          enterClass="hidden"
+          enterActiveClass="scalein"
+          leaveToClass="hidden"
+          leaveActiveClass="fadeout"
+          [hideOnOutsideClick]="true"
         >
           <i
             class="text-base lg:text-2xl mr-2 lg:mr-0"
@@ -156,8 +161,42 @@
             pBadge
             severity="danger"
           ></i>
-          <span class="block lg:hidden font-medium"> Toggle Theme </span>
+          <span class="block lg:hidden font-medium"> Theme </span>
+          <i class="pi pi-angle-down ml-auto lg:ml-3"></i>
         </a>
+        <ul
+          class="list-none py-0 px-6 m-0 lg:px-0 lg:py-0 border-round shadow-0 lg:shadow-2 lg:border-1 border-50 lg:absolute surface-overlay hidden origin-top w-full lg:w-15rem cursor-pointer right-0"
+        >
+          <li>
+            <a
+              href="#"
+              pRipple
+              class="flex p-3 align-items-center text-600 hover:text-900 hover:surface-100 transition-colors transition-duration-150"
+              (click)="toggleSystemThemeUsed()"
+            >
+              <p-checkbox
+                [ngModel]="systemThemeUsed"
+                [binary]="true"
+                inputId="binary"
+                class="-ml-1 mr-2"
+              ></p-checkbox>
+
+              <span class="font-medium"> Use system theme </span>
+            </a>
+          </li>
+          <li>
+            <a
+              *ngIf="!systemThemeUsed"
+              href="#"
+              pRipple
+              class="flex p-3 align-items-center text-600 hover:text-900 hover:surface-100 transition-colors transition-duration-150"
+              (click)="toggleTheme()"
+            >
+              <i class="mr-2" [ngClass]="themeIcon"></i>
+              <span class="font-medium"> Toggle Theme </span>
+            </a>
+          </li>
+        </ul>
       </li>
     </ul>
   </div>

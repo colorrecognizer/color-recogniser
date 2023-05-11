@@ -16,7 +16,15 @@ export class NavbarComponent {
 
   get themeIcon(): string {
     return `pi ${
-      this.$theme.getTheme() === "light-theme" ? "pi pi-sun" : "pi pi-moon"
+      this.$theme.theme === "light-theme" ? "pi pi-sun" : "pi pi-moon"
     }`;
+  }
+
+  get systemThemeUsed(): boolean {
+    return this.$theme.systemThemeUsed;
+  }
+
+  toggleSystemThemeUsed() {
+    this.$theme.toggleSystemThemeUsed();
   }
 }

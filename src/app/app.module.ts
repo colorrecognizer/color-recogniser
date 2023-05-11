@@ -6,6 +6,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { RegularlyUsedPrimengModule } from "./shared/regularly-used-primeng/regularly-used-primeng.module";
 import { DEFAULT_CONFIG, Driver, NgForageOptions } from "ngforage";
+import { FormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [AppComponent],
@@ -14,6 +15,7 @@ import { DEFAULT_CONFIG, Driver, NgForageOptions } from "ngforage";
     BrowserAnimationsModule,
     AppRoutingModule,
     RegularlyUsedPrimengModule,
+    FormsModule,
   ],
   providers: [
     // One way of configuring ngForage

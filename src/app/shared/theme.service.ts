@@ -2,32 +2,52 @@ import { DOCUMENT } from "@angular/common";
 import { Inject, Injectable, OnInit } from "@angular/core";
 import { NgForage } from "ngforage";
 
-const THEME_KEY = "theme";
+const THEME_KEY = "settings_theme";
+const SYSTEM_THEME_USED_KEY = "settings_systemThemeUsed";
 type ThemeType = "light-theme" | "dark-theme";
 
 @Injectable({
   providedIn: "root",
 })
 export class ThemeService {
-  private theme: ThemeType = "light-theme";
+  private _theme: ThemeType = "light-theme";
+  private _systemThemeUsed = true;
+
   constructor(
     @Inject(DOCUMENT) private $document: Document,
     private $ngf: NgForage
   ) {
-    $ngf.getItem<ThemeType>(THEME_KEY).then((theme) => {
-      this.theme = theme || "light-theme";
-      this.setTheme();
+    $ngf.getItem<boolean>(SYSTEM_THEME_USED_KEY).then((systemThemeUsed) => {
+      this._systemThemeUsed = systemThemeUsed || true;
+      this.initTheme();
     });
   }
 
-  async switchTheme() {
-    if (this.theme === "light-theme") {
-      this.theme = "dark-theme";
+  private initTheme() {
+    if (this._systemThemeUsed) {
+      this._theme = window?.matchMedia?.("(prefers-color-scheme:dark)")?.matches
+        ? "dark-theme"
+        : "light-theme";
+
+      this.setTheme();
     } else {
-      this.theme = "light-theme";
+      this.$ngf.getItem<ThemeType>(THEME_KEY).then((theme) => {
+        this._theme = theme || "light-theme";
+        this.setTheme();
+      });
+    }
+  }
+
+  async switchTheme() {
+    if (this._systemThemeUsed) return;
+
+    if (this._theme === "light-theme") {
+      this._theme = "dark-theme";
+    } else {
+      this._theme = "light-theme";
     }
 
-    await this.$ngf.setItem(THEME_KEY, this.theme);
+    await this.$ngf.setItem(THEME_KEY, this._theme);
     this.setTheme();
   }
 
@@ -37,11 +57,20 @@ export class ThemeService {
     ) as HTMLLinkElement;
 
     if (themeLink) {
-      themeLink.href = this.theme + ".css";
+      themeLink.href = this._theme + ".css";
     }
   }
 
-  getTheme(): ThemeType {
-    return this.theme;
+  get theme(): ThemeType {
+    return this._theme;
+  }
+
+  get systemThemeUsed(): boolean {
+    return this._systemThemeUsed;
+  }
+
+  toggleSystemThemeUsed() {
+    this._systemThemeUsed = !this._systemThemeUsed;
+    this.initTheme();
   }
 }
