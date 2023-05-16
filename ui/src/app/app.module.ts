@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import { ErrorHandler, NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
@@ -11,6 +11,10 @@ import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFireAuthModule } from "@angular/fire/compat/auth";
 import { environment } from "src/environments/environment.prod";
 import { BackButtonModule } from "./shared/back-button/back-button.module";
+import { ThemeService } from "./shared/theme.service";
+import { ConfirmationService, MessageService } from "primeng/api";
+import { HttpErrorHandlerService } from "./shared/services/http-error-handler.service";
+import { ToastModule } from "primeng/toast";
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,6 +27,7 @@ import { BackButtonModule } from "./shared/back-button/back-button.module";
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     BackButtonModule,
+    ToastModule,
   ],
   providers: [
     // One way of configuring ngForage
@@ -36,6 +41,12 @@ import { BackButtonModule } from "./shared/back-button/back-button.module";
           Driver.LOCAL_STORAGE,
         ],
       } as NgForageOptions,
+    },
+    MessageService,
+    ConfirmationService,
+    {
+      provide: ErrorHandler,
+      useClass: HttpErrorHandlerService,
     },
   ],
   bootstrap: [AppComponent],
