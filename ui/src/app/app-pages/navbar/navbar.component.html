@@ -144,6 +144,8 @@
           <span class="block lg:hidden font-medium">Notifications</span>
         </a>
       </li>
+
+      <!-- Theme -->
       <li class="lg:relative">
         <a
           pRipple
@@ -154,12 +156,12 @@
           leaveToClass="hidden"
           leaveActiveClass="fadeout"
           [hideOnOutsideClick]="true"
+          pTooltip="Theme Settings"
+          tooltipPosition="left"
         >
           <i
             class="text-base lg:text-2xl mr-2 lg:mr-0"
             [ngClass]="themeIcon"
-            pBadge
-            severity="danger"
           ></i>
           <span class="block lg:hidden font-medium"> Theme </span>
           <i class="pi pi-angle-down ml-auto lg:ml-2"></i>
@@ -197,6 +199,11 @@
             </a>
           </li>
         </ul>
+      </li>
+
+      <!-- Account -->
+      <li class="lg:relative">
+        <app-account-actions></app-account-actions>
       </li>
     </ul>
   </div>

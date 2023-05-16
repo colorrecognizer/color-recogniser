@@ -7,6 +7,10 @@ import { AppComponent } from "./app.component";
 import { RegularlyUsedPrimengModule } from "./shared/regularly-used-primeng/regularly-used-primeng.module";
 import { DEFAULT_CONFIG, Driver, NgForageOptions } from "ngforage";
 import { FormsModule } from "@angular/forms";
+import { AngularFireModule } from "@angular/fire/compat";
+import { AngularFireAuthModule } from "@angular/fire/compat/auth";
+import { environment } from "src/environments/environment.prod";
+import { BackButtonModule } from "./shared/back-button/back-button.module";
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,6 +20,9 @@ import { FormsModule } from "@angular/forms";
     AppRoutingModule,
     RegularlyUsedPrimengModule,
     FormsModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    BackButtonModule,
   ],
   providers: [
     // One way of configuring ngForage
@@ -32,5 +39,6 @@ import { FormsModule } from "@angular/forms";
     },
   ],
   bootstrap: [AppComponent],
+  exports: [],
 })
 export class AppModule {}

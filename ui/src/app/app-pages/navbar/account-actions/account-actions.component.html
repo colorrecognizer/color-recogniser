@@ -1,0 +1,36 @@
+<a
+  pRipple
+  class="flex p-2 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-colors transition-duration-150"
+  pStyleClass="@next"
+  enterClass="hidden"
+  enterActiveClass="scalein"
+  leaveToClass="hidden"
+  leaveActiveClass="fadeout"
+  [hideOnOutsideClick]="true"
+  pTooltip="Login"
+  [routerLink]="loginUrl"
+>
+  <i class="pi pi-user text-base lg:text-2xl mr-2 lg:mr-0"></i>
+  <span class="block lg:hidden font-medium"> Account </span>
+  <i class="pi pi-angle-down ml-auto lg:ml-2" *ngIf="false"></i>
+</a>
+<ul
+  *ngIf="false"
+  class="list-none py-0 px-2 m-0 lg:p-0 border-round shadow-0 lg:shadow-2 lg:border-1 border-50 lg:absolute surface-overlay hidden origin-top w-full lg:w-15rem cursor-pointer right-0"
+>
+  <li>
+    <a
+      href="#"
+      pRipple
+      class="flex p-2 align-items-center text-600 hover:text-900 hover:surface-100 transition-colors transition-duration-150"
+    >
+      <p-checkbox
+        [binary]="true"
+        inputId="binary"
+        class="-ml-1 mr-2"
+      ></p-checkbox>
+
+      <span class="font-medium"> Use system theme </span>
+    </a>
+  </li>
+</ul>

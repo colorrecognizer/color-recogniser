@@ -3,10 +3,17 @@ import { CommonModule } from "@angular/common";
 import { NavbarComponent } from "./navbar.component";
 import { RegularlyUsedPrimengModule } from "src/app/shared/regularly-used-primeng/regularly-used-primeng.module";
 import { FormsModule } from "@angular/forms";
+import { AccountActionsComponent } from "./account-actions/account-actions.component";
+import { RouterModule } from "@angular/router";
 
 @NgModule({
-  declarations: [NavbarComponent],
-  imports: [CommonModule, RegularlyUsedPrimengModule, FormsModule],
+  declarations: [NavbarComponent, AccountActionsComponent],
+  imports: [
+    CommonModule,
+    RegularlyUsedPrimengModule,
+    FormsModule,
+    RouterModule,
+  ],
   exports: [NavbarComponent],
 })
 export class NavbarModule {}
