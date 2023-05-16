@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 public class ApiController {
+    @GetMapping("/test")
+    public ResponseEntity<String> test(@RequestParam String longParameter) {
+        return ResponseEntity.ok("OK!");
+    }
+
     @GetMapping("/recognise")
     public ResponseEntity<String> recognise(@RequestParam @Min(0) @Max(255) short red,
                                             @RequestParam @Min(0) @Max(255) short green,
