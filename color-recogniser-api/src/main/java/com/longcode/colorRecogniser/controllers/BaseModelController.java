@@ -2,18 +2,13 @@ package com.longcode.colorRecogniser.controllers;
 
 import com.longcode.colorRecogniser.models.BaseModel;
 import com.longcode.colorRecogniser.models.requests.SearchRequest;
-import com.longcode.colorRecogniser.services.BaseModelService;
-import com.longcode.colorRecogniser.services.ColorService;
+import com.longcode.colorRecogniser.services.modelServices.BaseModelService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Getter
 public abstract class BaseModelController<T extends BaseModel> {
