@@ -5,9 +5,7 @@ import com.longcode.colorRecogniser.models.enums.UserStatus;
 import com.longcode.colorRecogniser.utils.RegexUtils;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +18,8 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User extends BaseModel implements UserDetails {
     @Column(nullable = false, unique = true, updatable = false)
     @Pattern(regexp = RegexUtils.USERNAME)
@@ -30,12 +30,7 @@ public class User extends BaseModel implements UserDetails {
     private String email;
 
     @Column(nullable = false)
-    @Pattern(regexp = RegexUtils.PASSWORD)
     private String password;
-
-    @Column(nullable = false)
-    @Pattern(regexp = RegexUtils.PHONE_NUMBER)
-    private String phoneNumber;
 
     @ElementCollection(targetClass = UserRole.class)
     @JoinTable(name = "UserRole", joinColumns = @JoinColumn(name = "id"))

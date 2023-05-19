@@ -1,5 +1,6 @@
 package com.longcode.colorRecogniser.services.modelServices;
 
+import com.longcode.colorRecogniser.config.ApiException;
 import com.longcode.colorRecogniser.models.Token;
 import com.longcode.colorRecogniser.models.User;
 import com.longcode.colorRecogniser.models.enums.UserRole;
@@ -55,23 +56,28 @@ public class UserService extends BaseModelService<User> {
     }
 
     // Methods
-    @Transactional
+
     public AuthenticationResponse register(RegisterRequest registerRequest) {
+        User user = null;
         try {
-            findByEmail(registerRequest.getEmail());
+            user = findByEmail(registerRequest.getEmail());
         } catch (Exception ignored) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Email [%s] has been used!".formatted(registerRequest.getEmail()));
+        }
+
+        if (user != null) {
+            throw new ApiException("Email [%s] has been used!".formatted(registerRequest.getEmail()));
         }
 
         try {
-            findByUsername(registerRequest.getEmail());
+            user = findByUsername(registerRequest.getUsername());
         } catch (Exception ignored) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Email [%s] has been used!".formatted(registerRequest.getEmail()));
         }
 
-        User user = User.builder()
+        if (user != null) {
+            throw new ApiException("Email [%s] has been used!".formatted(registerRequest.getEmail()));
+        }
+
+        user = User.builder()
                 .email(registerRequest.getEmail())
                 .username(registerRequest.getUsername())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))

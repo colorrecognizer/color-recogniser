@@ -17,6 +17,7 @@ public class RegexUtils {
      * At least one special character [*.!@#$%^&(){}[]:;<>,.?/~_+-=|\].
      * At least 8 characters in length, but no more than 32.
      */
-    public static final String PASSWORD = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}[]:;<>,.?/~_+-=|\\]).{8,32}$";
+    public static final String PASSWORD = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}\\[\\\\\\]:;<>,?/~_+\\-=|]).{8,32}$";
+    //"^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*.!@$%^&(){}\[\\\]:;<>,.?/~_+\-=|]).{8,32}$"
     public static final String PHONE_NUMBER = "^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$";
 }

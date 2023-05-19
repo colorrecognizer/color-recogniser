@@ -32,13 +32,11 @@ public abstract class BaseModelService<T extends BaseModel> {
         return baseModelRepository.findAll(specification, pageable);
     }
 
-    @Transactional
     public T insert(@Valid T model) {
         model.setId(null);
         return baseModelRepository.save(model);
     }
 
-    @Transactional
     public T update(@Valid T model) {
         if (!baseModelRepository.existsById(model.getId()))
             throw new NoSuchElementException();
@@ -46,7 +44,6 @@ public abstract class BaseModelService<T extends BaseModel> {
         return baseModelRepository.save(model);
     }
 
-    @Transactional
     public void deleteById(long id) {
         baseModelRepository.deleteById(id);
     }
