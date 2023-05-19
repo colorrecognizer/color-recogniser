@@ -1,5 +1,4 @@
-export const routes = {
-    auth: {
-        login: "/auth"
-    }
+export enum RouteEnum {
+  HomePage = "",
+  AuthPage = "/auth",
 }
