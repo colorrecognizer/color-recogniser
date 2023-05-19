@@ -74,7 +74,7 @@ public class UserService extends BaseModelService<User> {
         }
 
         if (user != null) {
-            throw new ApiException("Email [%s] has been used!".formatted(registerRequest.getEmail()));
+            throw new ApiException("Username [%s] has been used!".formatted(registerRequest.getUsername()));
         }
 
         user = User.builder()

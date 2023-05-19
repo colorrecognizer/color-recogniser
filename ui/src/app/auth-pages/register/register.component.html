@@ -9,13 +9,11 @@
         [form]="form"
       ></formly-form>
 
-      <p-button
+      <app-submit-button
         label="Create new account"
         icon="pi pi-sign-in"
-        styleClass="w-full"
-        type="submit"
-        [disabled]="form.invalid"
-      ></p-button>
+        [form]="form"
+      ></app-submit-button>
     </div>
   </form>
 </div>

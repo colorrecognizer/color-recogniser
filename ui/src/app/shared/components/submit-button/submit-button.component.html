@@ -1,0 +1,14 @@
+<p-button
+  [label]="label"
+  [icon]="icon"
+  [styleClass]="styleClass"
+  type="submit"
+  [disabled]="form.invalid || form.disabled"
+>
+</p-button>
+<p-progressBar
+  *ngIf="form.disabled"
+  mode="indeterminate"
+  [style]="{ height: '6px' }"
+  styleClass="mt-2"
+></p-progressBar>

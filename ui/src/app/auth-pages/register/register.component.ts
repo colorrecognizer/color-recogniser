@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { Title } from "@angular/platform-browser";
 import { FormlyFormOptions, FormlyFieldConfig } from "@ngx-formly/core";
-import { of, switchMap } from "rxjs";
+import { finalize, of, switchMap } from "rxjs";
 import { RegisterRequest, UserApi } from "src/app/shared/auto-generated/apis";
 import { AuthService } from "src/app/shared/services/auth.service";
 import { RegexUtils, RouteEnum } from "src/app/shared/utils";
@@ -22,6 +22,19 @@ export class RegisterComponent {
   options: FormlyFormOptions = {};
   fields: FormlyFieldConfig[] = [
     {
+      key: "email",
+      type: "input",
+      props: {
+        type: "email",
+        label: "Email",
+        placeholder: "color@recogniser.com",
+        required: true,
+      },
+      validators: {
+        validation: ["email"],
+      },
+    },
+    {
       key: "username",
       type: "input",
       props: {
@@ -38,19 +51,7 @@ The first character of the username must be an alphabetic character.`,
         },
       },
     },
-    {
-      key: "email",
-      type: "input",
-      props: {
-        type: "email",
-        label: "Email",
-        placeholder: "color@recogniser.com",
-        required: true,
-      },
-      validators: {
-        validation: ["email"],
-      },
-    },
+
     {
       key: "password",
       type: "input",
@@ -86,12 +87,16 @@ At least 8 characters in length, but no more than 32.`,
   loginWithGoogle() {}
 
   register() {
+    this.form.disable();
     this.$userApi
       .register(this.model)
       .pipe(
         switchMap((res) => {
           console.log(res?.token);
           return of(undefined);
+        }),
+        finalize(() => {
+          this.form.enable();
         })
       )
       .subscribe();

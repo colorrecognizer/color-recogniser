@@ -10,7 +10,7 @@ import { FormsModule } from "@angular/forms";
 import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFireAuthModule } from "@angular/fire/compat/auth";
 import { environment } from "src/environments/environment.prod";
-import { BackButtonModule } from "./shared/back-button/back-button.module";
+import { BackButtonModule } from "./shared/components/back-button/back-button.module";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { HttpErrorHandlerService } from "./shared/services/http-error-handler.service";
 import { ToastModule } from "primeng/toast";
