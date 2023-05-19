@@ -11,7 +11,7 @@
   },
   "codeGenerators": {
     "openApiToTypeScriptClient": {
-      "className": "{controller}Controller",
+      "className": "{controller}Api",
       "moduleName": "",
       "namespace": "",
       "typeScriptVersion": 4.3,
@@ -29,7 +29,7 @@
       "generateOptionalParameters": false,
       "exportTypes": true,
       "wrapDtoExceptions": false,
-      "exceptionClass": "",
+      "exceptionClass": "ApiException",
       "clientBaseClass": "",
       "wrapResponses": false,
       "wrapResponseMethods": [],
@@ -38,7 +38,7 @@
       "protectedMethods": [],
       "configurationClass": null,
       "useTransformOptionsMethod": false,
-      "useTransformResultMethod": true,
+      "useTransformResultMethod": false,
       "generateDtoTypes": true,
       "operationGenerationMode": "MultipleClientsFromPathSegments",
       "markOptionalProperties": true,
@@ -70,7 +70,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "ui/src/app/shared/apis.ts",
+      "output": "ui/src/app/shared/auto-generated/apis.ts",
       "newLineBehavior": "Auto"
     }
   }

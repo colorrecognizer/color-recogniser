@@ -1,14 +1,13 @@
-package com.swp490_g2.hrms.repositories;
+package com.longcode.colorRecogniser.repositories;
 
 
-import com.swp490_g2.hrms.entity.Token;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.longcode.colorRecogniser.models.Token;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface TokenRepository extends JpaRepository<Token, Long> {
+public interface TokenRepository extends BaseModelRepository<Token> {
 
     @Query(value = """
       select t from Token t inner join User u\s

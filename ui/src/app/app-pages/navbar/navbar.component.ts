@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
-import { ThemeService } from "src/app/shared/theme.service";
+import { ThemeService } from "src/app/shared/services/theme.service";
 
 @Component({
   selector: "app-navbar",

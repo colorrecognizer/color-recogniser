@@ -1,0 +1,21 @@
+<div class="flex flex-column gap-2">
+  <app-back-button></app-back-button>
+  <form [formGroup]="form" (ngSubmit)="register()">
+    <div class="flex flex-column gap-2">
+      <formly-form
+        [model]="model"
+        [fields]="fields"
+        [options]="options"
+        [form]="form"
+      ></formly-form>
+
+      <p-button
+        label="Create new account"
+        icon="pi pi-sign-in"
+        styleClass="w-full"
+        type="submit"
+        [disabled]="form.invalid"
+      ></p-button>
+    </div>
+  </form>
+</div>

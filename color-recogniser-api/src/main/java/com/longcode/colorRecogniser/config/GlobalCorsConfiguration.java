@@ -1,4 +1,4 @@
-package com.swp490_g2.hrms.config;
+package com.longcode.colorRecogniser.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,0 +1,34 @@
+@import "primeflex/primeflex.scss";
+
+label {
+  span.ng-star-inserted {
+    color: var(--red-500);
+  }
+}
+
+formly-form {
+  .p-field {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  label {
+    @include styleclass("font-medium text-900");
+  }
+
+  formly-validation-message {
+    white-space: pre-wrap;
+  }
+}
+
+formly-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

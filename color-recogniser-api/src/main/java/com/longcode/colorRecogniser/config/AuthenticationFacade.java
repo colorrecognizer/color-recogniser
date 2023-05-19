@@ -1,11 +1,11 @@
-package com.swp490_g2.hrms.config;
+package com.longcode.colorRecogniser.config;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AuthenticationFacade{
+public class AuthenticationFacade {
     public Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
     }

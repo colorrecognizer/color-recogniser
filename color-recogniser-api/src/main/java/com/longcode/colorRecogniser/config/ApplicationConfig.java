@@ -1,10 +1,9 @@
-package com.swp490_g2.hrms.config;
+package com.longcode.colorRecogniser.config;
 
 
-import com.swp490_g2.hrms.common.constants.ErrorStatusConstants;
-import com.swp490_g2.hrms.common.exception.BusinessException;
-import com.swp490_g2.hrms.repositories.UserRepository;
-import lombok.RequiredArgsConstructor;
+import com.longcode.colorRecogniser.repositories.UserRepository;
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,15 +15,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-@RequiredArgsConstructor
+@Getter
 public class ApplicationConfig {
 
-    private final UserRepository repository;
+    private UserRepository repository;
 
+    @Autowired
+    public void setRepository(UserRepository repository) {
+        this.repository = repository;
+    }
+
+    // Methods
     @Bean
     public UserDetailsService userDetailsService() {
-        return email -> repository.findByEmail(email)
-                .orElseThrow(() -> new BusinessException(ErrorStatusConstants.NOT_EXISTED_USER));
+        return email -> repository.findByEmail(email).orElseThrow();
     }
 
     @Bean

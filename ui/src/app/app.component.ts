@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { PrimeNGConfig } from "primeng/api";
-import { ThemeService } from "./shared/theme.service";
+import { ThemeService } from "./shared/services/theme.service";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-root",
@@ -12,8 +13,10 @@ export class AppComponent {
 
   constructor(
     private $primengConfig: PrimeNGConfig,
-    private $theme: ThemeService
+    private $theme: ThemeService,
+    private $title: Title
   ) {
     this.$primengConfig.ripple = true;
+    $title.setTitle("Color Recogniser");
   }
 }

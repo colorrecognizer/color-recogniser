@@ -1,52 +1,90 @@
 package com.longcode.colorRecogniser.config;
 
+import com.longcode.colorRecogniser.repositories.UserRepository;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
-
-import java.util.Collection;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 
 @Configuration
 @EnableWebSecurity
 @Getter
 public class WebSecurityConfig {
+    private UserRepository userRepository;
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    private JwtAuthenticationFilter jwtAuthFilter;
+
+    @Autowired
+    public void setJwtAuthFilter(JwtAuthenticationFilter jwtAuthFilter) {
+        this.jwtAuthFilter = jwtAuthFilter;
+    }
+
+    private AuthenticationProvider authenticationProvider;
+
+    @Autowired
+    public void setAuthenticationProvider(AuthenticationProvider authenticationProvider) {
+        this.authenticationProvider = authenticationProvider;
+    }
+
+    private LogoutHandler logoutHandler;
+
+    @Autowired
+    public void setLogoutHandler(LogoutHandler logoutHandler) {
+        this.logoutHandler = logoutHandler;
+    }
+
+    // Methods
     @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .cors()
                 .and()
-                .oauth2ResourceServer().jwt()
-                .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                .csrf()
+                .disable()
+                .authorizeHttpRequests()
+                .requestMatchers(
+                        "/user/register",
+                        "/user/login",
+                        "/v3/api-docs/**",
+                        "/swagger-ui.html",
+                        "/swagger-ui/*"
+                )
+                .permitAll()
+                .anyRequest()
+                .authenticated()
                 .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .cors().and().csrf().disable();
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout()
+                .logoutUrl("/user/logout")
+                .addLogoutHandler(logoutHandler)
+                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
+        ;
 
         return http.build();
     }
 
-    private JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-
-        converter.setJwtGrantedAuthoritiesConverter(jwt ->
-                Optional.ofNullable(jwt.getClaimAsStringList("custom_claims"))
-                        .stream()
-                        .flatMap(Collection::stream)
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList())
-        );
-
-        return converter;
-    }
 }

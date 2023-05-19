@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { AuthService } from "../shared/services/auth.service";
 
 @Component({
   selector: "app-auth-pages",
@@ -7,9 +6,5 @@ import { AuthService } from "../shared/services/auth.service";
   styleUrls: ["./auth-pages.component.scss"],
 })
 export class AuthPagesComponent {
-  constructor(private $auth: AuthService) {}
 
-  loginWithGoogle() {
-    this.$auth.googleAuth();
-  }
 }

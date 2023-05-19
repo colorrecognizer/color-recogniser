@@ -4,18 +4,21 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { RegularlyUsedPrimengModule } from "./shared/regularly-used-primeng/regularly-used-primeng.module";
+import { RegularlyUsedPrimengModule } from "./shared/modules/regularly-used-primeng.module";
 import { DEFAULT_CONFIG, Driver, NgForageOptions } from "ngforage";
 import { FormsModule } from "@angular/forms";
 import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFireAuthModule } from "@angular/fire/compat/auth";
 import { environment } from "src/environments/environment.prod";
 import { BackButtonModule } from "./shared/back-button/back-button.module";
-import { ThemeService } from "./shared/theme.service";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { HttpErrorHandlerService } from "./shared/services/http-error-handler.service";
 import { ToastModule } from "primeng/toast";
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { PageNotFoundComponent } from "./page-not-found/page-not-found.component";
+import { FormlyFormModule } from "./shared/modules/formly-form.module";
+import { AuthService } from "./shared/services/auth.service";
+import { AuthGuard } from "./shared/services/auth.guard";
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
   declarations: [AppComponent, PageNotFoundComponent],
@@ -29,6 +32,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     AngularFireAuthModule,
     BackButtonModule,
     ToastModule,
+    FormlyFormModule,
+    HttpClientModule
   ],
   providers: [
     // One way of configuring ngForage
@@ -49,6 +54,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
       provide: ErrorHandler,
       useClass: HttpErrorHandlerService,
     },
+    AuthService,
+    AuthGuard
   ],
   bootstrap: [AppComponent],
   exports: [],

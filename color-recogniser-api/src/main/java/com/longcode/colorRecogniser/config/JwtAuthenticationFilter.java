@@ -1,17 +1,14 @@
-package com.swp490_g2.hrms.config;
+package com.longcode.colorRecogniser.config;
 
-
-import com.swp490_g2.hrms.repositories.TokenRepository;
-import io.jsonwebtoken.ExpiredJwtException;
+import com.longcode.colorRecogniser.repositories.TokenRepository;
+import com.longcode.colorRecogniser.services.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-import java.util.Collections;
-
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,14 +18,36 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import java.io.IOException;
+import java.util.Collections;
+
 @Component
 @RequiredArgsConstructor
+@Getter
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
-    private final TokenRepository tokenRepository;
+    private JwtService jwtService;
 
+    @Autowired
+    public void setJwtService(JwtService jwtService) {
+        this.jwtService = jwtService;
+    }
+
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    public void setUserDetailsService(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
+    private TokenRepository tokenRepository;
+
+    @Autowired
+    public void setTokenRepository(TokenRepository tokenRepository) {
+        this.tokenRepository = tokenRepository;
+    }
+
+    // Methods
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -51,15 +70,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 var isTokenValid = tokenRepository.findByToken(jwt)
                         .map(t -> !t.isExpired() && !t.isRevoked())
                         .orElse(false);
+
                 if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,
                             Collections.emptyList()
                     );
+
                     authToken.setDetails(
                             new WebAuthenticationDetailsSource().buildDetails(request)
                     );
+
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }

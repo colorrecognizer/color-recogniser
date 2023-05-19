@@ -1,0 +1,45 @@
+<div class="flex flex-column gap-2">
+  <app-back-button></app-back-button>
+
+  <div class="text-center flex flex-column gap-2">
+    <div class="text-900 text-3xl font-medium">Welcome Back</div>
+    <div class="flex flex-wrap gap-2 justify-content-center">
+      <span class="text-600 font-medium line-height-3"
+        >Don't have an account?</span
+      >
+      <a
+        class="font-medium no-underline text-blue-500"
+        [routerLink]="registerUrl"
+      >
+        Create today!
+      </a>
+    </div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="login(model)">
+    <div class="flex flex-column gap-2">
+      <formly-form
+        [model]="model"
+        [fields]="fields"
+        [options]="options"
+        [form]="form"
+      ></formly-form>
+
+      <p-button
+        label="Login"
+        icon="pi pi-sign-in"
+        styleClass="w-full"
+        type="submit"
+        [disabled]="form.invalid"
+      ></p-button>
+    </div>
+  </form>
+
+  <p-button
+    label="Login with Google"
+    icon="pi pi-google"
+    (onClick)="loginWithGoogle()"
+    [disabled]="true"
+    styleClass="w-full"
+  ></p-button>
+</div>
