@@ -8,12 +8,9 @@ import com.longcode.colorRecogniser.services.modelServices.UserService;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/user")
@@ -38,9 +35,9 @@ public class UserController extends BaseModelController<User> {
         return ResponseEntity.ok(userService.login(loginRequest));
     }
 
-    @GetMapping("/find-current-user")
-    public ResponseEntity<User> findCurrentUser() {
-        return ResponseEntity.ok(userService.findCurrentUser());
+    @GetMapping("/get-current-user")
+    public ResponseEntity<User> getCurrentUser() {
+        return ResponseEntity.ok(userService.getCurrentUser());
     }
 
 //    @GetMapping("/get-admin-contacts")

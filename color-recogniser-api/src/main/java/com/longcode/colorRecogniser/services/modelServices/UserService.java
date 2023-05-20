@@ -1,6 +1,7 @@
 package com.longcode.colorRecogniser.services.modelServices;
 
 import com.longcode.colorRecogniser.config.ApiException;
+import com.longcode.colorRecogniser.config.AuthenticationFacade;
 import com.longcode.colorRecogniser.models.Token;
 import com.longcode.colorRecogniser.models.User;
 import com.longcode.colorRecogniser.models.enums.UserRole;
@@ -15,6 +16,7 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -61,24 +63,22 @@ public class UserService extends BaseModelService<User> {
     public void setAuthenticationManager(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
+
+    private AuthenticationFacade authenticationFacade;
+
+    @Autowired
+    public void setAuthenticationFacade(AuthenticationFacade authenticationFacade) {
+        this.authenticationFacade = authenticationFacade;
+    }
     // Methods
 
     public AuthenticationResponse register(RegisterRequest registerRequest) {
-        User user = null;
-        try {
-            user = findByEmail(registerRequest.getEmail());
-        } catch (Exception ignored) {
-        }
-
+        User user = getByEmail(registerRequest.getEmail());
         if (user != null) {
             throw new ApiException("Email [%s] has been used!".formatted(registerRequest.getEmail()));
         }
 
-        try {
-            user = findByUsername(registerRequest.getUsername());
-        } catch (Exception ignored) {
-        }
-
+        user = getByUsername(registerRequest.getUsername());
         if (user != null) {
             throw new ApiException("Username [%s] has been used!".formatted(registerRequest.getUsername()));
         }
@@ -106,24 +106,22 @@ public class UserService extends BaseModelService<User> {
                 .build();
     }
 
-    private User findByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new ApiException("Cannot find user with username [%s]!".formatted(username)));
+    private User getByUsername(String username) {
+        return userRepository.findByUsername(username).orElse(null);
     }
 
-    private User findByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new ApiException("Cannot find user with email [%s]!".formatted(email)));
+    private User getByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
     }
 
     @Transactional
     public AuthenticationResponse login(LoginRequest loginRequest) {
-        var user = findByUsernameOrEmail(loginRequest.getUsernameOrEmail());
+        var user = getByUsernameOrEmail(loginRequest.getUsernameOrEmail());
 
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            user.getEmail(),
+                            user.getUsername(),
                             loginRequest.getPassword()
                     )
             );
@@ -157,12 +155,27 @@ public class UserService extends BaseModelService<User> {
         });
     }
 
-    private User findByUsernameOrEmail(String usernameOrEmail) {
-        return userRepository.findByUsernameOrEmail(usernameOrEmail)
-                .orElseThrow(() -> new ApiException("Cannot find user with username or email [%s]!".formatted(usernameOrEmail)));
+    private User getByUsernameOrEmail(String usernameOrEmail) {
+        User user = userRepository.findByUsername(usernameOrEmail).orElse(null);
+        if (user == null) {
+            user = userRepository.findByEmail(usernameOrEmail).orElse(null);
+        }
+
+        if (user == null)
+            throw new ApiException("Cannot find user with email [%s]!".formatted(usernameOrEmail));
+
+        return user;
     }
 
-    public User findCurrentUser() {
-        return null;
+    public User getCurrentUser() {
+        Authentication authentication = authenticationFacade.getAuthentication();
+        if (authentication == null)
+            return null;
+
+        String username = authentication.getName();
+        if (!authentication.isAuthenticated() || username == null)
+            return null;
+
+        return getByUsername(username);
     }
 }

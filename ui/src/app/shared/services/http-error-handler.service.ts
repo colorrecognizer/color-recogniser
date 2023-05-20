@@ -13,7 +13,9 @@ export class HttpErrorHandlerService implements ErrorHandler {
       return;
     }
 
-    if(error.isApiException) {
+    if (error.reason) {
+      error.message = error.reason;
+    } else if (error.isApiException) {
       const response = JSON.parse(error.response);
       error.message = response.reason;
     }

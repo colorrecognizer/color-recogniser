@@ -14,10 +14,10 @@ public class Token extends BaseModel {
     @Column(nullable = false, unique = true)
     private String token;
 
-    @Column(nullable = false, insertable = false)
+    @Column(nullable = false, insertable = false, columnDefinition = "BOOLEAN DEFAULT 0")
     private boolean revoked;
 
-    @Column(nullable = false, insertable = false)
+    @Column(nullable = false, insertable = false, columnDefinition = "BOOLEAN DEFAULT 0")
     private boolean expired;
 
     @ManyToOne

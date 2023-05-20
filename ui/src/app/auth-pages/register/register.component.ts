@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { Title } from "@angular/platform-browser";
+import { Router } from "@angular/router";
 import { FormlyFormOptions, FormlyFieldConfig } from "@ngx-formly/core";
 import { finalize, of, switchMap } from "rxjs";
 import { RegisterRequest, UserApi } from "src/app/shared/auto-generated/apis";
@@ -79,7 +80,8 @@ At least 8 characters in length, but no more than 32.`,
   constructor(
     private $auth: AuthService,
     private $title: Title,
-    private $userApi: UserApi
+    private $userApi: UserApi,
+    private $router: Router
   ) {
     $title.setTitle("Login");
   }
@@ -92,7 +94,7 @@ At least 8 characters in length, but no more than 32.`,
       .register(this.model)
       .pipe(
         switchMap((res) => {
-          console.log(res?.token);
+          this.$router.navigateByUrl(RouteEnum.AuthPage);
           return of(undefined);
         }),
         finalize(() => {

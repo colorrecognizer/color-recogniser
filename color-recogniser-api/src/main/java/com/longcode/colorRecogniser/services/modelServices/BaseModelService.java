@@ -7,12 +7,8 @@ import com.longcode.colorRecogniser.repositories.BaseModelRepository;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
@@ -22,8 +18,8 @@ public abstract class BaseModelService<T extends BaseModel> {
     private final BaseModelRepository<T> baseModelRepository;
 
     // Methods
-    public T findById(long id) {
-        return baseModelRepository.findById(id).orElseThrow();
+    public T getById(long id) {
+        return baseModelRepository.findById(id).orElse(null);
     }
 
     public Page<T> search(SearchRequest searchRequest) {
@@ -39,7 +35,7 @@ public abstract class BaseModelService<T extends BaseModel> {
 
     public T update(@Valid T model) {
         if (!baseModelRepository.existsById(model.getId()))
-            throw new NoSuchElementException();
+            return null;
 
         return baseModelRepository.save(model);
     }

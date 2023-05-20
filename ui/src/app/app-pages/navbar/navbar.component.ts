@@ -1,4 +1,7 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { map, switchMap } from "rxjs";
+import { User } from "src/app/shared/auto-generated/apis";
+import { AuthService } from "src/app/shared/services/auth.service";
 import { ThemeService } from "src/app/shared/services/theme.service";
 
 @Component({
@@ -8,7 +11,14 @@ import { ThemeService } from "src/app/shared/services/theme.service";
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class NavbarComponent {
-  constructor(private $theme: ThemeService) {}
+  currentUser?: User;
+
+  constructor(private $theme: ThemeService, private $auth: AuthService) {
+    $auth
+      .getCurrentUser()
+      .pipe(map((user) => (this.currentUser = user)))
+      .subscribe();
+  }
 
   toggleTheme() {
     this.$theme.switchTheme();

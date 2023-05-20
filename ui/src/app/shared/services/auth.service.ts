@@ -24,10 +24,9 @@ export class AuthService {
   getCurrentUser(forceRefresh = false): Observable<User | undefined> {
     if (!forceRefresh && this._currentUser) return of(this._currentUser);
 
-    return this.$userApi.findCurrentUser().pipe(
+    return this.$userApi.getCurrentUser().pipe(
       switchMap((user) => {
         if (!user?.id) {
-          this.logout(false);
           return of(undefined);
         }
 
@@ -35,7 +34,6 @@ export class AuthService {
         return of(user);
       }),
       catchError(() => {
-        this.logout(false);
         return of(undefined);
       })
     );

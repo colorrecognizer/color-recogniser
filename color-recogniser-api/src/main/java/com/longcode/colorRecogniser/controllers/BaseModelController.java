@@ -19,9 +19,9 @@ public abstract class BaseModelController<T extends BaseModel> {
         this.baseModelService = baseModelService;
     }
 
-    @GetMapping("/find-by-id")
-    public ResponseEntity<T> findById(@RequestParam long id) {
-        return ResponseEntity.ok(baseModelService.findById(id));
+    @GetMapping("/get-by-id")
+    public ResponseEntity<T> getById(@RequestParam long id) {
+        return ResponseEntity.ok(baseModelService.getById(id));
     }
 
     @PostMapping("/search")

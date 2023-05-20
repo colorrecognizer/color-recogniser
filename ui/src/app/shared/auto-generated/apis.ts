@@ -68,7 +68,23 @@ export class UserApi {
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
@@ -123,7 +139,23 @@ export class UserApi {
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
@@ -178,7 +210,23 @@ export class UserApi {
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
@@ -233,7 +281,23 @@ export class UserApi {
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
@@ -288,7 +352,23 @@ export class UserApi {
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
@@ -306,8 +386,8 @@ export class UserApi {
     /**
      * @return OK
      */
-    findCurrentUser(): Observable<User> {
-        let url_ = this.baseUrl + "/user/find-current-user";
+    getCurrentUser(): Observable<User> {
+        let url_ = this.baseUrl + "/user/get-current-user";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -319,11 +399,11 @@ export class UserApi {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processFindCurrentUser(response_);
+            return this.processGetCurrentUser(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processFindCurrentUser(response_ as any);
+                    return this.processGetCurrentUser(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<User>;
                 }
@@ -332,14 +412,30 @@ export class UserApi {
         }));
     }
 
-    protected processFindCurrentUser(response: HttpResponseBase): Observable<User> {
+    protected processGetCurrentUser(response: HttpResponseBase): Observable<User> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
@@ -357,8 +453,8 @@ export class UserApi {
     /**
      * @return OK
      */
-    findById(id: number): Observable<User> {
-        let url_ = this.baseUrl + "/user/find-by-id?";
+    getById(id: number): Observable<User> {
+        let url_ = this.baseUrl + "/user/get-by-id?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined and cannot be null.");
         else
@@ -374,11 +470,11 @@ export class UserApi {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processFindById(response_);
+            return this.processGetById(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processFindById(response_ as any);
+                    return this.processGetById(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<User>;
                 }
@@ -387,14 +483,30 @@ export class UserApi {
         }));
     }
 
-    protected processFindById(response: HttpResponseBase): Observable<User> {
+    protected processGetById(response: HttpResponseBase): Observable<User> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
@@ -448,7 +560,23 @@ export class UserApi {
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return _observableOf(null as any);
             }));
@@ -514,7 +642,23 @@ export class ColorApi {
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
@@ -569,7 +713,23 @@ export class ColorApi {
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
@@ -624,7 +784,23 @@ export class ColorApi {
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
@@ -642,8 +818,8 @@ export class ColorApi {
     /**
      * @return OK
      */
-    findById(id: number): Observable<Color> {
-        let url_ = this.baseUrl + "/color/find-by-id?";
+    getById(id: number): Observable<Color> {
+        let url_ = this.baseUrl + "/color/get-by-id?";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined and cannot be null.");
         else
@@ -659,11 +835,11 @@ export class ColorApi {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processFindById(response_);
+            return this.processGetById(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processFindById(response_ as any);
+                    return this.processGetById(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<Color>;
                 }
@@ -672,14 +848,30 @@ export class ColorApi {
         }));
     }
 
-    protected processFindById(response: HttpResponseBase): Observable<Color> {
+    protected processGetById(response: HttpResponseBase): Observable<Color> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
@@ -733,7 +925,23 @@ export class ColorApi {
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return _observableOf(null as any);
             }));
@@ -799,7 +1007,23 @@ export class ApiApi {
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
@@ -863,7 +1087,23 @@ export class ApiApi {
             (response as any).error instanceof Blob ? (response as any).error : undefined;
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
@@ -940,16 +1180,15 @@ export class User implements IUser {
     username?: string;
     email?: string;
     password?: string;
-    phoneNumber?: string;
     roles?: Roles[];
     userStatus?: UserStatus;
     enabled?: boolean;
-    user?: boolean;
-    admin?: boolean;
     credentialsNonExpired?: boolean;
     accountNonExpired?: boolean;
-    authorities?: GrantedAuthority[];
     accountNonLocked?: boolean;
+    authorities?: GrantedAuthority[];
+    user?: boolean;
+    admin?: boolean;
 
     [key: string]: any;
 
@@ -972,7 +1211,6 @@ export class User implements IUser {
             this.username = _data["username"];
             this.email = _data["email"];
             this.password = _data["password"];
-            this.phoneNumber = _data["phoneNumber"];
             if (Array.isArray(_data["roles"])) {
                 this.roles = [] as any;
                 for (let item of _data["roles"])
@@ -980,16 +1218,16 @@ export class User implements IUser {
             }
             this.userStatus = _data["userStatus"];
             this.enabled = _data["enabled"];
-            this.user = _data["user"];
-            this.admin = _data["admin"];
             this.credentialsNonExpired = _data["credentialsNonExpired"];
             this.accountNonExpired = _data["accountNonExpired"];
+            this.accountNonLocked = _data["accountNonLocked"];
             if (Array.isArray(_data["authorities"])) {
                 this.authorities = [] as any;
                 for (let item of _data["authorities"])
                     this.authorities!.push(GrantedAuthority.fromJS(item));
             }
-            this.accountNonLocked = _data["accountNonLocked"];
+            this.user = _data["user"];
+            this.admin = _data["admin"];
         }
     }
 
@@ -1010,7 +1248,6 @@ export class User implements IUser {
         data["username"] = this.username;
         data["email"] = this.email;
         data["password"] = this.password;
-        data["phoneNumber"] = this.phoneNumber;
         if (Array.isArray(this.roles)) {
             data["roles"] = [];
             for (let item of this.roles)
@@ -1018,16 +1255,16 @@ export class User implements IUser {
         }
         data["userStatus"] = this.userStatus;
         data["enabled"] = this.enabled;
-        data["user"] = this.user;
-        data["admin"] = this.admin;
         data["credentialsNonExpired"] = this.credentialsNonExpired;
         data["accountNonExpired"] = this.accountNonExpired;
+        data["accountNonLocked"] = this.accountNonLocked;
         if (Array.isArray(this.authorities)) {
             data["authorities"] = [];
             for (let item of this.authorities)
                 data["authorities"].push(item.toJSON());
         }
-        data["accountNonLocked"] = this.accountNonLocked;
+        data["user"] = this.user;
+        data["admin"] = this.admin;
         return data;
     }
 
@@ -1044,16 +1281,15 @@ export interface IUser {
     username?: string;
     email?: string;
     password?: string;
-    phoneNumber?: string;
     roles?: Roles[];
     userStatus?: UserStatus;
     enabled?: boolean;
-    user?: boolean;
-    admin?: boolean;
     credentialsNonExpired?: boolean;
     accountNonExpired?: boolean;
-    authorities?: GrantedAuthority[];
     accountNonLocked?: boolean;
+    authorities?: GrantedAuthority[];
+    user?: boolean;
+    admin?: boolean;
 
     [key: string]: any;
 }
@@ -1361,10 +1597,10 @@ export class PageUser implements IPageUser {
     content?: User[];
     number?: number;
     sort?: SortObject;
-    numberOfElements?: number;
-    pageable?: PageableObject;
     first?: boolean;
     last?: boolean;
+    pageable?: PageableObject;
+    numberOfElements?: number;
     empty?: boolean;
 
     [key: string]: any;
@@ -1394,10 +1630,10 @@ export class PageUser implements IPageUser {
             }
             this.number = _data["number"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
-            this.numberOfElements = _data["numberOfElements"];
-            this.pageable = _data["pageable"] ? PageableObject.fromJS(_data["pageable"]) : <any>undefined;
             this.first = _data["first"];
             this.last = _data["last"];
+            this.pageable = _data["pageable"] ? PageableObject.fromJS(_data["pageable"]) : <any>undefined;
+            this.numberOfElements = _data["numberOfElements"];
             this.empty = _data["empty"];
         }
     }
@@ -1425,10 +1661,10 @@ export class PageUser implements IPageUser {
         }
         data["number"] = this.number;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
-        data["numberOfElements"] = this.numberOfElements;
-        data["pageable"] = this.pageable ? this.pageable.toJSON() : <any>undefined;
         data["first"] = this.first;
         data["last"] = this.last;
+        data["pageable"] = this.pageable ? this.pageable.toJSON() : <any>undefined;
+        data["numberOfElements"] = this.numberOfElements;
         data["empty"] = this.empty;
         return data;
     }
@@ -1448,10 +1684,10 @@ export interface IPageUser {
     content?: User[];
     number?: number;
     sort?: SortObject;
-    numberOfElements?: number;
-    pageable?: PageableObject;
     first?: boolean;
     last?: boolean;
+    pageable?: PageableObject;
+    numberOfElements?: number;
     empty?: boolean;
 
     [key: string]: any;
@@ -1460,10 +1696,10 @@ export interface IPageUser {
 export class PageableObject implements IPageableObject {
     offset?: number;
     sort?: SortObject;
-    pageSize?: number;
-    pageNumber?: number;
     paged?: boolean;
     unpaged?: boolean;
+    pageNumber?: number;
+    pageSize?: number;
 
     [key: string]: any;
 
@@ -1484,10 +1720,10 @@ export class PageableObject implements IPageableObject {
             }
             this.offset = _data["offset"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
-            this.pageSize = _data["pageSize"];
-            this.pageNumber = _data["pageNumber"];
             this.paged = _data["paged"];
             this.unpaged = _data["unpaged"];
+            this.pageNumber = _data["pageNumber"];
+            this.pageSize = _data["pageSize"];
         }
     }
 
@@ -1506,10 +1742,10 @@ export class PageableObject implements IPageableObject {
         }
         data["offset"] = this.offset;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
-        data["pageSize"] = this.pageSize;
-        data["pageNumber"] = this.pageNumber;
         data["paged"] = this.paged;
         data["unpaged"] = this.unpaged;
+        data["pageNumber"] = this.pageNumber;
+        data["pageSize"] = this.pageSize;
         return data;
     }
 
@@ -1524,18 +1760,18 @@ export class PageableObject implements IPageableObject {
 export interface IPageableObject {
     offset?: number;
     sort?: SortObject;
-    pageSize?: number;
-    pageNumber?: number;
     paged?: boolean;
     unpaged?: boolean;
+    pageNumber?: number;
+    pageSize?: number;
 
     [key: string]: any;
 }
 
 export class SortObject implements ISortObject {
     empty?: boolean;
-    sorted?: boolean;
     unsorted?: boolean;
+    sorted?: boolean;
 
     [key: string]: any;
 
@@ -1555,8 +1791,8 @@ export class SortObject implements ISortObject {
                     this[property] = _data[property];
             }
             this.empty = _data["empty"];
-            this.sorted = _data["sorted"];
             this.unsorted = _data["unsorted"];
+            this.sorted = _data["sorted"];
         }
     }
 
@@ -1574,8 +1810,8 @@ export class SortObject implements ISortObject {
                 data[property] = this[property];
         }
         data["empty"] = this.empty;
-        data["sorted"] = this.sorted;
         data["unsorted"] = this.unsorted;
+        data["sorted"] = this.sorted;
         return data;
     }
 
@@ -1589,8 +1825,8 @@ export class SortObject implements ISortObject {
 
 export interface ISortObject {
     empty?: boolean;
-    sorted?: boolean;
     unsorted?: boolean;
+    sorted?: boolean;
 
     [key: string]: any;
 }
@@ -1714,6 +1950,8 @@ export interface IAuthenticationResponse {
 }
 
 export class LoginRequest implements ILoginRequest {
+    usernameOrEmail?: string;
+    password?: string;
 
     [key: string]: any;
 
@@ -1732,6 +1970,8 @@ export class LoginRequest implements ILoginRequest {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
+            this.usernameOrEmail = _data["usernameOrEmail"];
+            this.password = _data["password"];
         }
     }
 
@@ -1748,6 +1988,8 @@ export class LoginRequest implements ILoginRequest {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
+        data["usernameOrEmail"] = this.usernameOrEmail;
+        data["password"] = this.password;
         return data;
     }
 
@@ -1760,6 +2002,8 @@ export class LoginRequest implements ILoginRequest {
 }
 
 export interface ILoginRequest {
+    usernameOrEmail?: string;
+    password?: string;
 
     [key: string]: any;
 }
@@ -1771,10 +2015,10 @@ export class PageColor implements IPageColor {
     content?: Color[];
     number?: number;
     sort?: SortObject;
-    numberOfElements?: number;
-    pageable?: PageableObject;
     first?: boolean;
     last?: boolean;
+    pageable?: PageableObject;
+    numberOfElements?: number;
     empty?: boolean;
 
     [key: string]: any;
@@ -1804,10 +2048,10 @@ export class PageColor implements IPageColor {
             }
             this.number = _data["number"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
-            this.numberOfElements = _data["numberOfElements"];
-            this.pageable = _data["pageable"] ? PageableObject.fromJS(_data["pageable"]) : <any>undefined;
             this.first = _data["first"];
             this.last = _data["last"];
+            this.pageable = _data["pageable"] ? PageableObject.fromJS(_data["pageable"]) : <any>undefined;
+            this.numberOfElements = _data["numberOfElements"];
             this.empty = _data["empty"];
         }
     }
@@ -1835,10 +2079,10 @@ export class PageColor implements IPageColor {
         }
         data["number"] = this.number;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
-        data["numberOfElements"] = this.numberOfElements;
-        data["pageable"] = this.pageable ? this.pageable.toJSON() : <any>undefined;
         data["first"] = this.first;
         data["last"] = this.last;
+        data["pageable"] = this.pageable ? this.pageable.toJSON() : <any>undefined;
+        data["numberOfElements"] = this.numberOfElements;
         data["empty"] = this.empty;
         return data;
     }
@@ -1858,10 +2102,10 @@ export interface IPageColor {
     content?: Color[];
     number?: number;
     sort?: SortObject;
-    numberOfElements?: number;
-    pageable?: PageableObject;
     first?: boolean;
     last?: boolean;
+    pageable?: PageableObject;
+    numberOfElements?: number;
     empty?: boolean;
 
     [key: string]: any;
