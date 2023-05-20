@@ -18,7 +18,8 @@ import { PageNotFoundComponent } from "./page-not-found/page-not-found.component
 import { FormlyFormModule } from "./shared/modules/formly-form.module";
 import { AuthService } from "./shared/services/auth.service";
 import { AuthGuard } from "./shared/services/auth.guard";
-import { HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
+import { TokenInterceptor } from "./shared/services/token.interceptor";
 
 @NgModule({
   declarations: [AppComponent, PageNotFoundComponent],
@@ -33,7 +34,7 @@ import { HttpClientModule } from "@angular/common/http";
     BackButtonModule,
     ToastModule,
     FormlyFormModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [
     // One way of configuring ngForage
@@ -55,7 +56,12 @@ import { HttpClientModule } from "@angular/common/http";
       useClass: HttpErrorHandlerService,
     },
     AuthService,
-    AuthGuard
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
   exports: [],

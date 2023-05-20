@@ -10,13 +10,13 @@ import com.longcode.colorRecogniser.models.responses.AuthenticationResponse;
 import com.longcode.colorRecogniser.repositories.BaseModelRepository;
 import com.longcode.colorRecogniser.repositories.UserRepository;
 import com.longcode.colorRecogniser.services.JwtService;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -55,6 +55,12 @@ public class UserService extends BaseModelService<User> {
         this.tokenService = tokenService;
     }
 
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
     // Methods
 
     public AuthenticationResponse register(RegisterRequest registerRequest) {
@@ -101,15 +107,59 @@ public class UserService extends BaseModelService<User> {
     }
 
     private User findByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ApiException("Cannot find user with username [%s]!".formatted(username)));
     }
 
     private User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ApiException("Cannot find user with email [%s]!".formatted(email)));
     }
 
+    @Transactional
     public AuthenticationResponse login(LoginRequest loginRequest) {
-        return null;
+        var user = findByUsernameOrEmail(loginRequest.getUsernameOrEmail());
+
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            user.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
+        } catch (Exception e) {
+            throw new ApiException("Invalid username, email or password!");
+        }
+
+        var jwtToken = jwtService.generateToken(user);
+        revokeAllUserTokens(user);
+
+        tokenService.insert(Token.builder()
+                .token(jwtToken)
+                .user(user)
+                .build());
+
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build();
+    }
+
+    @Transactional
+    private void revokeAllUserTokens(User user) {
+        var validUserTokens = tokenService.findAllValidTokensByUserId(user.getId());
+        if (validUserTokens.isEmpty())
+            return;
+
+        validUserTokens.forEach(token -> {
+            token.setExpired(true);
+            token.setRevoked(true);
+            tokenService.update(token);
+        });
+    }
+
+    private User findByUsernameOrEmail(String usernameOrEmail) {
+        return userRepository.findByUsernameOrEmail(usernameOrEmail)
+                .orElseThrow(() -> new ApiException("Cannot find user with username or email [%s]!".formatted(usernameOrEmail)));
     }
 
     public User findCurrentUser() {

@@ -16,7 +16,7 @@
     </div>
   </div>
 
-  <form [formGroup]="form" (ngSubmit)="login(model)">
+  <form [formGroup]="form" (ngSubmit)="login()">
     <div class="flex flex-column gap-2">
       <formly-form
         [model]="model"
@@ -25,13 +25,12 @@
         [form]="form"
       ></formly-form>
 
-      <p-button
-        label="Login"
+      <app-submit-button
+        [form]="form"
         icon="pi pi-sign-in"
+        label="Login"
         styleClass="w-full"
-        type="submit"
-        [disabled]="form.invalid"
-      ></p-button>
+      ></app-submit-button>
     </div>
   </form>
 

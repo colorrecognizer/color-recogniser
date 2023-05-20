@@ -11,13 +11,13 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Token extends BaseModel {
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String token;
 
-    @Column(insertable = false)
+    @Column(nullable = false, insertable = false)
     private boolean revoked;
 
-    @Column(insertable = false)
+    @Column(nullable = false, insertable = false)
     private boolean expired;
 
     @ManyToOne

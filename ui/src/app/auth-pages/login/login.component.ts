@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { Title } from "@angular/platform-browser";
 import { FormlyFormOptions, FormlyFieldConfig } from "@ngx-formly/core";
+import { LoginRequest } from "src/app/shared/auto-generated/apis";
 import { AuthService } from "src/app/shared/services/auth.service";
 import { RouteEnum } from "src/app/shared/utils";
 
@@ -11,7 +12,7 @@ import { RouteEnum } from "src/app/shared/utils";
 })
 export class LoginComponent {
   form = new FormGroup({});
-  model: any = {};
+  model = LoginRequest.fromJS({});
   options: FormlyFormOptions = {};
   fields: FormlyFieldConfig[] = [
     {
@@ -27,6 +28,7 @@ export class LoginComponent {
       key: "password",
       type: "input",
       props: {
+        type: "password",
         label: "Password",
         placeholder: "Password",
         required: true,
@@ -44,7 +46,7 @@ export class LoginComponent {
     // this.$auth.googleAuth();
   }
 
-  login(model: any) {
-    console.log(model);
+  login() {
+    this.$auth.login(this.model).subscribe();
   }
 }
