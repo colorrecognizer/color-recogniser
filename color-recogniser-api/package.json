@@ -1,6 +1,7 @@
 {
   "devDependencies": {
-    "gulp": "^4.0.2"
+    "gulp": "^4.0.2",
+    "gulp-ssh": "^0.7.0"
   },
   "name": "color-recogniser-api",
   "version": "1.0.0",

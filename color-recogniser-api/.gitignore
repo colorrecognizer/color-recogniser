@@ -38,3 +38,9 @@ out/
 
 ### Node Modules
 node_modules/
+
+### Application Properties
+src/main/resources/application.properties
+
+### MySQL
+mysql/my.cnf
