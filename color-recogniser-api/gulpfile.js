@@ -1,6 +1,13 @@
-function defaultTask(cb) {
-  // place code for your default task here
+const { series } = require('gulp');
+
+function runOneOffScripts(cb) {
+  // body omitted
   cb();
 }
 
-exports.default = defaultTask
+function bundle(cb) {
+  // body omitted
+  cb();
+}
+
+exports.deployDB = series(runOneOffScripts, bundle);
