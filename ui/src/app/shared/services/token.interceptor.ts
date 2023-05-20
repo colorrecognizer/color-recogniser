@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   HttpEvent,
   HttpHandler,
@@ -12,7 +13,6 @@ import { AuthService } from "./auth.service";
 export class TokenInterceptor implements HttpInterceptor {
   constructor(private $auth: AuthService) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler

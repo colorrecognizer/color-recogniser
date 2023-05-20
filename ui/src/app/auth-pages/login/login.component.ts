@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { Title } from "@angular/platform-browser";
 import { FormlyFormOptions, FormlyFieldConfig } from "@ngx-formly/core";
+import { finalize } from "rxjs";
 import { LoginRequest } from "src/app/shared/auto-generated/apis";
 import { AuthService } from "src/app/shared/services/auth.service";
 import { RouteEnum } from "src/app/shared/utils";
@@ -47,6 +48,14 @@ export class LoginComponent {
   }
 
   login() {
-    this.$auth.login(this.model).subscribe();
+    this.form.disable();
+    this.$auth
+      .login(this.model)
+      .pipe(
+        finalize(() => {
+          this.form.enable();
+        })
+      )
+      .subscribe();
   }
 }

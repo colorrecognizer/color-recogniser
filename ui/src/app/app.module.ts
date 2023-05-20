@@ -9,7 +9,6 @@ import { DEFAULT_CONFIG, Driver, NgForageOptions } from "ngforage";
 import { FormsModule } from "@angular/forms";
 import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFireAuthModule } from "@angular/fire/compat/auth";
-import { environment } from "src/environments/environment.prod";
 import { BackButtonModule } from "./shared/components/back-button/back-button.module";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { HttpErrorHandlerService } from "./shared/services/http-error-handler.service";
@@ -20,6 +19,8 @@ import { AuthService } from "./shared/services/auth.service";
 import { AuthGuard } from "./shared/services/auth.guard";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { TokenInterceptor } from "./shared/services/token.interceptor";
+import { API_BASE_URL } from "./shared/auto-generated/apis";
+import { environment } from "src/environments/environment";
 
 @NgModule({
   declarations: [AppComponent, PageNotFoundComponent],
@@ -61,6 +62,10 @@ import { TokenInterceptor } from "./shared/services/token.interceptor";
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true,
+    },
+    {
+      provide: API_BASE_URL,
+      useValue: environment.apiUrl,
     },
   ],
   bootstrap: [AppComponent],

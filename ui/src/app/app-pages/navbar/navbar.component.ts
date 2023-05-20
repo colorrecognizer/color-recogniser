@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
-import { map, switchMap } from "rxjs";
+import { map } from "rxjs";
 import { User } from "src/app/shared/auto-generated/apis";
 import { AuthService } from "src/app/shared/services/auth.service";
 import { ThemeService } from "src/app/shared/services/theme.service";

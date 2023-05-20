@@ -3,7 +3,6 @@ import { Router } from "@angular/router";
 import { Observable, of } from "rxjs";
 import { catchError, map, switchMap } from "rxjs/operators";
 import { LoginRequest, User, UserApi } from "../auto-generated/apis";
-import { NgForage } from "ngforage";
 import { LocalforageService } from "./localforage.service";
 import { RouteEnum } from "../utils";
 

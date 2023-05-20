@@ -1,10 +1,10 @@
 ssh root@66.175.233.233
 BS2p@_h609
-cd /root/swp490_g2/SpringBootAPI/HRMS_SWP490_G2/
+cd /root/color-recogniser/color-recogniser-api/
 git reset --hard
 git pull
-./mvnw spring-boot:run
-./mvnw package -DskipTests
+gradle bootRun
+gradle build
 sudo systemctl restart hrms
 sudo systemctl restart nginx
 https://66.175.233.233/v3/api-docs

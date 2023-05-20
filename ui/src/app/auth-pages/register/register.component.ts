@@ -86,6 +86,7 @@ At least 8 characters in length, but no more than 32.`,
     $title.setTitle("Login");
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   loginWithGoogle() {}
 
   register() {
@@ -93,7 +94,7 @@ At least 8 characters in length, but no more than 32.`,
     this.$userApi
       .register(this.model)
       .pipe(
-        switchMap((res) => {
+        switchMap(() => {
           this.$router.navigateByUrl(RouteEnum.AuthPage);
           return of(undefined);
         }),

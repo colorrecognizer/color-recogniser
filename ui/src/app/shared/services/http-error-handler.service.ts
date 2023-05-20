@@ -1,6 +1,5 @@
 import { ErrorHandler, Injectable, NgZone } from "@angular/core";
 import { MessageService } from "primeng/api";
-import { ApiException } from "../auto-generated/apis";
 
 @Injectable({
   providedIn: "root",
@@ -8,6 +7,7 @@ import { ApiException } from "../auto-generated/apis";
 export class HttpErrorHandlerService implements ErrorHandler {
   constructor(private $message: MessageService, private $zone: NgZone) {}
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleError(error: any): void {
     if (!error) {
       return;

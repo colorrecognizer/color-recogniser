@@ -1,5 +1,6 @@
 package com.longcode.colorRecogniser.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.longcode.colorRecogniser.models.enums.UserRole;
 import com.longcode.colorRecogniser.models.enums.UserStatus;
 import com.longcode.colorRecogniser.utils.RegexUtils;
@@ -30,6 +31,7 @@ public class User extends BaseModel implements UserDetails {
     private String email;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @ElementCollection(targetClass = UserRole.class)

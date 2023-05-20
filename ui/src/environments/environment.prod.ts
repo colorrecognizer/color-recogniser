@@ -4,7 +4,7 @@
 
 export const environment = {
   production: true,
-  // apiUrl: "https://holarestaurantmanagement.online",
+  apiUrl: "https://holarestaurantmanagement.online",
   firebase: {
     apiKey: "AIzaSyCUuPeiEBlTpFtOmx4pYQ5WXJhZvdq4I5M",
     authDomain: "color-recogniser-b18e3.firebaseapp.com",
