@@ -12,17 +12,17 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 public class BaseLogModel extends BaseModel {
-    @ManyToOne(optional = false)
+    @ManyToOne
     private User insertedBy;
 
     @Column(insertable = false, updatable = false, nullable = false,
-            columnDefinition = "TIMESTAMP WITH TIME ZONE default CURRENT_TIMESTAMP")
+            columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
     private OffsetDateTime insertedAt;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     private User updatedBy;
 
     @Column(insertable = false, updatable = false, nullable = false,
-            columnDefinition = "TIMESTAMP WITH TIME ZONE default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP")
+            columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP")
     private OffsetDateTime updatedAt;
 }
