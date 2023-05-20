@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface TokenRepository extends BaseModelRepository<Token> {
 
     @Query(value = """
-            SELECT * FROM token
+            SELECT * FROM Token
             where userId = :userId and (expired = false or revoked = false)
             ;
             """, nativeQuery = true)

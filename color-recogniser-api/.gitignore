@@ -44,3 +44,4 @@ src/main/resources/application.properties
 
 ### MySQL
 mysql/my.cnf
+mysql/backup/backup.sql
