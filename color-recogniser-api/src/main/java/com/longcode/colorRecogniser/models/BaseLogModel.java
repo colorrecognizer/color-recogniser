@@ -1,11 +1,12 @@
 package com.longcode.colorRecogniser.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Instant;
 import java.time.OffsetDateTime;
 
 @MappedSuperclass
@@ -13,6 +14,7 @@ import java.time.OffsetDateTime;
 @Setter
 public class BaseLogModel extends BaseModel {
     @ManyToOne
+    @JoinColumn(name = "insertedByUserId")
     private User insertedBy;
 
     @Column(insertable = false, updatable = false, nullable = false,
@@ -20,6 +22,7 @@ public class BaseLogModel extends BaseModel {
     private OffsetDateTime insertedAt;
 
     @ManyToOne
+    @JoinColumn(name = "updatedByUserId")
     private User updatedBy;
 
     @Column(insertable = false, updatable = false, nullable = false,

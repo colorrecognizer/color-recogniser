@@ -5,5 +5,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ColorRepository extends BaseModelRepository<Color> {
+     boolean existsByName(String name);
 
+     Color findByRedAndGreenAndBlue(short red, short green, short blue);
 }
