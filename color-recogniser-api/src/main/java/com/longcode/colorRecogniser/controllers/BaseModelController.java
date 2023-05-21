@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Getter
 public abstract class BaseModelController<T extends BaseModel> {
     private BaseModelService<T> baseModelService;
@@ -22,6 +24,11 @@ public abstract class BaseModelController<T extends BaseModel> {
     @GetMapping("/get-by-id")
     public ResponseEntity<T> getById(@RequestParam long id) {
         return ResponseEntity.ok(baseModelService.getById(id));
+    }
+
+    @GetMapping("/get-all")
+    public ResponseEntity<List<T>> getAll() {
+        return ResponseEntity.ok(baseModelService.getAll());
     }
 
     @PostMapping("/search")

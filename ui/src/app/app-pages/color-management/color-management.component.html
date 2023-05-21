@@ -1,0 +1,31 @@
+<div
+  class="align-items-center flex flex-column justify-content-center p-2 lg:p-5 surface-ground gap-2"
+>
+  <div class="surface-card p-2 lg:p-5 shadow-2 border-round w-full lg:w-6">
+    <div class="flex flex-column gap-2">
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="flex flex-column gap-2">
+          <formly-form
+            [model]="model"
+            [fields]="fields"
+            [options]="options"
+            [form]="form"
+          ></formly-form>
+
+          <app-submit-button [form]="form"></app-submit-button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="surface-card p-2 lg:p-5 shadow-2 border-round w-full lg:w-6">
+    <div class="flex flex-column gap-2">
+      <div class="flex flex-wrap gap-2" *ngFor="let color of colors">
+        <span>
+          {{ color.name }}
+        </span>
+        <input type="color" [value]="getColorHex(color)" disabled />
+      </div>
+    </div>
+  </div>
+</div>

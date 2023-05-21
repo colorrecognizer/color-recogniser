@@ -1,0 +1,14 @@
+<!-- <input type="input" [formControl]="formControl" [formlyAttributes]="field"> -->
+
+<div class="flex align-items-center gap-2">
+  <p-colorPicker
+    [(ngModel)]="model.color"
+    format="rgb"
+    (onChange)="changeColor($event)"
+  ></p-colorPicker>
+
+  <div>
+    <label for="hexValue"> Hex value: </label>
+    <input id="hexValue" pInputText type="text" [ngModel]="hex" (keyup)="onHexValueEntered($event)"/>
+  </div>
+</div>

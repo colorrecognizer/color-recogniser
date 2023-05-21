@@ -1,10 +1,10 @@
 import { NgModule } from "@angular/core";
-import {
-  ReactiveFormsModule,
-  Validators,
-} from "@angular/forms";
+import { FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { FormlyPrimeNGModule } from "@ngx-formly/primeng";
 import { FormlyModule } from "@ngx-formly/core";
+import { ColorPickerTypeComponent } from "./color-picker-type/color-picker-type.component";
+import { ColorPickerModule } from "primeng/colorpicker";
+import { InputTextModule } from "primeng/inputtext";
 
 const modules = [
   ReactiveFormsModule,
@@ -17,11 +17,12 @@ const modules = [
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }) as any,
   FormlyPrimeNGModule,
+  ColorPickerModule,
 ];
 
 @NgModule({
-  declarations: [],
-  imports: modules,
-  exports: modules,
+  declarations: [ColorPickerTypeComponent],
+  imports: [...modules, InputTextModule, FormsModule],
+  exports: [...modules, ColorPickerTypeComponent],
 })
 export class FormlyFormModule {}

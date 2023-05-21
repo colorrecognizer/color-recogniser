@@ -524,6 +524,80 @@ export class UserApi {
     /**
      * @return OK
      */
+    getAll(): Observable<User[]> {
+        let url_ = this.baseUrl + "/user/get-all";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "*/*"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<User[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<User[]>;
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<User[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(User.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
     deleteById(id: number): Observable<void> {
         let url_ = this.baseUrl + "/user/delete-by-id?";
         if (id === undefined || id === null)
@@ -889,6 +963,80 @@ export class ColorApi {
     /**
      * @return OK
      */
+    getAll(): Observable<Color[]> {
+        let url_ = this.baseUrl + "/color/get-all";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "*/*"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<Color[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<Color[]>;
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<Color[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(Color.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
     deleteById(id: number): Observable<void> {
         let url_ = this.baseUrl + "/color/delete-by-id?";
         if (id === undefined || id === null)
@@ -1179,16 +1327,15 @@ export class User implements IUser {
     id?: number;
     username?: string;
     email?: string;
-    password?: string;
     roles?: Roles[];
     userStatus?: UserStatus;
     enabled?: boolean;
     credentialsNonExpired?: boolean;
     accountNonExpired?: boolean;
-    accountNonLocked?: boolean;
-    authorities?: GrantedAuthority[];
-    user?: boolean;
     admin?: boolean;
+    user?: boolean;
+    authorities?: GrantedAuthority[];
+    accountNonLocked?: boolean;
 
     [key: string]: any;
 
@@ -1210,7 +1357,6 @@ export class User implements IUser {
             this.id = _data["id"];
             this.username = _data["username"];
             this.email = _data["email"];
-            this.password = _data["password"];
             if (Array.isArray(_data["roles"])) {
                 this.roles = [] as any;
                 for (let item of _data["roles"])
@@ -1220,14 +1366,14 @@ export class User implements IUser {
             this.enabled = _data["enabled"];
             this.credentialsNonExpired = _data["credentialsNonExpired"];
             this.accountNonExpired = _data["accountNonExpired"];
-            this.accountNonLocked = _data["accountNonLocked"];
+            this.admin = _data["admin"];
+            this.user = _data["user"];
             if (Array.isArray(_data["authorities"])) {
                 this.authorities = [] as any;
                 for (let item of _data["authorities"])
                     this.authorities!.push(GrantedAuthority.fromJS(item));
             }
-            this.user = _data["user"];
-            this.admin = _data["admin"];
+            this.accountNonLocked = _data["accountNonLocked"];
         }
     }
 
@@ -1247,7 +1393,6 @@ export class User implements IUser {
         data["id"] = this.id;
         data["username"] = this.username;
         data["email"] = this.email;
-        data["password"] = this.password;
         if (Array.isArray(this.roles)) {
             data["roles"] = [];
             for (let item of this.roles)
@@ -1257,14 +1402,14 @@ export class User implements IUser {
         data["enabled"] = this.enabled;
         data["credentialsNonExpired"] = this.credentialsNonExpired;
         data["accountNonExpired"] = this.accountNonExpired;
-        data["accountNonLocked"] = this.accountNonLocked;
+        data["admin"] = this.admin;
+        data["user"] = this.user;
         if (Array.isArray(this.authorities)) {
             data["authorities"] = [];
             for (let item of this.authorities)
                 data["authorities"].push(item.toJSON());
         }
-        data["user"] = this.user;
-        data["admin"] = this.admin;
+        data["accountNonLocked"] = this.accountNonLocked;
         return data;
     }
 
@@ -1280,16 +1425,15 @@ export interface IUser {
     id?: number;
     username?: string;
     email?: string;
-    password?: string;
     roles?: Roles[];
     userStatus?: UserStatus;
     enabled?: boolean;
     credentialsNonExpired?: boolean;
     accountNonExpired?: boolean;
-    accountNonLocked?: boolean;
-    authorities?: GrantedAuthority[];
-    user?: boolean;
     admin?: boolean;
+    user?: boolean;
+    authorities?: GrantedAuthority[];
+    accountNonLocked?: boolean;
 
     [key: string]: any;
 }
@@ -1597,10 +1741,10 @@ export class PageUser implements IPageUser {
     content?: User[];
     number?: number;
     sort?: SortObject;
+    numberOfElements?: number;
+    pageable?: PageableObject;
     first?: boolean;
     last?: boolean;
-    pageable?: PageableObject;
-    numberOfElements?: number;
     empty?: boolean;
 
     [key: string]: any;
@@ -1630,10 +1774,10 @@ export class PageUser implements IPageUser {
             }
             this.number = _data["number"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
+            this.numberOfElements = _data["numberOfElements"];
+            this.pageable = _data["pageable"] ? PageableObject.fromJS(_data["pageable"]) : <any>undefined;
             this.first = _data["first"];
             this.last = _data["last"];
-            this.pageable = _data["pageable"] ? PageableObject.fromJS(_data["pageable"]) : <any>undefined;
-            this.numberOfElements = _data["numberOfElements"];
             this.empty = _data["empty"];
         }
     }
@@ -1661,10 +1805,10 @@ export class PageUser implements IPageUser {
         }
         data["number"] = this.number;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
+        data["numberOfElements"] = this.numberOfElements;
+        data["pageable"] = this.pageable ? this.pageable.toJSON() : <any>undefined;
         data["first"] = this.first;
         data["last"] = this.last;
-        data["pageable"] = this.pageable ? this.pageable.toJSON() : <any>undefined;
-        data["numberOfElements"] = this.numberOfElements;
         data["empty"] = this.empty;
         return data;
     }
@@ -1684,10 +1828,10 @@ export interface IPageUser {
     content?: User[];
     number?: number;
     sort?: SortObject;
+    numberOfElements?: number;
+    pageable?: PageableObject;
     first?: boolean;
     last?: boolean;
-    pageable?: PageableObject;
-    numberOfElements?: number;
     empty?: boolean;
 
     [key: string]: any;
@@ -1696,10 +1840,10 @@ export interface IPageUser {
 export class PageableObject implements IPageableObject {
     offset?: number;
     sort?: SortObject;
-    paged?: boolean;
-    unpaged?: boolean;
     pageNumber?: number;
     pageSize?: number;
+    unpaged?: boolean;
+    paged?: boolean;
 
     [key: string]: any;
 
@@ -1720,10 +1864,10 @@ export class PageableObject implements IPageableObject {
             }
             this.offset = _data["offset"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
-            this.paged = _data["paged"];
-            this.unpaged = _data["unpaged"];
             this.pageNumber = _data["pageNumber"];
             this.pageSize = _data["pageSize"];
+            this.unpaged = _data["unpaged"];
+            this.paged = _data["paged"];
         }
     }
 
@@ -1742,10 +1886,10 @@ export class PageableObject implements IPageableObject {
         }
         data["offset"] = this.offset;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
-        data["paged"] = this.paged;
-        data["unpaged"] = this.unpaged;
         data["pageNumber"] = this.pageNumber;
         data["pageSize"] = this.pageSize;
+        data["unpaged"] = this.unpaged;
+        data["paged"] = this.paged;
         return data;
     }
 
@@ -1760,18 +1904,18 @@ export class PageableObject implements IPageableObject {
 export interface IPageableObject {
     offset?: number;
     sort?: SortObject;
-    paged?: boolean;
-    unpaged?: boolean;
     pageNumber?: number;
     pageSize?: number;
+    unpaged?: boolean;
+    paged?: boolean;
 
     [key: string]: any;
 }
 
 export class SortObject implements ISortObject {
     empty?: boolean;
-    unsorted?: boolean;
     sorted?: boolean;
+    unsorted?: boolean;
 
     [key: string]: any;
 
@@ -1791,8 +1935,8 @@ export class SortObject implements ISortObject {
                     this[property] = _data[property];
             }
             this.empty = _data["empty"];
-            this.unsorted = _data["unsorted"];
             this.sorted = _data["sorted"];
+            this.unsorted = _data["unsorted"];
         }
     }
 
@@ -1810,8 +1954,8 @@ export class SortObject implements ISortObject {
                 data[property] = this[property];
         }
         data["empty"] = this.empty;
-        data["unsorted"] = this.unsorted;
         data["sorted"] = this.sorted;
+        data["unsorted"] = this.unsorted;
         return data;
     }
 
@@ -1825,8 +1969,8 @@ export class SortObject implements ISortObject {
 
 export interface ISortObject {
     empty?: boolean;
-    unsorted?: boolean;
     sorted?: boolean;
+    unsorted?: boolean;
 
     [key: string]: any;
 }
@@ -2015,10 +2159,10 @@ export class PageColor implements IPageColor {
     content?: Color[];
     number?: number;
     sort?: SortObject;
+    numberOfElements?: number;
+    pageable?: PageableObject;
     first?: boolean;
     last?: boolean;
-    pageable?: PageableObject;
-    numberOfElements?: number;
     empty?: boolean;
 
     [key: string]: any;
@@ -2048,10 +2192,10 @@ export class PageColor implements IPageColor {
             }
             this.number = _data["number"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
+            this.numberOfElements = _data["numberOfElements"];
+            this.pageable = _data["pageable"] ? PageableObject.fromJS(_data["pageable"]) : <any>undefined;
             this.first = _data["first"];
             this.last = _data["last"];
-            this.pageable = _data["pageable"] ? PageableObject.fromJS(_data["pageable"]) : <any>undefined;
-            this.numberOfElements = _data["numberOfElements"];
             this.empty = _data["empty"];
         }
     }
@@ -2079,10 +2223,10 @@ export class PageColor implements IPageColor {
         }
         data["number"] = this.number;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
+        data["numberOfElements"] = this.numberOfElements;
+        data["pageable"] = this.pageable ? this.pageable.toJSON() : <any>undefined;
         data["first"] = this.first;
         data["last"] = this.last;
-        data["pageable"] = this.pageable ? this.pageable.toJSON() : <any>undefined;
-        data["numberOfElements"] = this.numberOfElements;
         data["empty"] = this.empty;
         return data;
     }
@@ -2102,10 +2246,10 @@ export interface IPageColor {
     content?: Color[];
     number?: number;
     sort?: SortObject;
+    numberOfElements?: number;
+    pageable?: PageableObject;
     first?: boolean;
     last?: boolean;
-    pageable?: PageableObject;
-    numberOfElements?: number;
     empty?: boolean;
 
     [key: string]: any;

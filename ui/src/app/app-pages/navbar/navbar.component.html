@@ -28,6 +28,9 @@
         <a
           pRipple
           class="flex p-2 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-colors transition-duration-150"
+          [routerLink]="homeUrl"
+          routerLinkActive="text-900 surface-100"
+          [routerLinkActiveOptions]="{ exact: true }"
         >
           <i class="pi pi-home mr-2"></i>
           <span>Home</span>
@@ -37,6 +40,9 @@
         <a
           pRipple
           class="flex p-2 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-colors transition-duration-150"
+          [routerLink]="colorManagementUrl"
+          routerLinkActive="text-900 surface-100"
+          [routerLinkActiveOptions]="{ exact: true }"
         >
           <i class="pi pi-book mr-2"></i>
           <span>Color Management</span>

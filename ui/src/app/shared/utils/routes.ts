@@ -1,5 +1,6 @@
 export enum RouteEnum {
   HomePage = "",
   AuthPage = "/auth",
-  Register = "/auth/register"
+  Register = "/auth/register",
+  ColorManagement = "/color-management"
 }

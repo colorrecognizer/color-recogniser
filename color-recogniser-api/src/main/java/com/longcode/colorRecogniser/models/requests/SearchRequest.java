@@ -5,18 +5,23 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
 @Getter
 @Setter
 public class SearchRequest {
-    private List<FilterRequest> filters;
-    private List<SortRequest> sorts;
+    @Builder.Default
+    private List<FilterRequest> filters = new ArrayList<>();
+
+    @Builder.Default
+    private List<SortRequest> sorts = new ArrayList<>();
 
     @Min(0)
     private int page;
 
-    @Min(0)
-    private int size;
+    @Min(1)
+    @Builder.Default
+    private int size = 10;
 }

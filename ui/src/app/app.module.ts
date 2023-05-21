@@ -14,7 +14,7 @@ import { ConfirmationService, MessageService } from "primeng/api";
 import { HttpErrorHandlerService } from "./shared/services/http-error-handler.service";
 import { ToastModule } from "primeng/toast";
 import { PageNotFoundComponent } from "./page-not-found/page-not-found.component";
-import { FormlyFormModule } from "./shared/modules/formly-form.module";
+import { FormlyFormModule } from "./shared/modules/formly-form/formly-form.module";
 import { AuthService } from "./shared/services/auth.service";
 import { AuthGuard } from "./shared/services/auth.guard";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";

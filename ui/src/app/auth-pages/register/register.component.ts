@@ -15,9 +15,9 @@ import { RegexUtils, RouteEnum } from "src/app/shared/utils";
 export class RegisterComponent {
   form = new FormGroup({});
   model = new RegisterRequest({
-    username: "yen_admin",
-    email: "yenngo20199@gmail.com",
-    password: "Long@123",
+    // username: "yen_admin",
+    // email: "yenngo20199@gmail.com",
+    // password: "Long@123",
   });
 
   options: FormlyFormOptions = {};

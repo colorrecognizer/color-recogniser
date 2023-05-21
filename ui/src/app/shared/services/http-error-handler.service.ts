@@ -16,8 +16,11 @@ export class HttpErrorHandlerService implements ErrorHandler {
     if (error.reason) {
       error.message = error.reason;
     } else if (error.isApiException) {
-      const response = JSON.parse(error.response);
-      error.message = response.reason;
+      try {
+        const response = JSON.parse(error.response);
+        error.message = response.reason;
+      // eslint-disable-next-line no-empty
+      } catch {}
     }
 
     const errorMessage = error.message || "Undefined error!";
