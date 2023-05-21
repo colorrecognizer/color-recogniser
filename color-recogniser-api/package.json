@@ -1,7 +1,9 @@
 {
   "devDependencies": {
+    "fancy-log": "^2.0.0",
     "gulp": "^4.0.2",
-    "gulp-ssh": "^0.7.0"
+    "gulp-ssh": "^0.7.0",
+    "nswag": "^13.19.0"
   },
   "name": "color-recogniser-api",
   "version": "1.0.0",
@@ -83,7 +85,6 @@
     "extend": "^3.0.2",
     "extend-shallow": "^2.0.1",
     "extglob": "^2.0.4",
-    "fancy-log": "^1.3.3",
     "fast-levenshtein": "^1.1.4",
     "fill-range": "^4.0.0",
     "find-up": "^1.1.2",

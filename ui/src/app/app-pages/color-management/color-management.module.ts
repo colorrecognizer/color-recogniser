@@ -7,6 +7,7 @@ import { FormlyFormModule } from "src/app/shared/modules/formly-form/formly-form
 import { SubmitButtonModule } from "src/app/shared/components/submit-button/submit-button.module";
 import { FormsModule } from "@angular/forms";
 import { ColorPickerModule } from "primeng/colorpicker";
+import { RegularlyUsedPrimengModule } from "src/app/shared/modules/regularly-used-primeng.module";
 
 @NgModule({
   declarations: [ColorManagementComponent],
@@ -16,7 +17,8 @@ import { ColorPickerModule } from "primeng/colorpicker";
     FormlyFormModule,
     SubmitButtonModule,
     FormsModule,
-    ColorPickerModule
+    ColorPickerModule,
+    RegularlyUsedPrimengModule,
   ],
 })
 export class ColorManagementModule {}

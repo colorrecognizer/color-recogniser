@@ -5,6 +5,7 @@ import { StyleClassModule } from "primeng/styleclass";
 import { CheckboxModule } from "primeng/checkbox";
 import { BadgeModule } from "primeng/badge";
 import { TooltipModule } from "primeng/tooltip";
+import { TableModule } from "primeng/table";
 
 const modules = [
   ButtonModule,
@@ -13,6 +14,7 @@ const modules = [
   CheckboxModule,
   BadgeModule,
   TooltipModule,
+  TableModule,
 ];
 
 @NgModule({

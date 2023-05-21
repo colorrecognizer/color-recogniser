@@ -1,4 +1,4 @@
-const { series } = require('gulp');
+const { series, parallel } = require('gulp');
 // import GulpSSH from 'gulp-ssh';
 var exec = require('child_process').exec;
 
@@ -32,4 +32,11 @@ exports.backupDBSchema = function (cb)
         function (err, stdout, stderr){});
 
     cb();
+}
+
+exports.generateTypescript = function(cb) {
+    exec('nswag run ../swag.nswag',
+                function (err, stdout, stderr){
+                    cb(err);
+                });
 }

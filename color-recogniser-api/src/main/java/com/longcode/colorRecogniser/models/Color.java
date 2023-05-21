@@ -1,12 +1,10 @@
 package com.longcode.colorRecogniser.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 
 @Entity
 @Table(uniqueConstraints = {
@@ -36,4 +34,13 @@ public class Color extends BaseModel {
     @Min(0)
     @Max(255)
     private short blue;
+
+    // Transient
+    public String getHexValue() {
+        return "#%s%s%s".formatted(
+                StringUtils.leftPad(Integer.toHexString(red), 2, "0"),
+                StringUtils.leftPad(Integer.toHexString(green), 2, "0"),
+                StringUtils.leftPad(Integer.toHexString(blue), 2, "0")
+        );
+    }
 }
