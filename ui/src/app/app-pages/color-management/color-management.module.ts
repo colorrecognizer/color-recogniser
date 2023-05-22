@@ -8,7 +8,7 @@ import { SubmitButtonModule } from "src/app/shared/components/submit-button/subm
 import { FormsModule } from "@angular/forms";
 import { ColorPickerModule } from "primeng/colorpicker";
 import { RegularlyUsedPrimengModule } from "src/app/shared/modules/regularly-used-primeng.module";
-import { ColorComponent } from './color/color.component';
+import { ColorComponent } from "./color/color.component";
 
 @NgModule({
   declarations: [ColorManagementComponent, ColorComponent],

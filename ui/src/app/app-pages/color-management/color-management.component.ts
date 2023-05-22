@@ -1,11 +1,8 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormGroup } from "@angular/forms";
-import { FormlyFormOptions, FormlyFieldConfig } from "@ngx-formly/core";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { DialogService, DynamicDialogRef } from "primeng/dynamicdialog";
-import { finalize, map, switchMap } from "rxjs";
+import { finalize, map } from "rxjs";
 import { Color, ColorApi } from "src/app/shared/auto-generated/apis";
-import { ColorPickerTypeComponent } from "src/app/shared/modules/formly-form/color-picker-type/color-picker-type.component";
 import { ColorComponent } from "./color/color.component";
 
 @Component({
