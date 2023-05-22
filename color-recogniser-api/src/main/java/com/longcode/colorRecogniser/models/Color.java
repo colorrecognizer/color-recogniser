@@ -7,10 +7,7 @@ import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
 @Entity
-@Table(uniqueConstraints = {
-        @UniqueConstraint(name = "UK_Color_name_red_green_blue", columnNames = {"name", "red", "green", "blue"}),
-        @UniqueConstraint(name = "UK_Color_red_green_blue", columnNames = {"red", "green", "blue"})
-})
+@Table
 @Getter
 @Setter
 @Builder

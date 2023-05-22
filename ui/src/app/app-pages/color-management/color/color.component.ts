@@ -32,7 +32,6 @@ export class ColorComponent {
         label: "Color name",
         placeholder: "Red",
         required: true,
-        pattern: "^([A-Z][a-z]*)+( {1}([A-Z][a-z]*))*$",
       },
       validation: {
         messages: {
@@ -85,7 +84,7 @@ export class ColorComponent {
           this.$message.add({
             severity: "success",
             summary: "Success",
-            detail: `Color [${this.model.name}] is added successfully!`,
+            detail: `Color [${this.model.name}] added!`,
           });
         }),
         finalize(() => {
