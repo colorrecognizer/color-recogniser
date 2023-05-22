@@ -7,14 +7,16 @@ import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 
 @Entity
-@Table
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "UK_Color_name_red_green_blue", columnNames = {"name", "red", "green", "blue"})
+})
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Color extends BaseModel {
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
@@ -32,12 +34,22 @@ public class Color extends BaseModel {
     @Max(255)
     private short blue;
 
-    // Transient
+    // Methods
     public String getHexValue() {
         return "#%s%s%s".formatted(
                 StringUtils.leftPad(Integer.toHexString(red), 2, "0"),
                 StringUtils.leftPad(Integer.toHexString(green), 2, "0"),
                 StringUtils.leftPad(Integer.toHexString(blue), 2, "0")
         );
+    }
+
+    @Override
+    public String toString() {
+        return "Color{" +
+                "name='" + name + '\'' +
+                ", red=" + red +
+                ", green=" + green +
+                ", blue=" + blue +
+                '}';
     }
 }

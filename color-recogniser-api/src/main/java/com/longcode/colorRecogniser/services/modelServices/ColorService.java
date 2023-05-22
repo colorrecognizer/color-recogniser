@@ -21,20 +21,4 @@ public class ColorService extends BaseModelService<Color> {
     public void setColorRepository(ColorRepository colorRepository) {
         this.colorRepository = colorRepository;
     }
-
-    @Override
-    public Color insert(Color model) {
-        if (model == null)
-            return null;
-
-        if (colorRepository.existsByName(model.getName()))
-            throw new ApiException("Color [%s] existed!".formatted(model.getName()));
-
-        Color existedColor = colorRepository.findByRedAndGreenAndBlue(model.getRed(), model.getGreen(), model.getBlue());
-        if (existedColor != null) {
-            throw new ApiException("The color code has been used for color [%s]!".formatted(existedColor.getName()));
-        }
-
-        return super.insert(model);
-    }
 }

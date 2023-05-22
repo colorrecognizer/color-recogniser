@@ -90,6 +90,8 @@ export class ColorComponent {
         finalize(() => {
           this.form.enable();
           this.finalized.emit();
+        }),
+        map(() => {
           this.$dynamicDialogRef.close();
         })
       )

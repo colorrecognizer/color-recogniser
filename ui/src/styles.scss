@@ -38,3 +38,8 @@ p-colorpicker {
 .p-column-title {
   @include styleclass("font-medium text-900");
 }
+
+div.p-toast-detail {
+  inline-size: 15rem;
+  overflow-wrap: break-word;
+}

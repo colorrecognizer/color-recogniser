@@ -1,81 +1,70 @@
-<div
-  class="align-items-center flex flex-column justify-content-center p-2 lg:p-5 surface-ground gap-2"
->
-  <!-- <div class="surface-card p-2 lg:p-5 shadow-2 border-round w-full lg:w-6">
-    <app-color (finalized)="refresh()"></app-color>
-  </div> -->
-
-  <div class="surface-card p-2 lg:p-5 shadow-2 border-round">
-    <p-table
-      [value]="colors"
-      responsiveLayout="stack"
-      breakpoint="991px"
-      [loading]="colorTableLoading"
-      styleClass="p-datatable-sm p-datatable-striped"
-      [paginator]="true"
-      paginatorPosition="both"
-      [rows]="10"
-      [lazy]="true"
-      (onLazyLoad)="loadColors($event)"
-      [totalRecords]="totalColors"
-      [showCurrentPageReport]="true"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} colors"
-      [rowsPerPageOptions]="[10, 25, 50]"
-    >
-      <ng-template pTemplate="header">
-        <tr>
-          <th pSortableColumn="name">
-            Name <p-sortIcon field="name"></p-sortIcon>
-          </th>
-          <th>Code</th>
-          <th>Actions</th>
-        </tr>
-        <tr>
-          <th><p-columnFilter type="text" field="name"></p-columnFilter></th>
-          <th></th>
-          <th></th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-color>
-        <tr>
-          <td>
-            <span class="p-column-title">Name</span>
-            <div class="flex justify-content-between align-items-center gap-2">
-              <span>{{ color.name }}</span>
-              <p-colorPicker
-                [ngModel]="color.hexValue"
-                [disabled]="true"
-              ></p-colorPicker>
-            </div>
-          </td>
-          <td>
-            <span class="p-column-title"> Code </span> {{ color.hexValue }}
-          </td>
-          <td>
-            <span class="p-column-title"> Actions </span>
-            <div class="flex flex-wrap gap-2">
-              <p-button
-                icon="pi pi-pencil"
-                (onClick)="openColorEditor(color)"
-              ></p-button>
-              <p-button
-                icon="pi pi-trash"
-                (onClick)="deleteColor($event, color)"
-                styleClass="p-button-danger"
-              ></p-button>
-            </div>
-          </td>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="paginatorleft">
-        <p-button
-          label="Add color"
-          type="button"
-          icon="pi pi-plus"
-          styleClass="p-button-text"
-          (onClick)="openColorEditor()"
-        ></p-button>
-      </ng-template>
-    </p-table>
-  </div>
+<div class="surface-card p-2 lg:p-5 shadow-2 border-round">
+  <p-table
+    [value]="colors"
+    [tableStyle]="{ 'min-width': '35rem' }"
+    [loading]="colorTableLoading"
+    styleClass="p-datatable-sm p-datatable-striped"
+    [paginator]="true"
+    paginatorPosition="both"
+    [rows]="10"
+    [lazy]="true"
+    (onLazyLoad)="loadColors($event)"
+    [totalRecords]="totalColors"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} colors"
+    [rowsPerPageOptions]="[10, 25, 50]"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="name">
+          Name <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th>Code</th>
+        <th>Actions</th>
+      </tr>
+      <tr>
+        <th><p-columnFilter type="text" field="name"></p-columnFilter></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-color>
+      <tr>
+        <td>
+          <span class="p-column-title">Name</span>
+          <div class="flex justify-content-between align-items-center gap-2">
+            <span>{{ color.name }}</span>
+            <p-colorPicker
+              [ngModel]="color.hexValue"
+              [disabled]="true"
+            ></p-colorPicker>
+          </div>
+        </td>
+        <td><span class="p-column-title"> Code </span> {{ color.hexValue }}</td>
+        <td>
+          <span class="p-column-title"> Actions </span>
+          <div class="flex flex-wrap gap-2">
+            <p-button
+              icon="pi pi-pencil"
+              (onClick)="openColorEditor(color)"
+            ></p-button>
+            <p-button
+              icon="pi pi-trash"
+              (onClick)="deleteColor($event, color)"
+              styleClass="p-button-danger"
+            ></p-button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft">
+      <p-button
+        label="Add color"
+        type="button"
+        icon="pi pi-plus"
+        styleClass="p-button-text"
+        (onClick)="openColorEditor()"
+      ></p-button>
+    </ng-template>
+  </p-table>
 </div>

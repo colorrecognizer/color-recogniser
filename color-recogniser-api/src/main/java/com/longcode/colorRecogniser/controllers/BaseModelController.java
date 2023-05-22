@@ -1,5 +1,6 @@
 package com.longcode.colorRecogniser.controllers;
 
+import com.longcode.colorRecogniser.config.ApiException;
 import com.longcode.colorRecogniser.models.BaseModel;
 import com.longcode.colorRecogniser.models.requests.SearchRequest;
 import com.longcode.colorRecogniser.services.modelServices.BaseModelService;
@@ -39,7 +40,11 @@ public abstract class BaseModelController<T extends BaseModel> {
 
     @PostMapping("/insert")
     public ResponseEntity<T> insert(@RequestBody @Valid T model) {
-        return ResponseEntity.ok(baseModelService.insert(model));
+        try {
+            return ResponseEntity.ok(baseModelService.insert(model));
+        } catch (Exception e) {
+            throw new ApiException("Data [%s] insertion failed!".formatted(model.toString()));
+        }
     }
 
     @PutMapping("/update")
