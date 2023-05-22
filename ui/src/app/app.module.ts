@@ -21,6 +21,12 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { TokenInterceptor } from "./shared/services/token.interceptor";
 import { API_BASE_URL } from "./shared/auto-generated/apis";
 import { environment } from "src/environments/environment";
+import { ConfirmPopupModule } from "primeng/confirmpopup";
+import {
+  DialogService,
+  DynamicDialogConfig,
+  DynamicDialogRef,
+} from "primeng/dynamicdialog";
 
 @NgModule({
   declarations: [AppComponent, PageNotFoundComponent],
@@ -36,6 +42,7 @@ import { environment } from "src/environments/environment";
     ToastModule,
     FormlyFormModule,
     HttpClientModule,
+    ConfirmPopupModule,
   ],
   providers: [
     // One way of configuring ngForage
@@ -67,6 +74,9 @@ import { environment } from "src/environments/environment";
       provide: API_BASE_URL,
       useValue: environment.apiUrl,
     },
+    DialogService,
+    DynamicDialogRef,
+    DynamicDialogConfig,
   ],
   bootstrap: [AppComponent],
   exports: [],

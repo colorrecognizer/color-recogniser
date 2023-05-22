@@ -14,35 +14,21 @@ export class ColorPickerTypeComponent extends FieldType<FieldTypeConfig> {
     return `#${r}${g}${b}`;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  changeColor(event: any) {
-    if (!event.value) return;
+  set hex(value: string) {
+    if (!value) return;
+
+    if (value.match("^#{0,1}(?:[0-9a-fA-F]{3}){2}$")) {
+      if (value.length === 7) value = value.substring(1);
+      this.model.color = {
+        r: parseInt(value.substring(0, 2), 16),
+        g: parseInt(value.substring(2, 4), 16),
+        b: parseInt(value.substring(4, 6), 16),
+      };
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onHexValueEntered(event: any) {
-    if (!event.target?.value) return;
-
-    let hex = event.target.value as string;
-    if (hex.match("^#{0,1}(?:[0-9a-fA-F]{3}){2}$")) {
-      if (hex.length === 4 || hex.length === 7) hex = hex.substring(1);
-
-      let r, g, b;
-      if (hex.length === 3) {
-        r = parseInt(hex.substring(0, 1), 16);
-        g = parseInt(hex.substring(1, 2), 16);
-        b = parseInt(hex.substring(2, 3), 16);
-      } else {
-        r = parseInt(hex.substring(0, 2), 16);
-        g = parseInt(hex.substring(2, 4), 16);
-        b = parseInt(hex.substring(4, 6), 16);
-      }
-
-      this.model.color = {
-        r: r,
-        g: g,
-        b: b,
-      };
-    }
+  changeColor(event: any) {
+    if (!event.value) return;
   }
 }

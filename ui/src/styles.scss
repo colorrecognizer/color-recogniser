@@ -27,3 +27,10 @@ a {
 
 @import "./assets/scss/formly.scss";
 @import "./assets/scss/size.scss";
+
+p-colorpicker {
+  .p-disabled,
+  .p-component:disabled {
+    opacity: 1 !important;
+  }
+}
