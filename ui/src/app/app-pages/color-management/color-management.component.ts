@@ -138,13 +138,17 @@ export class ColorManagementComponent implements OnDestroy {
     });
   }
 
-  openColorEditor(color: Color) {
+  openColorEditor(color?: Color) {
     this.colorEditorDialogRef = this.$dialog.open(ColorComponent, {
-      header: "Edit color",
+      header: color ? "Edit color" : "Add color",
       draggable: true,
       data: {
         color: color,
       },
+    });
+
+    this.colorEditorDialogRef.onClose.subscribe(() => {
+      this.refresh();
     });
   }
 }

@@ -91,6 +91,7 @@ export class ColorComponent {
         finalize(() => {
           this.form.enable();
           this.finalized.emit();
+          this.$dynamicDialogRef.close();
         })
       )
       .subscribe();
