@@ -45,7 +45,8 @@
         "plugin:@angular-eslint/template/accessibility"
       ],
       "rules": {
-        "@angular-eslint/template/elements-content": "off"
+        "@angular-eslint/template/elements-content": "off",
+        "@angular-eslint/template/interactive-supports-focus": "off"
       }
     }
   ]
