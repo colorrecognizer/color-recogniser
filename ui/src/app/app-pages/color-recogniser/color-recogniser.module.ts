@@ -3,15 +3,14 @@ import { CommonModule } from "@angular/common";
 
 import { ColorRecogniserRoutingModule } from "./color-recogniser-routing.module";
 import { ColorRecogniserComponent } from "./color-recogniser.component";
-
+import { AngularResizeEventModule } from "angular-resize-event";
 
 @NgModule({
-  declarations: [
-    ColorRecogniserComponent
-  ],
+  declarations: [ColorRecogniserComponent],
   imports: [
     CommonModule,
-    ColorRecogniserRoutingModule
-  ]
+    ColorRecogniserRoutingModule,
+    AngularResizeEventModule,
+  ],
 })
-export class ColorRecogniserModule { }
+export class ColorRecogniserModule {}

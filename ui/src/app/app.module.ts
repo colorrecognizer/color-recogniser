@@ -27,6 +27,7 @@ import {
   DynamicDialogConfig,
   DynamicDialogRef,
 } from "primeng/dynamicdialog";
+import { AngularResizeEventModule } from "angular-resize-event";
 
 @NgModule({
   declarations: [AppComponent, PageNotFoundComponent],
@@ -77,6 +78,7 @@ import {
     DialogService,
     DynamicDialogRef,
     DynamicDialogConfig,
+    AngularResizeEventModule,
   ],
   bootstrap: [AppComponent],
   exports: [],
