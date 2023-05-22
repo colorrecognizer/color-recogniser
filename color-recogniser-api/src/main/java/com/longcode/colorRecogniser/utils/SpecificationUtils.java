@@ -4,9 +4,9 @@ import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;
 
 public class SpecificationUtils {
-    public static Path<?> getPath(Root root, String keyString) {
+    public static <T> Path<T> getPath(Root<T> root, String keyString) {
         String[] keys = keyString.split("\\.");
-        Path<?> key = root;
+        Path<T> key = root;
         for(var k : keys) {
             key = key.get(k);
         }

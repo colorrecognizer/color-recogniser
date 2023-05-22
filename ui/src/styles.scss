@@ -34,3 +34,7 @@ p-colorpicker {
     opacity: 1 !important;
   }
 }
+
+.p-column-title {
+  @include styleclass("font-medium text-900");
+}

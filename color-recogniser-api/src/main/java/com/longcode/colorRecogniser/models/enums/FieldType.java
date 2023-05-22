@@ -5,6 +5,11 @@ public enum FieldType {
         public Object parse(String value) {
             return Boolean.valueOf(value);
         }
+    },
+    STRING {
+        public Object parse(String value) {
+            return value;
+        }
     };
 
     public abstract Object parse(String value);

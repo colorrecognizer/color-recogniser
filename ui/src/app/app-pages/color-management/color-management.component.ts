@@ -1,19 +1,29 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { DialogService, DynamicDialogRef } from "primeng/dynamicdialog";
 import { finalize, map } from "rxjs";
-import { Color, ColorApi } from "src/app/shared/auto-generated/apis";
+import {
+  Color,
+  ColorApi,
+  FilterRequest,
+  SortRequest,
+} from "src/app/shared/auto-generated/apis";
 import { ColorComponent } from "./color/color.component";
+import { SearchRequest } from "src/app/shared/auto-generated/apis";
+import { TableLazyLoadEvent } from "primeng/table";
+import { TableUtils, Utils } from "src/app/shared/utils";
 
 @Component({
   selector: "app-color-management",
   templateUrl: "./color-management.component.html",
   styleUrls: ["./color-management.component.scss"],
 })
-export class ColorManagementComponent implements OnInit, OnDestroy {
+export class ColorManagementComponent implements OnDestroy {
   colors: Color[] = [];
   colorTableLoading = false;
   colorEditorDialogRef?: DynamicDialogRef;
+  totalColors = 0;
+  colorTableLazyLoadEvent?: TableLazyLoadEvent;
 
   constructor(
     private $colorApi: ColorApi,
@@ -26,19 +36,73 @@ export class ColorManagementComponent implements OnInit, OnDestroy {
     if (this.colorEditorDialogRef) this.colorEditorDialogRef.close();
   }
 
-  ngOnInit(): void {
-    this.refresh();
-  }
-
   refresh() {
+    if (
+      Utils.isNullOrUndefined(this.colorTableLazyLoadEvent) ||
+      Utils.isNullOrUndefined(this.colorTableLazyLoadEvent?.first) ||
+      Utils.isNullOrUndefined(this.colorTableLazyLoadEvent?.rows)
+    ) {
+      return;
+    }
+
+    this.colorTableLazyLoadEvent.sortField =
+      this.colorTableLazyLoadEvent.sortField || "name";
+
+    this.colorTableLazyLoadEvent.sortOrder =
+      this.colorTableLazyLoadEvent.sortOrder || 1;
+
+    const filters: FilterRequest[] = [];
+    if (this.colorTableLazyLoadEvent.filters?.["name"]) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const filter = this.colorTableLazyLoadEvent.filters?.["name"] as any;
+      if (!Utils.isNullOrUndefined(filter.value)) {
+        filters.push(
+          new FilterRequest({
+            key: "name",
+            operator: TableUtils.convertMatchModeToOperator(filter.matchMode),
+            fieldType: "STRING",
+            value: filter.value,
+          })
+        );
+      }
+    }
+
     this.colorTableLoading = true;
     this.$colorApi
-      .getAll()
+      .search(
+        new SearchRequest({
+          filters: filters,
+          sorts: [
+            new SortRequest({
+              key: "name",
+              direction:
+                this.colorTableLazyLoadEvent.sortField === "name" &&
+                this.colorTableLazyLoadEvent.sortOrder > 0
+                  ? "ASC"
+                  : "DESC",
+            }),
+          ],
+          page:
+            this.colorTableLazyLoadEvent.first /
+            this.colorTableLazyLoadEvent.rows,
+          size: this.colorTableLazyLoadEvent.rows || undefined,
+        })
+      )
       .pipe(
-        map((colors) => (this.colors = colors)),
+        map((page) => {
+          this.colors = page.content || [];
+          this.totalColors = page.totalElements || 0;
+        }),
         finalize(() => (this.colorTableLoading = false))
       )
       .subscribe();
+  }
+
+  loadColors(event: TableLazyLoadEvent) {
+    this.colorTableLazyLoadEvent = event;
+    setTimeout(() => {
+      this.refresh();
+    });
   }
 
   getColorHex(color: Color) {
