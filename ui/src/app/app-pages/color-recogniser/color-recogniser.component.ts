@@ -6,6 +6,17 @@ declare let Konva: any;
 const BORDER_WIDTH = 4;
 const SCROLL_SCALE_DELTA = 1.05;
 
+function getCenter(p1: any, p2: any) {
+  return {
+    x: (p1.x + p2.x) / 2,
+    y: (p1.y + p2.y) / 2,
+  };
+}
+
+function getDistance(p1: { x: any; y: any }, p2: { x: any; y: any }) {
+  return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+}
+
 @Component({
   selector: "app-color-recogniser",
   templateUrl: "./color-recogniser.component.html",
@@ -21,6 +32,9 @@ export class ColorRecogniserComponent implements AfterViewInit {
     stroke: "black",
     strokeWidth: BORDER_WIDTH,
   });
+
+  panZoomLastCenter: any = null;
+  panZoomLastDist = 0;
 
   get imageZoom(): number {
     if (!this.konvaImage) return 1;
@@ -59,6 +73,12 @@ export class ColorRecogniserComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    // by default Konva prevent some events when node is dragging
+    // it improve the performance and work well for 95% of cases
+    // we need to enable all events on Konva, even when we are dragging a node
+    // so it triggers touchmove correctly
+    Konva.hitOnDragEnabled = true;
+
     this.stage = new Konva.Stage({
       container: "canvas",
     });
@@ -123,6 +143,75 @@ export class ColorRecogniserComponent implements AfterViewInit {
         this.konvaImage.position(newPos);
       }
     );
+
+    this.stage.on(
+      "touchmove",
+      (e: { evt: { preventDefault: () => void; touches: any[] } }) => {
+        e.evt.preventDefault();
+        const touch1 = e.evt.touches[0];
+        const touch2 = e.evt.touches[1];
+
+        if (touch1 && touch2) {
+          // if the stage was under Konva's drag&drop
+          // we need to stop it, and implement our own pan logic with two pointers
+          if (this.konvaImage.isDragging()) {
+            this.konvaImage.stopDrag();
+          }
+
+          const p1 = {
+            x: touch1.clientX,
+            y: touch1.clientY,
+          };
+          const p2 = {
+            x: touch2.clientX,
+            y: touch2.clientY,
+          };
+
+          if (!this.panZoomLastCenter) {
+            this.panZoomLastCenter = getCenter(p1, p2);
+            return;
+          }
+          const newCenter = getCenter(p1, p2);
+
+          const dist = getDistance(p1, p2);
+
+          if (!this.panZoomLastDist) {
+            this.panZoomLastDist = dist;
+          }
+
+          // local coordinates of center point
+          const pointTo = {
+            x: (newCenter.x - this.konvaImage.x()) / this.konvaImage.scaleX(),
+            y: (newCenter.y - this.konvaImage.y()) / this.konvaImage.scaleX(),
+          };
+
+          const scale =
+            this.konvaImage.scaleX() * (dist / this.panZoomLastDist);
+
+          this.konvaImage.scaleX(scale);
+          this.konvaImage.scaleY(scale);
+
+          // calculate new position of the stage
+          const dx = newCenter.x - this.panZoomLastCenter.x;
+          const dy = newCenter.y - this.panZoomLastCenter.y;
+
+          const newPos = {
+            x: newCenter.x - pointTo.x * scale + dx,
+            y: newCenter.y - pointTo.y * scale + dy,
+          };
+
+          this.konvaImage.position(newPos);
+
+          this.panZoomLastDist = dist;
+          this.panZoomLastCenter = newCenter;
+        }
+      }
+    );
+
+    this.stage.on("touchend", () => {
+      this.panZoomLastDist = 0;
+      this.panZoomLastCenter = null;
+    });
   }
 
   onCanvasResized() {
