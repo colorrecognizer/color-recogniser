@@ -5,6 +5,7 @@ declare let Konva: any;
 
 const BORDER_WIDTH = 4;
 const SCROLL_SCALE_DELTA = 1.05;
+const DRAG_THRESHOLD = 0.25;
 
 function getCenter(p1: any, p2: any) {
   return {
@@ -94,6 +95,7 @@ export class ColorRecogniserComponent implements AfterViewInit {
 
       this.onCanvasResized();
       this.setToDefault();
+      this.setImageDragLimit();
 
       // add the shape to the layer
       this.layer.add(this.konvaImage);
@@ -101,6 +103,40 @@ export class ColorRecogniserComponent implements AfterViewInit {
     };
 
     this.imageObj.src = "/assets/images/andrew.jpeg";
+  }
+
+  private onImageDragLimitUpdated() {
+    if (!this.konvaImage) return;
+
+    const stageWidth = this.stage.width();
+    const stageHeight = this.stage.height();
+    const imageWidth = this.konvaImage.width() * this.konvaImage.scaleX();
+    const imageHeight = this.konvaImage.height() * this.konvaImage.scaleX();
+
+    if (this.konvaImage.x() < -imageWidth * (1 - DRAG_THRESHOLD)) {
+      this.konvaImage.x(-imageWidth * (1 - DRAG_THRESHOLD));
+    } else if (this.konvaImage.x() > stageWidth - imageWidth * DRAG_THRESHOLD) {
+      this.konvaImage.x(stageWidth - imageWidth * DRAG_THRESHOLD);
+    }
+
+    if (this.konvaImage.y() < -imageHeight * (1 - DRAG_THRESHOLD)) {
+      this.konvaImage.y(-imageHeight * (1 - DRAG_THRESHOLD));
+    } else if (
+      this.konvaImage.y() >
+      stageHeight - imageHeight * DRAG_THRESHOLD
+    ) {
+      this.konvaImage.y(stageHeight - imageHeight * DRAG_THRESHOLD);
+    }
+  }
+
+  private setImageDragLimit() {
+    if (!this.konvaImage) return;
+
+    // we can use transformer event
+    // or just shape event
+    this.konvaImage.on("dragmove", () => {
+      this.onImageDragLimitUpdated();
+    });
   }
 
   private setStageZoom() {
@@ -141,6 +177,7 @@ export class ColorRecogniserComponent implements AfterViewInit {
           y: pointer.y - mousePointTo.y * newScale,
         };
         this.konvaImage.position(newPos);
+        this.onImageDragLimitUpdated();
       }
     );
 
@@ -204,6 +241,7 @@ export class ColorRecogniserComponent implements AfterViewInit {
 
           this.panZoomLastDist = dist;
           this.panZoomLastCenter = newCenter;
+          this.onImageDragLimitUpdated();
         }
       }
     );
@@ -233,8 +271,13 @@ export class ColorRecogniserComponent implements AfterViewInit {
     // canvasHeight = canvasWidth / (imageWidth / imageHeight)
     const stageWidth = this.canvasWidth;
     const stageHeight = this.canvasWidth / (imageWidth / imageHeight);
+    const oldStageWidth = this.stage.width();
     this.stage.width(stageWidth);
+    const scale = this.stage.width() / oldStageWidth;
+
     this.stage.height(stageHeight);
+    this.konvaImage.x(this.konvaImage.x() * scale);
+    this.konvaImage.y(this.konvaImage.y() * scale);
     this.konvaImage.width(stageWidth - BORDER_WIDTH);
     this.konvaImage.height(stageHeight - BORDER_WIDTH);
     this.border.points([
