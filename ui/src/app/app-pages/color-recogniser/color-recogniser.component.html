@@ -1,3 +1,26 @@
-<div class="surface-card p-2 lg:p-5 shadow-2 border-round">
+<div
+  class="surface-card p-2 lg:p-5 shadow-2 border-round flex flex-column gap-2"
+>
+  <div class="flex flex-wrap gap-2">
+    <p-button
+      icon="pi pi-replay"
+      (onClick)="setToDefault()"
+      pTooltip="Set to default"
+      tooltipPosition="top"
+    ></p-button>
+
+    <p-inputNumber
+      [(ngModel)]="imageZoom"
+      [showButtons]="true"
+      buttonLayout="horizontal"
+      inputId="horizontal"
+      spinnerMode="horizontal"
+      [step]="1"
+      incrementButtonIcon="pi pi-plus"
+      decrementButtonIcon="pi pi-minus"
+      suffix="%"
+      styleClass="w-5rem"
+    ></p-inputNumber>
+  </div>
   <div #canvas id="canvas" (resized)="onCanvasResized()"></div>
 </div>

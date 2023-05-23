@@ -6,6 +6,9 @@ import { CheckboxModule } from "primeng/checkbox";
 import { BadgeModule } from "primeng/badge";
 import { TooltipModule } from "primeng/tooltip";
 import { TableModule } from "primeng/table";
+import { InputTextModule } from "primeng/inputtext";
+import { RadioButtonModule } from "primeng/radiobutton";
+import { InputNumberModule } from "primeng/inputnumber";
 
 const modules = [
   ButtonModule,
@@ -15,6 +18,9 @@ const modules = [
   BadgeModule,
   TooltipModule,
   TableModule,
+  InputTextModule,
+  RadioButtonModule,
+  InputNumberModule,
 ];
 
 @NgModule({

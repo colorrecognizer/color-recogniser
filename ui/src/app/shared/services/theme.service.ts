@@ -1,6 +1,7 @@
 import { DOCUMENT } from "@angular/common";
 import { Inject, Injectable } from "@angular/core";
 import { NgForage } from "ngforage";
+import { BehaviorSubject } from "rxjs";
 
 const THEME_KEY = "settings_theme";
 const SYSTEM_THEME_USED_KEY = "settings_systemThemeUsed";
@@ -12,6 +13,8 @@ type ThemeType = "light-theme" | "dark-theme";
 export class ThemeService {
   private _theme: ThemeType = "light-theme";
   private _systemThemeUsed = true;
+
+  theme = new BehaviorSubject<ThemeType>(this._theme);
 
   constructor(
     @Inject(DOCUMENT) private $document: Document,
@@ -50,6 +53,7 @@ export class ThemeService {
   }
 
   private setTheme() {
+    this.theme.next(this._theme);
     const themeLink = this.$document.getElementById(
       "app-theme"
     ) as HTMLLinkElement;
@@ -57,10 +61,6 @@ export class ThemeService {
     if (themeLink) {
       themeLink.href = this._theme + ".css";
     }
-  }
-
-  get theme(): ThemeType {
-    return this._theme;
   }
 
   get systemThemeUsed(): boolean {

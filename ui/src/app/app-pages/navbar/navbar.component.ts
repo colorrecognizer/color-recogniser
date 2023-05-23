@@ -15,22 +15,21 @@ export class NavbarComponent {
   currentUser?: User;
   colorManagementUrl = RouteEnum.ColorManagement;
   homeUrl = RouteEnum.HomePage;
+  themeIcon?: string;
 
   constructor(private $theme: ThemeService, private $auth: AuthService) {
     $auth
       .getCurrentUser()
       .pipe(map((user) => (this.currentUser = user)))
       .subscribe();
+
+    this.$theme.theme.subscribe((theme) => {
+      this.themeIcon = theme === "light-theme" ? "pi pi-sun" : "pi pi-moon";
+    });
   }
 
   toggleTheme() {
     this.$theme.switchTheme();
-  }
-
-  get themeIcon(): string {
-    return `pi ${
-      this.$theme.theme === "light-theme" ? "pi pi-sun" : "pi pi-moon"
-    }`;
   }
 
   get systemThemeUsed(): boolean {
