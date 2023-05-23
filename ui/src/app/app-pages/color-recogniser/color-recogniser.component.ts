@@ -235,8 +235,8 @@ export class ColorRecogniserComponent implements AfterViewInit {
     const stageHeight = this.canvasWidth / (imageWidth / imageHeight);
     this.stage.width(stageWidth);
     this.stage.height(stageHeight);
-    this.konvaImage.width(stageWidth - 2 * BORDER_WIDTH);
-    this.konvaImage.height(stageHeight - 2 * BORDER_WIDTH);
+    this.konvaImage.width(stageWidth - BORDER_WIDTH);
+    this.konvaImage.height(stageHeight - BORDER_WIDTH);
     this.border.points([
       0,
       0,
@@ -252,8 +252,8 @@ export class ColorRecogniserComponent implements AfterViewInit {
   }
 
   setToDefault() {
-    this.konvaImage.x(BORDER_WIDTH);
-    this.konvaImage.y(BORDER_WIDTH);
+    this.konvaImage.x(BORDER_WIDTH / 2);
+    this.konvaImage.y(BORDER_WIDTH / 2);
     this.konvaImage.scale({ x: 1, y: 1 });
   }
 }
