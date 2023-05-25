@@ -1,5 +1,7 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from "@angular/core";
 import { ThemeService } from "src/app/shared/services/theme.service";
+import { SelectionTool } from "./selection-tool";
+import { DropdownChangeEvent } from "primeng/dropdown";
 
 declare let Konva: any;
 
@@ -36,6 +38,29 @@ export class ColorRecogniserComponent implements AfterViewInit {
 
   panZoomLastCenter: any = null;
   panZoomLastDist = 0;
+
+  selectionTools: SelectionTool[] = [
+    {
+      icon: "pi pi-stop",
+      label: "Rectangle selection",
+      type: "rectangle",
+    },
+    {
+      icon: "pi pi-circle",
+      label: "Ellipse selection",
+      type: "ellipse",
+    },
+    {
+      label: "Free selection",
+      svgPath: "/assets/svgs/free-drawing.svg",
+      type: "free",
+    },
+  ];
+
+  selectedSelectionTool?: SelectionTool;
+  canModifyImage = true;
+  selection: any;
+  freeDrawingGroup: any;
 
   get imageZoom(): number {
     if (!this.konvaImage) return 1;
@@ -106,7 +131,9 @@ export class ColorRecogniserComponent implements AfterViewInit {
   }
 
   private onImageDragLimitUpdated() {
-    if (!this.konvaImage) return;
+    if (!this.konvaImage || !this.stage) {
+      return;
+    }
 
     const stageWidth = this.stage.width();
     const stageHeight = this.stage.height();
@@ -145,6 +172,8 @@ export class ColorRecogniserComponent implements AfterViewInit {
       (e: {
         evt: { preventDefault: () => void; deltaY: number; ctrlKey: any };
       }) => {
+        if (!this.canModifyImage) return;
+
         // stop default scrolling
         e.evt.preventDefault();
 
@@ -184,6 +213,8 @@ export class ColorRecogniserComponent implements AfterViewInit {
     this.stage.on(
       "touchmove",
       (e: { evt: { preventDefault: () => void; touches: any[] } }) => {
+        if (!this.canModifyImage) return;
+
         e.evt.preventDefault();
         const touch1 = e.evt.touches[0];
         const touch2 = e.evt.touches[1];
@@ -273,7 +304,7 @@ export class ColorRecogniserComponent implements AfterViewInit {
     const stageHeight = this.canvasWidth / (imageWidth / imageHeight);
     const oldStageWidth = this.stage.width();
     this.stage.width(stageWidth);
-    const scale = this.stage.width() / oldStageWidth;
+    const scale = oldStageWidth ? this.stage.width() / oldStageWidth : 1;
 
     this.stage.height(stageHeight);
     this.konvaImage.x(this.konvaImage.x() * scale);
@@ -298,5 +329,128 @@ export class ColorRecogniserComponent implements AfterViewInit {
     this.konvaImage.x(BORDER_WIDTH / 2);
     this.konvaImage.y(BORDER_WIDTH / 2);
     this.konvaImage.scale({ x: 1, y: 1 });
+  }
+
+  onSelectionToolChanged() {
+    this.stage.off(
+      "mousedown touchstart mousemove touchmove mouseup touchend"
+    );
+
+    this.selection?.destroy();
+
+    if (!this.selectedSelectionTool) {
+      this.canModifyImage = true;
+      this.konvaImage.draggable(true);
+
+      return;
+    }
+
+    this.canModifyImage = false;
+    this.konvaImage.draggable(false);
+
+    switch (this.selectedSelectionTool.type) {
+      case "rectangle":
+        this.selection = new Konva.Rect();
+        break;
+      case "ellipse":
+        this.selection = new Konva.Ellipse();
+        break;
+      case "free":
+        this.selection = new Konva.Line({
+          points: [],
+          closed: true,
+        });
+
+        break;
+    }
+
+    this.selection.fill("rgba(0,0,255,0.5)");
+    this.selection.visible(false);
+    this.layer.add(this.selection);
+
+    let x1: number, y1: number, x2: number, y2: number;
+    let isSelecting = false;
+
+    this.stage.on(
+      "mousedown touchstart",
+      (e: { target: any; evt: { preventDefault: () => void } }) => {
+        // do nothing if we mousedown on any shape
+        if (!this.selectedSelectionTool) {
+          return;
+        }
+
+        isSelecting = true;
+        e.evt.preventDefault();
+
+        x1 = this.stage.getPointerPosition().x;
+        y1 = this.stage.getPointerPosition().y;
+        x2 = this.stage.getPointerPosition().x;
+        y2 = this.stage.getPointerPosition().y;
+
+        this.selection.visible(true);
+
+        if (this.selectedSelectionTool.type === "free") {
+          this.selection.points([x1, y1]);
+        } else {
+          this.selection.width(0);
+          this.selection.height(0);
+        }
+      }
+    );
+
+    this.stage.on(
+      "mousemove touchmove",
+      (e: { evt: { preventDefault: () => void } }) => {
+        // do nothing if we didn't start selection
+        if (
+          !this.selectedSelectionTool ||
+          !this.selection.visible() ||
+          !isSelecting
+        ) {
+          return;
+        }
+
+        e.evt.preventDefault();
+        x2 = this.stage.getPointerPosition().x;
+        y2 = this.stage.getPointerPosition().y;
+
+        if (this.selectedSelectionTool.type === "free") {
+          this.selection.points(this.selection.points().concat([x2, y2]));
+        } else {
+          let x = 0,
+            y = 0;
+          switch (this.selectedSelectionTool.type) {
+            case "rectangle":
+              x = Math.min(x1, x2);
+              y = Math.min(y1, y2);
+              break;
+            case "ellipse":
+              x = Math.min(x1, x2) + Math.abs(x2 - x1) / 2;
+              y = Math.min(y1, y2) + Math.abs(y2 - y1) / 2;
+              break;
+          }
+
+          this.selection.setAttrs({
+            x: x,
+            y: y,
+            width: Math.abs(x2 - x1),
+            height: Math.abs(y2 - y1),
+          });
+        }
+      }
+    );
+
+    this.stage.on(
+      "mouseup touchend",
+      (e: { evt: { preventDefault: () => void } }) => {
+        // do nothing if we didn't start selection
+        if (!this.selectedSelectionTool || !this.selection.visible()) {
+          return;
+        }
+
+        e.evt.preventDefault();
+        isSelecting = false;
+      }
+    );
   }
 }

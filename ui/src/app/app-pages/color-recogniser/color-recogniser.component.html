@@ -1,12 +1,13 @@
 <div
   class="surface-card p-2 lg:p-5 shadow-2 border-round flex flex-column gap-2"
 >
-  <div class="flex flex-wrap gap-2">
+  <div class="flex flex-wrap align-items-center gap-2">
     <p-button
       icon="pi pi-replay"
       (onClick)="setToDefault()"
       pTooltip="Set to default"
       tooltipPosition="top"
+      [disabled]="!canModifyImage"
     ></p-button>
 
     <p-inputNumber
@@ -20,7 +21,56 @@
       decrementButtonIcon="pi pi-minus"
       suffix="%"
       inputStyleClass="w-5rem"
+      [disabled]="!canModifyImage"
     ></p-inputNumber>
+
+    <p-dropdown
+      [options]="selectionTools"
+      [(ngModel)]="selectedSelectionTool"
+      optionLabel="label"
+      [showClear]="true"
+      placeholder="Selection tool"
+      (onChange)="onSelectionToolChanged()"
+    >
+      <ng-template pTemplate="selectedItem">
+        <div
+          class="flex align-items-center gap-2"
+          *ngIf="selectedSelectionTool"
+        >
+          <div class="flex gap-2 align-items-center">
+            <i
+              *ngIf="selectedSelectionTool.icon"
+              [ngClass]="selectedSelectionTool.icon"
+            ></i>
+            <img
+              *ngIf="selectedSelectionTool.svgPath"
+              [src]="selectedSelectionTool.svgPath"
+              alt="Free drawing icon"
+              width="16"
+              height="16"
+            />
+          </div>
+        </div>
+      </ng-template>
+      <ng-template let-selectedSelectionTool pTemplate="item">
+        <div class="flex align-items-center gap-2">
+          <div class="flex gap-2 align-items-center">
+            <i
+              *ngIf="selectedSelectionTool.icon"
+              [ngClass]="selectedSelectionTool.icon"
+            ></i>
+            <img
+              *ngIf="selectedSelectionTool.svgPath"
+              [src]="selectedSelectionTool.svgPath"
+              alt="Free drawing icon"
+              width="16"
+              height="16"
+            />
+            <span>{{ selectedSelectionTool.label }}</span>
+          </div>
+        </div>
+      </ng-template>
+    </p-dropdown>
   </div>
   <div #canvas id="canvas" (resized)="onCanvasResized()"></div>
 </div>

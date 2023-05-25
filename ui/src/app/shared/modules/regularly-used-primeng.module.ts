@@ -9,6 +9,8 @@ import { TableModule } from "primeng/table";
 import { InputTextModule } from "primeng/inputtext";
 import { RadioButtonModule } from "primeng/radiobutton";
 import { InputNumberModule } from "primeng/inputnumber";
+import { DividerModule } from "primeng/divider";
+import { DropdownModule } from "primeng/dropdown";
 
 const modules = [
   ButtonModule,
@@ -21,6 +23,8 @@ const modules = [
   InputTextModule,
   RadioButtonModule,
   InputNumberModule,
+  DividerModule,
+  DropdownModule
 ];
 
 @NgModule({
