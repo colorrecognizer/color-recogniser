@@ -278,6 +278,7 @@ export class ColorRecogniserComponent implements AfterViewInit {
     );
 
     this.stage.on("touchend", () => {
+      if (!this.canModifyImage) return;
       this.panZoomLastDist = 0;
       this.panZoomLastCenter = null;
     });
@@ -332,9 +333,7 @@ export class ColorRecogniserComponent implements AfterViewInit {
   }
 
   onSelectionToolChanged() {
-    this.stage.off(
-      "mousedown touchstart mousemove touchmove mouseup touchend"
-    );
+    this.stage.off("mousedown touchstart mousemove touchmove mouseup touchend");
 
     this.selection?.destroy();
 
@@ -342,6 +341,8 @@ export class ColorRecogniserComponent implements AfterViewInit {
       this.canModifyImage = true;
       this.konvaImage.draggable(true);
 
+      // Turn on zoom back because it is off in the first line of the function
+      this.setStageZoom();
       return;
     }
 
