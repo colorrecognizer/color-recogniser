@@ -64,8 +64,8 @@ public class ApiController {
             double ar = 0, ag = 0, ab = 0;
             int count = 0;
 
-            for (double px = minX; px <= maxX; px += (maxX - minX) / steps) {
-                for (double py = minY; py <= maxY; py += (maxY - minY) / steps) {
+            for (double px = minX; px < maxX; px += (maxX - minX) / steps) {
+                for (double py = minY; py < maxY; py += (maxY - minY) / steps) {
                     boolean isInside = false;
                     switch (recogniserRequest.selectionType) {
                         case RECTANGLE -> isInside = true;

@@ -604,7 +604,31 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
     this.selection.visible(false);
     this.layer.draw();
 
-    this.canvas.toBlob((blob: any) => {
+    //create a new canvas
+    const uploadedCanvas = document.getElementById("uploadedCanvas") as any;
+    const context = uploadedCanvas.getContext("2d");
+
+    //set dimensions
+    const desiredSize = 300;
+    const scale = Math.max(maxx - minx, maxy - miny) / desiredSize;
+    uploadedCanvas.width = (maxx - minx) / scale;
+    uploadedCanvas.height = (maxy - miny) / scale;
+
+    //apply the old canvas to the new one
+    const realImageScale = this.canvas.width / this.stage.width();
+    context?.drawImage(
+      this.canvas,
+      minx * realImageScale,
+      miny * realImageScale,
+      (maxx - minx) * realImageScale,
+      (maxy - miny) * realImageScale,
+      0,
+      0,
+      uploadedCanvas.width,
+      uploadedCanvas.height
+    );
+
+    uploadedCanvas.toBlob((blob: any) => {
       if (!this.selectedSelectionTool) return;
 
       const formData: FormData = new FormData();
@@ -613,11 +637,19 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
         "recogniserRequest",
         JSON.stringify({
           selectionType: this.selectedSelectionTool.type,
-          minX: minx,
-          maxX: maxx,
-          minY: miny,
-          maxY: maxy,
-          points: this.selectedSelectionTool.type === "FREE" ? coordinates : [],
+          minX: 0,
+          maxX: uploadedCanvas.width,
+          minY: 0,
+          maxY: uploadedCanvas.height,
+          points:
+            this.selectedSelectionTool.type === "FREE"
+              ? coordinates.map((c) => {
+                  return {
+                    x: (c.x - minx) / scale,
+                    y: (c.y - miny) / scale,
+                  };
+                })
+              : [],
         })
       );
 
