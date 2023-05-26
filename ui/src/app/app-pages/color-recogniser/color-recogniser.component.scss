@@ -3,3 +3,9 @@
   width: 24px;
   height: 24px;
 }
+
+:host ::ng-deep p-fileupload {
+  span.p-fileupload-choose {
+    width: 10rem;
+  }
+}

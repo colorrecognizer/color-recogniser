@@ -1116,6 +1116,89 @@ export class ApiApi {
     }
 
     /**
+     * @param body (optional) 
+     * @return OK
+     */
+    recognise(recogniserRequest: string, body: Body | undefined): Observable<Color[]> {
+        let url_ = this.baseUrl + "/api/recognise?";
+        if (recogniserRequest === undefined || recogniserRequest === null)
+            throw new Error("The parameter 'recogniserRequest' must be defined and cannot be null.");
+        else
+            url_ += "recogniserRequest=" + encodeURIComponent("" + recogniserRequest) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "*/*"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processRecognise(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processRecognise(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<Color[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<Color[]>;
+        }));
+    }
+
+    protected processRecognise(response: HttpResponseBase): Observable<Color[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(Color.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * @return OK
      */
     test(longParameter: string): Observable<string> {
@@ -1149,86 +1232,6 @@ export class ApiApi {
     }
 
     protected processTest(response: HttpResponseBase): Observable<string> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (response as any).error instanceof Blob ? (response as any).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 400) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result400: any = null;
-            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (resultData400) {
-                result400 = {} as any;
-                for (let key in resultData400) {
-                    if (resultData400.hasOwnProperty(key))
-                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
-                }
-            }
-            else {
-                result400 = <any>null;
-            }
-            return throwException("Bad Request", status, _responseText, _headers, result400);
-            }));
-        } else if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf(null as any);
-    }
-
-    /**
-     * @return OK
-     */
-    recognise(red: number, green: number, blue: number): Observable<string> {
-        let url_ = this.baseUrl + "/api/recognise?";
-        if (red === undefined || red === null)
-            throw new Error("The parameter 'red' must be defined and cannot be null.");
-        else
-            url_ += "red=" + encodeURIComponent("" + red) + "&";
-        if (green === undefined || green === null)
-            throw new Error("The parameter 'green' must be defined and cannot be null.");
-        else
-            url_ += "green=" + encodeURIComponent("" + green) + "&";
-        if (blue === undefined || blue === null)
-            throw new Error("The parameter 'blue' must be defined and cannot be null.");
-        else
-            url_ += "blue=" + encodeURIComponent("" + blue) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "*/*"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processRecognise(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processRecognise(response_ as any);
-                } catch (e) {
-                    return _observableThrow(e) as any as Observable<string>;
-                }
-            } else
-                return _observableThrow(response_) as any as Observable<string>;
-        }));
-    }
-
-    protected processRecognise(response: HttpResponseBase): Observable<string> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1332,10 +1335,10 @@ export class User implements IUser {
     enabled?: boolean;
     accountNonLocked?: boolean;
     authorities?: GrantedAuthority[];
-    accountNonExpired?: boolean;
-    credentialsNonExpired?: boolean;
     admin?: boolean;
     user?: boolean;
+    accountNonExpired?: boolean;
+    credentialsNonExpired?: boolean;
 
     [key: string]: any;
 
@@ -1370,10 +1373,10 @@ export class User implements IUser {
                 for (let item of _data["authorities"])
                     this.authorities!.push(GrantedAuthority.fromJS(item));
             }
-            this.accountNonExpired = _data["accountNonExpired"];
-            this.credentialsNonExpired = _data["credentialsNonExpired"];
             this.admin = _data["admin"];
             this.user = _data["user"];
+            this.accountNonExpired = _data["accountNonExpired"];
+            this.credentialsNonExpired = _data["credentialsNonExpired"];
         }
     }
 
@@ -1406,10 +1409,10 @@ export class User implements IUser {
             for (let item of this.authorities)
                 data["authorities"].push(item.toJSON());
         }
-        data["accountNonExpired"] = this.accountNonExpired;
-        data["credentialsNonExpired"] = this.credentialsNonExpired;
         data["admin"] = this.admin;
         data["user"] = this.user;
+        data["accountNonExpired"] = this.accountNonExpired;
+        data["credentialsNonExpired"] = this.credentialsNonExpired;
         return data;
     }
 
@@ -1430,10 +1433,10 @@ export interface IUser {
     enabled?: boolean;
     accountNonLocked?: boolean;
     authorities?: GrantedAuthority[];
-    accountNonExpired?: boolean;
-    credentialsNonExpired?: boolean;
     admin?: boolean;
     user?: boolean;
+    accountNonExpired?: boolean;
+    credentialsNonExpired?: boolean;
 
     [key: string]: any;
 }
@@ -1844,10 +1847,10 @@ export interface IPageUser {
 export class PageableObject implements IPageableObject {
     offset?: number;
     sort?: SortObject;
-    pageNumber?: number;
     pageSize?: number;
-    unpaged?: boolean;
+    pageNumber?: number;
     paged?: boolean;
+    unpaged?: boolean;
 
     [key: string]: any;
 
@@ -1868,10 +1871,10 @@ export class PageableObject implements IPageableObject {
             }
             this.offset = _data["offset"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
-            this.pageNumber = _data["pageNumber"];
             this.pageSize = _data["pageSize"];
-            this.unpaged = _data["unpaged"];
+            this.pageNumber = _data["pageNumber"];
             this.paged = _data["paged"];
+            this.unpaged = _data["unpaged"];
         }
     }
 
@@ -1890,10 +1893,10 @@ export class PageableObject implements IPageableObject {
         }
         data["offset"] = this.offset;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
-        data["pageNumber"] = this.pageNumber;
         data["pageSize"] = this.pageSize;
-        data["unpaged"] = this.unpaged;
+        data["pageNumber"] = this.pageNumber;
         data["paged"] = this.paged;
+        data["unpaged"] = this.unpaged;
         return data;
     }
 
@@ -1908,10 +1911,10 @@ export class PageableObject implements IPageableObject {
 export interface IPageableObject {
     offset?: number;
     sort?: SortObject;
-    pageNumber?: number;
     pageSize?: number;
-    unpaged?: boolean;
+    pageNumber?: number;
     paged?: boolean;
+    unpaged?: boolean;
 
     [key: string]: any;
 }
@@ -2259,6 +2262,61 @@ export interface IPageColor {
     [key: string]: any;
 }
 
+export class Body implements IBody {
+    image!: string;
+
+    [key: string]: any;
+
+    constructor(data?: IBody) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.image = _data["image"];
+        }
+    }
+
+    static fromJS(data: any): Body {
+        data = typeof data === 'object' ? data : {};
+        let result = new Body();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["image"] = this.image;
+        return data;
+    }
+
+    clone(): Body {
+        const json = this.toJSON();
+        let result = new Body();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IBody {
+    image: string;
+
+    [key: string]: any;
+}
+
 export type Roles = "USER" | "ADMIN";
 
 export type UserStatus = "INACTIVE" | "ACTIVE";
@@ -2268,6 +2326,11 @@ export type FilterRequestOperator = "EQUALS" | "NOT_EQUALS" | "STARTS_WITH" | "C
 export type FilterRequestFieldType = "BOOLEAN" | "STRING";
 
 export type SortRequestDirection = "ASC" | "DESC";
+
+export interface FileParameter {
+    data: any;
+    fileName: string;
+}
 
 export class ApiException extends Error {
     override message: string;

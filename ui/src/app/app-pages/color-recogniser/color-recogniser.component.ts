@@ -1,12 +1,23 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { ThemeService } from "src/app/shared/services/theme.service";
 import { SelectionTool } from "./selection-tool";
-import { DropdownChangeEvent } from "primeng/dropdown";
+import { ApiApi, Color } from "src/app/shared/auto-generated/apis";
+import { finalize, map } from "rxjs";
+import { MessageService } from "primeng/api";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "src/environments/environment";
 
 declare let Konva: any;
+declare let Mousetrap: any;
 
 const BORDER_WIDTH = 4;
-const SCROLL_SCALE_DELTA = 1.05;
+const SCROLL_SCALE_DELTA = 1.01;
 const DRAG_THRESHOLD = 0.25;
 
 function getCenter(p1: any, p2: any) {
@@ -25,12 +36,14 @@ function getDistance(p1: { x: any; y: any }, p2: { x: any; y: any }) {
   templateUrl: "./color-recogniser.component.html",
   styleUrls: ["./color-recogniser.component.scss"],
 })
-export class ColorRecogniserComponent implements AfterViewInit {
+export class ColorRecogniserComponent implements OnInit, AfterViewInit {
   stage: any;
-  layer = new Konva.Layer();
-  imageObj = new Image();
+  layer: any;
+  imageObj: any;
   konvaImage: any;
-  @ViewChild("canvas") canvas!: ElementRef<HTMLDivElement>;
+  @ViewChild("canvas") canvasDiv!: ElementRef<HTMLDivElement>;
+  @ViewChild("matchColorTable", { static: false })
+  matchColorTable!: ElementRef<HTMLDivElement>;
   border = new Konva.Line({
     stroke: "black",
     strokeWidth: BORDER_WIDTH,
@@ -43,17 +56,17 @@ export class ColorRecogniserComponent implements AfterViewInit {
     {
       icon: "pi pi-stop",
       label: "Rectangle selection",
-      type: "rectangle",
+      type: "RECTANGLE",
     },
     {
       icon: "pi pi-circle",
       label: "Ellipse selection",
-      type: "ellipse",
+      type: "ELLIPSE",
     },
     {
       label: "Free selection",
-      svgPath: "/assets/svgs/free-drawing.svg",
-      type: "free",
+      icon: "pi pi-pencil",
+      type: "FREE",
     },
   ];
 
@@ -61,6 +74,17 @@ export class ColorRecogniserComponent implements AfterViewInit {
   canModifyImage = true;
   selection: any;
   freeDrawingGroup: any;
+  canvas: any;
+  averageColor?: {
+    r: number;
+    g: number;
+    b: number;
+  };
+
+  recogniseButtonDisabled = false;
+  private ctrlPressed = false;
+  private tipShown = false;
+  matchColors: Color[] = [];
 
   get imageZoom(): number {
     if (!this.konvaImage) return 1;
@@ -89,13 +113,36 @@ export class ColorRecogniserComponent implements AfterViewInit {
   }
 
   get canvasWidth(): number {
-    return this.canvas.nativeElement.offsetWidth;
+    return this.canvasDiv.nativeElement.offsetWidth;
   }
 
-  constructor(private $theme: ThemeService) {
+  constructor(
+    private $theme: ThemeService,
+    private $api: ApiApi,
+    private $message: MessageService,
+    private $http: HttpClient
+  ) {
     $theme.theme.subscribe((theme) => {
       this.border.stroke(theme === "light-theme" ? "black" : "white");
     });
+  }
+
+  ngOnInit(): void {
+    Mousetrap.bind(
+      ["ctrl", "command"],
+      () => {
+        this.ctrlPressed = true;
+      },
+      "keydown"
+    );
+
+    Mousetrap.bind(
+      ["ctrl", "command"],
+      () => {
+        this.ctrlPressed = false;
+      },
+      "keyup"
+    );
   }
 
   ngAfterViewInit(): void {
@@ -105,29 +152,64 @@ export class ColorRecogniserComponent implements AfterViewInit {
     // so it triggers touchmove correctly
     Konva.hitOnDragEnabled = true;
 
+    this.stage?.destroyChildren();
+
+    this.layer = new Konva.Layer();
+
     this.stage = new Konva.Stage({
       container: "canvas",
     });
 
     this.stage.add(this.layer);
+
+    this.konvaImage = new Konva.Image({
+      draggable: true,
+    });
+
+    // add the shape to the layer
+    this.layer.add(this.konvaImage);
+    this.layer.add(this.border);
+
+    this.setToDefault();
+    this.setImageDragLimit();
+
     this.setStageZoom();
 
+    // this.imageObj.src = "/assets/images/andrew.jpeg";
+    this.canvas = this.stage.container().getElementsByTagName("canvas")[0];
+  }
+
+  removeImage() {
+    this.imageObj = null;
+    this.konvaImage.setAttrs({
+      height: 0,
+      image: null,
+    });
+
+    this.onCanvasResized();
+  }
+
+  setImage(file: File) {
+    const URL = window.webkitURL || window.URL;
+    const url = URL.createObjectURL(file);
+    this.imageObj = new Image();
+    this.imageObj.src = url;
+
     this.imageObj.onload = () => {
-      this.konvaImage = new Konva.Image({
-        image: this.imageObj,
-        draggable: true,
-      });
+      if (!this.tipShown) {
+        this.$message.add({
+          severity: "info",
+          summary: "Tip",
+          detail:
+            "You can zoom in/out the image by holding down \"ctrl\"/\"⌘\" and scrolling, or using two fingers on a touch device.",
+          life: 60000,
+        });
+      }
 
+      this.tipShown = true;
+      this.konvaImage.image(this.imageObj);
       this.onCanvasResized();
-      this.setToDefault();
-      this.setImageDragLimit();
-
-      // add the shape to the layer
-      this.layer.add(this.konvaImage);
-      this.layer.add(this.border);
     };
-
-    this.imageObj.src = "/assets/images/andrew.jpeg";
   }
 
   private onImageDragLimitUpdated() {
@@ -172,7 +254,7 @@ export class ColorRecogniserComponent implements AfterViewInit {
       (e: {
         evt: { preventDefault: () => void; deltaY: number; ctrlKey: any };
       }) => {
-        if (!this.canModifyImage) return;
+        if (!this.canModifyImage || !this.ctrlPressed) return;
 
         // stop default scrolling
         e.evt.preventDefault();
@@ -286,8 +368,6 @@ export class ColorRecogniserComponent implements AfterViewInit {
 
   onCanvasResized() {
     if (
-      !this.imageObj?.width ||
-      !this.imageObj?.height ||
       !this.stage?.width ||
       !this.stage?.height ||
       !this.konvaImage?.width ||
@@ -296,34 +376,42 @@ export class ColorRecogniserComponent implements AfterViewInit {
       return;
     }
 
-    const imageWidth = this.imageObj.width;
-    const imageHeight = this.imageObj.height;
+    this.selectedSelectionTool = undefined;
+    this.onSelectionToolChanged();
 
-    // canvasWidth / canvasHeight = imageWidth / imageHeight
-    // canvasHeight = canvasWidth / (imageWidth / imageHeight)
-    const stageWidth = this.canvasWidth;
-    const stageHeight = this.canvasWidth / (imageWidth / imageHeight);
-    const oldStageWidth = this.stage.width();
-    this.stage.width(stageWidth);
-    const scale = oldStageWidth ? this.stage.width() / oldStageWidth : 1;
+    if (this.imageObj) {
+      const imageWidth = this.imageObj?.width;
+      const imageHeight = this.imageObj?.height;
 
-    this.stage.height(stageHeight);
-    this.konvaImage.x(this.konvaImage.x() * scale);
-    this.konvaImage.y(this.konvaImage.y() * scale);
-    this.konvaImage.width(stageWidth - BORDER_WIDTH);
-    this.konvaImage.height(stageHeight - BORDER_WIDTH);
-    this.border.points([
-      0,
-      0,
-      0,
-      stageHeight,
-      stageWidth,
-      stageHeight,
-      stageWidth,
-      0,
-      0,
-      0,
-    ]);
+      // canvasWidth / canvasHeight = imageWidth / imageHeight
+      // canvasHeight = canvasWidth / (imageWidth / imageHeight)
+      const stageWidth = this.canvasWidth;
+      const stageHeight = this.canvasWidth / (imageWidth / imageHeight);
+      const oldStageWidth = this.stage.width();
+      this.stage.width(stageWidth);
+      const scale = oldStageWidth ? this.stage.width() / oldStageWidth : 1;
+
+      this.stage.height(stageHeight);
+      this.konvaImage.x(this.konvaImage.x() * scale);
+      this.konvaImage.y(this.konvaImage.y() * scale);
+      this.konvaImage.width(stageWidth - BORDER_WIDTH);
+      this.konvaImage.height(stageHeight - BORDER_WIDTH);
+      this.border.points([
+        0,
+        0,
+        0,
+        stageHeight,
+        stageWidth,
+        stageHeight,
+        stageWidth,
+        0,
+        0,
+        0,
+      ]);
+    } else {
+      this.stage.height(0);
+      this.konvaImage.height(0);
+    }
   }
 
   setToDefault() {
@@ -336,6 +424,7 @@ export class ColorRecogniserComponent implements AfterViewInit {
     this.stage.off("mousedown touchstart mousemove touchmove mouseup touchend");
 
     this.selection?.destroy();
+    this.selection = undefined;
 
     if (!this.selectedSelectionTool) {
       this.canModifyImage = true;
@@ -350,13 +439,13 @@ export class ColorRecogniserComponent implements AfterViewInit {
     this.konvaImage.draggable(false);
 
     switch (this.selectedSelectionTool.type) {
-      case "rectangle":
+      case "RECTANGLE":
         this.selection = new Konva.Rect();
         break;
-      case "ellipse":
+      case "ELLIPSE":
         this.selection = new Konva.Ellipse();
         break;
-      case "free":
+      case "FREE":
         this.selection = new Konva.Line({
           points: [],
           closed: true,
@@ -365,7 +454,8 @@ export class ColorRecogniserComponent implements AfterViewInit {
         break;
     }
 
-    this.selection.fill("rgba(0,0,255,0.5)");
+    this.selection.stroke("rgba(0,0,255)");
+    this.selection.strokeWidth(BORDER_WIDTH);
     this.selection.visible(false);
     this.layer.add(this.selection);
 
@@ -390,7 +480,7 @@ export class ColorRecogniserComponent implements AfterViewInit {
 
         this.selection.visible(true);
 
-        if (this.selectedSelectionTool.type === "free") {
+        if (this.selectedSelectionTool.type === "FREE") {
           this.selection.points([x1, y1]);
         } else {
           this.selection.width(0);
@@ -415,17 +505,17 @@ export class ColorRecogniserComponent implements AfterViewInit {
         x2 = this.stage.getPointerPosition().x;
         y2 = this.stage.getPointerPosition().y;
 
-        if (this.selectedSelectionTool.type === "free") {
+        if (this.selectedSelectionTool.type === "FREE") {
           this.selection.points(this.selection.points().concat([x2, y2]));
         } else {
           let x = 0,
             y = 0;
           switch (this.selectedSelectionTool.type) {
-            case "rectangle":
+            case "RECTANGLE":
               x = Math.min(x1, x2);
               y = Math.min(y1, y2);
               break;
-            case "ellipse":
+            case "ELLIPSE":
               x = Math.min(x1, x2) + Math.abs(x2 - x1) / 2;
               y = Math.min(y1, y2) + Math.abs(y2 - y1) / 2;
               break;
@@ -453,5 +543,104 @@ export class ColorRecogniserComponent implements AfterViewInit {
         isSelecting = false;
       }
     );
+  }
+
+  recognise() {
+    if (!this.selectedSelectionTool) throw new Error("Invalid selection!");
+
+    if (
+      this.selectedSelectionTool.type === "RECTANGLE" ||
+      this.selectedSelectionTool.type === "ELLIPSE"
+    ) {
+      if (!this.selection.width() || !this.selection.height())
+        throw new Error("Invalid selection!");
+    }
+
+    this.matchColors.length = 0;
+    this.recogniseButtonDisabled = true;
+
+    let minx = this.stage.width(),
+      maxx = 0,
+      miny = this.stage.height(),
+      maxy = 0;
+
+    switch (this.selectedSelectionTool?.type) {
+      case "RECTANGLE":
+        minx = this.selection.x();
+        maxx = this.selection.x() + this.selection.width();
+        miny = this.selection.y();
+        maxy = this.selection.y() + this.selection.height();
+        break;
+
+      case "ELLIPSE":
+        minx = this.selection.x() - this.selection.width() / 2;
+        maxx = this.selection.x() + this.selection.width() / 2;
+        miny = this.selection.y() - this.selection.height() / 2;
+        maxy = this.selection.y() + this.selection.height() / 2;
+        break;
+
+      case "FREE":
+        break;
+    }
+
+    const coordinates: any[] = [];
+    if (this.selectedSelectionTool.type === "FREE") {
+      const points = this.selection.points();
+      for (let i = 0; i < points.length; i += 2) {
+        coordinates.push({
+          x: points[i],
+          y: points[i + 1],
+        });
+      }
+
+      coordinates.map((c) => {
+        minx = Math.min(minx, c.x || 0);
+        maxx = Math.max(maxx, c.x || 0);
+        miny = Math.min(miny, c.y || 0);
+        maxy = Math.max(maxy, c.y || 0);
+      });
+    }
+
+    this.selection.visible(false);
+    this.layer.draw();
+
+    this.canvas.toBlob((blob: any) => {
+      if (!this.selectedSelectionTool) return;
+
+      const formData: FormData = new FormData();
+      formData.append("image", blob);
+      formData.append(
+        "recogniserRequest",
+        JSON.stringify({
+          selectionType: this.selectedSelectionTool.type,
+          minX: minx,
+          maxX: maxx,
+          minY: miny,
+          maxY: maxy,
+          points: this.selectedSelectionTool.type === "FREE" ? coordinates : [],
+        })
+      );
+
+      this.$http
+        .post<Color[]>(`${environment.apiUrl}/api/recognise`, formData, {
+          responseType: "json",
+        })
+        .pipe(
+          map((colors) => {
+            this.matchColors = colors;
+            setTimeout(() => {
+              this.matchColorTable.nativeElement.scrollIntoView({
+                behavior: "smooth",
+                block: "end",
+              });
+            }, 1000);
+          }),
+          finalize(() => {
+            this.recogniseButtonDisabled = false;
+            this.selection.visible(true);
+          })
+        )
+        .subscribe();
+    });
   }
 }
