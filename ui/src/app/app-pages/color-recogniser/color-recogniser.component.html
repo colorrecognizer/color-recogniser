@@ -100,11 +100,10 @@
     </ng-container>
   </div>
 
-  <canvas id="uploadedCanvas"></canvas>
+  <!-- <canvas id="uploadedCanvas"></canvas> -->
 
-  <div #matchColorTable>
+  <div #matchColorTable *ngIf="matchColors.length">
     <p-table
-      [hidden]="!matchColors.length"
       [value]="matchColors"
       [tableStyle]="{ 'min-width': '35rem' }"
       styleClass="p-datatable-sm p-datatable-striped"

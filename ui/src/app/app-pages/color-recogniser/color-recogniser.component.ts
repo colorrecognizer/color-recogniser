@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  NgZone,
   OnInit,
   ViewChild,
 } from "@angular/core";
@@ -120,7 +121,8 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
     private $theme: ThemeService,
     private $api: ApiApi,
     private $message: MessageService,
-    private $http: HttpClient
+    private $http: HttpClient,
+    private $zone: NgZone
   ) {
     $theme.theme.subscribe((theme) => {
       this.border.stroke(theme === "light-theme" ? "black" : "white");
@@ -605,11 +607,12 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
     this.layer.draw();
 
     //create a new canvas
-    const uploadedCanvas = document.getElementById("uploadedCanvas") as any;
+    // const uploadedCanvas = document.getElementById("uploadedCanvas") as any;
+    const uploadedCanvas = document.createElement("canvas");
     const context = uploadedCanvas.getContext("2d");
 
     //set dimensions
-    const desiredSize = 300;
+    const desiredSize = 30;
     const scale = Math.max(maxx - minx, maxy - miny) / desiredSize;
     uploadedCanvas.width = (maxx - minx) / scale;
     uploadedCanvas.height = (maxy - miny) / scale;
@@ -659,13 +662,9 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
         })
         .pipe(
           map((colors) => {
-            this.matchColors = colors;
-            setTimeout(() => {
-              this.matchColorTable.nativeElement.scrollIntoView({
-                behavior: "smooth",
-                block: "end",
-              });
-            }, 1000);
+            this.$zone.run(() => {
+              this.matchColors = colors;
+            });
           }),
           finalize(() => {
             this.recogniseButtonDisabled = false;
