@@ -13,6 +13,8 @@ import { finalize, map } from "rxjs";
 import { MessageService } from "primeng/api";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
+import { DialogService } from "primeng/dynamicdialog";
+import { HowToMixComponent } from "src/app/shared/modules/how-to-mix/how-to-mix.component";
 
 declare let Konva: any;
 declare let Mousetrap: any;
@@ -86,7 +88,92 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
   private ctrlPressed = false;
   private zoomTipShown = false;
   private moveTipShown = false;
-  matchColors: Color[] = [];
+  private tipShown = false;
+  //   matchColors: Color[] = [];
+  matchColors: Color[] = [
+    {
+      id: 1224,
+      name: "Silver (Crayola)",
+      red: 201,
+      green: 192,
+      blue: 187,
+      hexValue: "#c9c0bb",
+    },
+    {
+      id: 1227,
+      name: "Silver pink",
+      red: 196,
+      green: 174,
+      blue: 173,
+      hexValue: "#c4aead",
+    },
+    {
+      id: 1053,
+      name: "Pastel pink",
+      red: 222,
+      green: 165,
+      blue: 164,
+      hexValue: "#dea5a4",
+    },
+    {
+      id: 164,
+      name: "Black Shadows",
+      red: 191,
+      green: 175,
+      blue: 178,
+      hexValue: "#bfafb2",
+    },
+    {
+      id: 317,
+      name: "Desert sand",
+      red: 237,
+      green: 201,
+      blue: 175,
+      hexValue: "#edc9af",
+    },
+    {
+      id: 1223,
+      name: "Silver",
+      red: 192,
+      green: 192,
+      blue: 192,
+      hexValue: "#c0c0c0",
+    },
+    {
+      id: 390,
+      name: "Gray (X11 gray)",
+      red: 190,
+      green: 190,
+      blue: 190,
+      hexValue: "#bebebe",
+    },
+    {
+      id: 1086,
+      name: "Pink lavender",
+      red: 216,
+      green: 178,
+      blue: 209,
+      hexValue: "#d8b2d1",
+    },
+    {
+      id: 1228,
+      name: "Silver sand",
+      red: 191,
+      green: 193,
+      blue: 194,
+      hexValue: "#bfc1c2",
+    },
+    {
+      id: 445,
+      name: "Kobi",
+      red: 231,
+      green: 159,
+      blue: 196,
+      hexValue: "#e79fc4",
+    },
+  ] as any;
+
+  selectedColor?: Color;
 
   get imageZoom(): number {
     if (!this.konvaImage) return 1;
@@ -139,7 +226,8 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
     private $api: ApiApi,
     private $message: MessageService,
     private $http: HttpClient,
-    private $zone: NgZone
+    private $zone: NgZone,
+    private $dialog: DialogService
   ) {
     $theme.theme.subscribe((theme) => {
       this.border.stroke(theme === "light-theme" ? "black" : "white");
@@ -698,6 +786,18 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
           })
         )
         .subscribe();
+    });
+  }
+
+  showHowToMix(color: any) {
+    if (!color) return;
+
+    this.$dialog.open(HowToMixComponent, {
+      header: `How to mix color ${color.name}`,
+      draggable: true,
+      data: {
+        color: color,
+      },
     });
   }
 }

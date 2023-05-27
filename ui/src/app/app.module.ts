@@ -28,6 +28,7 @@ import {
   DynamicDialogRef,
 } from "primeng/dynamicdialog";
 import { AngularResizeEventModule } from "angular-resize-event";
+import { HowToMixModule } from './shared/modules/how-to-mix/how-to-mix.module';
 
 @NgModule({
   declarations: [AppComponent, PageNotFoundComponent],
@@ -44,6 +45,7 @@ import { AngularResizeEventModule } from "angular-resize-event";
     FormlyFormModule,
     HttpClientModule,
     ConfirmPopupModule,
+    HowToMixModule,
   ],
   providers: [
     // One way of configuring ngForage
