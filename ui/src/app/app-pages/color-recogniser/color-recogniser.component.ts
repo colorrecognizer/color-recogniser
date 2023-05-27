@@ -84,7 +84,8 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
 
   recogniseButtonDisabled = false;
   private ctrlPressed = false;
-  private tipShown = false;
+  private zoomTipShown = false;
+  private moveTipShown = false;
   matchColors: Color[] = [];
 
   get imageZoom(): number {
@@ -94,7 +95,19 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
   }
 
   set imageZoom(value: number) {
-    if (!this.konvaImage) return;
+    if (!this.konvaImage || this.imageZoom === value) return;
+
+    if (!this.zoomTipShown) {
+      this.$message.add({
+        severity: "info",
+        summary: "Tip",
+        detail:
+          "You can zoom in/out the image by holding down \"ctrl\"/\"⌘\" while scrolling, or using two fingers on a touch device.",
+        life: 60000,
+      });
+      this.zoomTipShown = true;
+    }
+
     const scale = value / 100;
 
     const oldScale = this.konvaImage.scaleX();
@@ -117,6 +130,10 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
     return this.canvasDiv.nativeElement.offsetWidth;
   }
 
+  set canvasWidth(value: number) {
+    this.canvasDiv.nativeElement.style.width = value + "px";
+  }
+
   constructor(
     private $theme: ThemeService,
     private $api: ApiApi,
@@ -134,6 +151,7 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
       ["ctrl", "command"],
       () => {
         this.ctrlPressed = true;
+        this.konvaImage.draggable(true);
       },
       "keydown"
     );
@@ -142,6 +160,7 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
       ["ctrl", "command"],
       () => {
         this.ctrlPressed = false;
+        this.konvaImage.draggable(false);
       },
       "keyup"
     );
@@ -163,9 +182,23 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
     });
 
     this.stage.add(this.layer);
-
     this.konvaImage = new Konva.Image({
-      draggable: true,
+      preventDefault: false,
+    });
+
+    this.konvaImage.on("mousedown touchstart", (event: any) => {
+      event.evt.stopPropagation();
+
+      if (!this.moveTipShown) {
+        this.$message.add({
+          severity: "info",
+          summary: "Tip",
+          detail:
+            "You can move the image by holding down \"ctrl\"/\"⌘\" while dragging it, or using two fingers on a touch device.",
+          life: 60000,
+        });
+        this.moveTipShown = true;
+      }
     });
 
     // add the shape to the layer
@@ -179,6 +212,11 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
 
     // this.imageObj.src = "/assets/images/andrew.jpeg";
     this.canvas = this.stage.container().getElementsByTagName("canvas")[0];
+
+    this.canvas.addEventListener("mouseover", () => {
+      this.canvas.tabIndex = 1;
+      this.canvas.focus();
+    });
   }
 
   removeImage() {
@@ -198,18 +236,8 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
     this.imageObj.src = url;
 
     this.imageObj.onload = () => {
-      if (!this.tipShown) {
-        this.$message.add({
-          severity: "info",
-          summary: "Tip",
-          detail:
-            "You can zoom in/out the image by holding down \"ctrl\"/\"⌘\" and scrolling, or using two fingers on a touch device.",
-          life: 60000,
-        });
-      }
-
-      this.tipShown = true;
       this.konvaImage.image(this.imageObj);
+
       this.onCanvasResized();
     };
   }
@@ -298,12 +326,11 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
       "touchmove",
       (e: { evt: { preventDefault: () => void; touches: any[] } }) => {
         if (!this.canModifyImage) return;
-
-        e.evt.preventDefault();
         const touch1 = e.evt.touches[0];
         const touch2 = e.evt.touches[1];
 
         if (touch1 && touch2) {
+          e.evt.preventDefault();
           // if the stage was under Konva's drag&drop
           // we need to stop it, and implement our own pan logic with two pointers
           if (this.konvaImage.isDragging()) {
@@ -389,6 +416,7 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
       // canvasHeight = canvasWidth / (imageWidth / imageHeight)
       const stageWidth = this.canvasWidth;
       const stageHeight = this.canvasWidth / (imageWidth / imageHeight);
+
       const oldStageWidth = this.stage.width();
       this.stage.width(stageWidth);
       const scale = oldStageWidth ? this.stage.width() / oldStageWidth : 1;
@@ -430,7 +458,6 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
 
     if (!this.selectedSelectionTool) {
       this.canModifyImage = true;
-      this.konvaImage.draggable(true);
 
       // Turn on zoom back because it is off in the first line of the function
       this.setStageZoom();
@@ -438,7 +465,6 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
     }
 
     this.canModifyImage = false;
-    this.konvaImage.draggable(false);
 
     switch (this.selectedSelectionTool.type) {
       case "RECTANGLE":
