@@ -89,7 +89,7 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
   private zoomTipShown = false;
   private moveTipShown = false;
   private tipShown = false;
-  //   matchColors: Color[] = [];
+  // matchColors: Color[] = [];
   matchColors: Color[] = [
     {
       id: 1224,

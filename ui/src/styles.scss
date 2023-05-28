@@ -25,6 +25,7 @@ a {
   color: red;
 }
 
+@import "primeflex/primeflex.scss";
 @import "./assets/scss/formly.scss";
 @import "./assets/scss/size.scss";
 
@@ -42,4 +43,12 @@ p-colorpicker {
 div.p-toast-detail {
   inline-size: 15rem;
   overflow-wrap: break-word;
+}
+
+p-dynamicdialog .p-dialog {
+  width: 100%;
+
+  @media (min-width: #{$lg}) {
+    width: 50vw;
+  }
 }
