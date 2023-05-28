@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { DynamicDialogRef, DynamicDialogConfig } from "primeng/dynamicdialog";
 import { CMYKColor, Color } from "../../auto-generated/apis";
 import { ThemeService } from "../../services/theme.service";
