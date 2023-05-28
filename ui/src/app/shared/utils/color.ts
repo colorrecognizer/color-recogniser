@@ -2,9 +2,10 @@ import { CMYKColor, Color } from "../auto-generated/apis";
 
 export class ColorUtils {
   static toRGB(cmyk: CMYKColor) {
-    if (!cmyk.cyan || !cmyk.magenta || !cmyk.yellow || !cmyk.black) {
-      return "#000000";
-    }
+    cmyk.cyan = cmyk.cyan || 0;
+    cmyk.magenta = cmyk.magenta || 0;
+    cmyk.yellow = cmyk.yellow || 0;
+    cmyk.black = cmyk.black || 0;
 
     const r = Math.round(255 * (1 - cmyk.cyan) * (1 - cmyk.black));
     const g = Math.round(255 * (1 - cmyk.magenta) * (1 - cmyk.black));

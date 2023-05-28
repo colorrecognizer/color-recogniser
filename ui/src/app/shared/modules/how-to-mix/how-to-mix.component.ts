@@ -68,4 +68,57 @@ export class HowToMixComponent {
       })
     );
   }
+
+  get cmykMagenta(): string {
+    return ColorUtils.toRGB(
+      new CMYKColor({
+        cyan: 0,
+        magenta: this.color.cmyk?.magenta,
+        yellow: 0,
+        black: 0,
+      })
+    );
+  }
+
+  get cmykYellow(): string {
+    return ColorUtils.toRGB(
+      new CMYKColor({
+        cyan: 0,
+        magenta: 0,
+        yellow: this.color.cmyk?.yellow,
+        black: 0,
+      })
+    );
+  }
+
+  get cmykBlack(): string {
+    return ColorUtils.toRGB(
+      new CMYKColor({
+        cyan: 0,
+        magenta: 0,
+        yellow: 0,
+        black: this.color.cmyk?.black,
+      })
+    );
+  }
+
+  get cyanPercentage(): number {
+    const color = this.color.cmyk?.cyan || 0;
+    return Math.round(color * 100);
+  }
+
+  get magentaPercentage(): number {
+    const color = this.color.cmyk?.magenta || 0;
+    return Math.round(color * 100);
+  }
+
+  get yellowPercentage(): number {
+    const color = this.color.cmyk?.yellow || 0;
+    return Math.round(color * 100);
+  }
+
+  get blackPercentage(): number {
+    const color = this.color.cmyk?.black || 0;
+    return Math.round(color * 100);
+  }
 }
