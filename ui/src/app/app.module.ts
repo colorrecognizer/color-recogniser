@@ -29,6 +29,7 @@ import {
 } from "primeng/dynamicdialog";
 import { AngularResizeEventModule } from "angular-resize-event";
 import { HowToMixModule } from "./shared/modules/how-to-mix/how-to-mix.module";
+import { AnalyticsModule } from "@angular/fire/analytics";
 
 @NgModule({
   declarations: [AppComponent, PageNotFoundComponent],
@@ -40,6 +41,7 @@ import { HowToMixModule } from "./shared/modules/how-to-mix/how-to-mix.module";
     FormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
+    AnalyticsModule,
     BackButtonModule,
     ToastModule,
     FormlyFormModule,
