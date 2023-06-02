@@ -787,7 +787,7 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
     const context = uploadedCanvas.getContext("2d");
 
     //set dimensions
-    const desiredSize = 30;
+    const desiredSize = 300;
     const scale = Math.max(maxx - minx, maxy - miny) / desiredSize;
     uploadedCanvas.width = (maxx - minx) / scale;
     uploadedCanvas.height = (maxy - miny) / scale;

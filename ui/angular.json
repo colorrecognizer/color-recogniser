@@ -45,7 +45,8 @@
               "node_modules/konva/konva.js",
               "src/assets/js/keymaster.js",
               "node_modules/sweepline-intersections/dist/sweeplineIntersections.js",
-              "node_modules/bentley-ottmann-intersections/dist/bentleyOttmannIntersections.js"
+              "node_modules/bentley-ottmann-intersections/dist/bentleyOttmannIntersections.js",
+              "node_modules/animejs/lib/anime.min.js"
             ]
           },
           "configurations": {

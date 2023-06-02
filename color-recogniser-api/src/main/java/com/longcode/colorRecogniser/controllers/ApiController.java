@@ -56,7 +56,7 @@ public class ApiController {
             BufferedImage image = ImageIO.read(imageMultipartFile.getInputStream());
 
 
-            int steps = 50;
+            int steps = 500;
             double minX = recogniserRequest.minX;
             double maxX = recogniserRequest.maxX;
             double minY = recogniserRequest.minY;
