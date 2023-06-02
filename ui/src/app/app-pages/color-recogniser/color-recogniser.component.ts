@@ -599,6 +599,7 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
   }
 
   onSelectionToolChanged() {
+    this.konvaImage.draggable(false);
     this.stage.off("mousedown touchstart mousemove touchmove mouseup touchend");
 
     this.selection?.destroy();

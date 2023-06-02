@@ -89,17 +89,15 @@
               </div>
             </ng-template>
           </p-dropdown>
-
-          <p-button
-            *ngIf="selection"
-            icon="pi pi-search"
-            (onClick)="recognise()"
-            pTooltip="Recognise color in selection"
-            tooltipPosition="top"
-            styleClass="p-button-success"
-            [disabled]="recogniseButtonDisabled"
-          ></p-button>
         </ng-container>
+      </div>
+
+      <div>
+        <app-recognise-button
+          *ngIf="selection"
+          (clicked)="recognise()"
+          [disabled]="recogniseButtonDisabled"
+        ></app-recognise-button>
       </div>
 
       <!-- <canvas id="uploadedCanvas"></canvas> -->
