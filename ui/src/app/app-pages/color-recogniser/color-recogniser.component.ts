@@ -831,6 +831,7 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
         })
       );
 
+      this.selection.visible(true);
       this.$http
         .post<Color[]>(`${environment.apiUrl}/api/recognise`, formData, {
           responseType: "json",
@@ -843,7 +844,6 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
           }),
           finalize(() => {
             this.recogniseButtonDisabled = false;
-            this.selection.visible(true);
           })
         )
         .subscribe();
