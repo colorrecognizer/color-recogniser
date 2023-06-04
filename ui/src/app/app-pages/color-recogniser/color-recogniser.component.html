@@ -1,4 +1,25 @@
-<div class="grid">
+<div class="grid grid-nogutter gap-2 lg:gap-5">
+  <div
+    class="col-12 surface-card shadow-2 border-round flex justify-content-center relative overflow-hidden"
+  >
+    <div class="text-center p-2 lg:p-5" style="max-width: 40rem; z-index: 1">
+      <h1 class="text-6xl font-bold mb-2">Color Recogniser</h1>
+      <h2 class="text-4xl text-primary font-bold mb-4">
+        Explore and Identify Colors with Ease
+      </h2>
+      <p>
+        <strong>Color Recogniser</strong> is a user-friendly tool that allows
+        you to effortlessly explore and identify colors. Whether you're an
+        <strong>artist</strong>, <strong>designer</strong>, or simply
+        <strong>curious</strong>
+        about colors, our app helps you unleash your creativity by recognizing
+        and understanding the fascinating world of colors.
+      </p>
+    </div>
+    <div id="bubbles">
+      <span *ngFor="let e of [].constructor(150)" #bubbles></span>
+    </div>
+  </div>
   <div class="col-12 lg:col-6">
     <div
       class="surface-card p-2 lg:p-5 shadow-2 border-round flex flex-column gap-2"
@@ -167,7 +188,7 @@
             </td>
             <td>
               <span class="p-column-title text-500"> Match Percentage </span>
-              {{ color.matchPercentage | percent:'1.2-2' }}
+              {{ color.matchPercentage | percent : "1.2-2" }}
             </td>
           </tr>
         </ng-template>

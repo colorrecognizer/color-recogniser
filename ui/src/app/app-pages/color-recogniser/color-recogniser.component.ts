@@ -4,7 +4,9 @@ import {
   ElementRef,
   NgZone,
   OnInit,
+  QueryList,
   ViewChild,
+  ViewChildren,
 } from "@angular/core";
 import { ThemeService } from "src/app/shared/services/theme.service";
 import { SelectionTool } from "./selection-tool";
@@ -95,151 +97,9 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
   private moveTipShown = false;
   private tipShown = false;
   matchColors: RecogniserResponse[] = [];
-  //   matchColors: Color[] = [
-  //     {
-  //       id: 1169,
-  //       name: "Rosy brown",
-  //       red: 188,
-  //       green: 143,
-  //       blue: 143,
-  //       cmyk: {
-  //         cyan: 0.0,
-  //         magenta: 0.23936170212765961,
-  //         yellow: 0.23936170212765961,
-  //         black: 0.26274509803921564,
-  //       },
-  //       hexValue: "#bc8f8f",
-  //     },
-  //     {
-  //       id: 208,
-  //       name: "Camel",
-  //       red: 193,
-  //       green: 154,
-  //       blue: 107,
-  //       cmyk: {
-  //         cyan: 0.0,
-  //         magenta: 0.20207253886010365,
-  //         yellow: 0.4455958549222797,
-  //         black: 0.2431372549019608,
-  //       },
-  //       hexValue: "#c19a6b",
-  //     },
-  //     {
-  //       id: 316,
-  //       name: "Desert",
-  //       red: 193,
-  //       green: 154,
-  //       blue: 107,
-  //       cmyk: {
-  //         cyan: 0.0,
-  //         magenta: 0.20207253886010365,
-  //         yellow: 0.4455958549222797,
-  //         black: 0.2431372549019608,
-  //       },
-  //       hexValue: "#c19a6b",
-  //     },
-  //     {
-  //       id: 339,
-  //       name: "Fallow",
-  //       red: 193,
-  //       green: 154,
-  //       blue: 107,
-  //       cmyk: {
-  //         cyan: 0.0,
-  //         magenta: 0.20207253886010365,
-  //         yellow: 0.4455958549222797,
-  //         black: 0.2431372549019608,
-  //       },
-  //       hexValue: "#c19a6b",
-  //     },
-  //     {
-  //       id: 1367,
-  //       name: "Wood brown",
-  //       red: 193,
-  //       green: 154,
-  //       blue: 107,
-  //       cmyk: {
-  //         cyan: 0.0,
-  //         magenta: 0.20207253886010365,
-  //         yellow: 0.4455958549222797,
-  //         black: 0.2431372549019608,
-  //       },
-  //       hexValue: "#c19a6b",
-  //     },
-  //     {
-  //       id: 1010,
-  //       name: "Old rose",
-  //       red: 192,
-  //       green: 128,
-  //       blue: 129,
-  //       cmyk: {
-  //         cyan: 0.0,
-  //         magenta: 0.3333333333333333,
-  //         yellow: 0.328125,
-  //         black: 0.24705882352941178,
-  //       },
-  //       hexValue: "#c08081",
-  //     },
-  //     {
-  //       id: 580,
-  //       name: "Misty moss",
-  //       red: 187,
-  //       green: 180,
-  //       blue: 119,
-  //       cmyk: {
-  //         cyan: 0.0,
-  //         magenta: 0.037433155080213776,
-  //         yellow: 0.3636363636363636,
-  //         black: 0.2666666666666667,
-  //       },
-  //       hexValue: "#bbb477",
-  //     },
-  //     {
-  //       id: 152,
-  //       name: "Beaver",
-  //       red: 159,
-  //       green: 129,
-  //       blue: 112,
-  //       cmyk: {
-  //         cyan: 0.0,
-  //         magenta: 0.1886792452830189,
-  //         yellow: 0.29559748427672955,
-  //         black: 0.3764705882352941,
-  //       },
-  //       hexValue: "#9f8170",
-  //     },
-  //     {
-  //       id: 126,
-  //       name: "Antique brass",
-  //       red: 205,
-  //       green: 149,
-  //       blue: 117,
-  //       cmyk: {
-  //         cyan: 0.0,
-  //         magenta: 0.27317073170731704,
-  //         yellow: 0.42926829268292693,
-  //         black: 0.196078431372549,
-  //       },
-  //       hexValue: "#cd9575",
-  //     },
-  //     {
-  //       id: 333,
-  //       name: "English lavender",
-  //       red: 180,
-  //       green: 131,
-  //       blue: 149,
-  //       cmyk: {
-  //         cyan: 0.0,
-  //         magenta: 0.27222222222222237,
-  //         yellow: 0.17222222222222222,
-  //         black: 0.2941176470588235,
-  //       },
-  //       hexValue: "#b48395",
-  //     },
-  //   ] as any;
-
   selectedColor?: Color;
   @ViewChild("imageUpload") imageUpload!: FileUpload;
+  @ViewChildren("bubbles") bubbles!: QueryList<ElementRef<HTMLSpanElement>>;
 
   get imageZoom(): number {
     if (!this.konvaImage) return 1;
@@ -371,6 +231,15 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
       this.canvas.tabIndex = 1;
       this.canvas.focus();
     });
+
+    // Bubbles
+    console.log(this.bubbles);
+    this.bubbles.forEach(
+      (b) =>
+        (b.nativeElement.style.animationDuration = `calc(125s / ${
+          Math.random() * (30 - 10) + 10
+        })`)
+    );
   }
 
   removeImage() {
