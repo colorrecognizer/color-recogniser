@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
@@ -18,7 +17,7 @@ import { RouteEnum } from "src/app/shared/utils";
   styleUrls: ["./navbar.component.scss"],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class NavbarComponent implements AfterViewInit {
+export class NavbarComponent {
   currentUser?: User;
   colorManagementUrl = RouteEnum.ColorManagement;
   homeUrl = RouteEnum.HomePage;
@@ -39,35 +38,35 @@ export class NavbarComponent implements AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    const sharedAnimationSettings: anime.AnimeParams = {
-      targets: [this.logo.nativeElement],
-      loop: true,
-      duration: 5000,
-      rotate: -360,
-    };
+  // ngAfterViewInit(): void {
+  //   const sharedAnimationSettings: anime.AnimeParams = {
+  //     targets: [this.logo.nativeElement],
+  //     loop: true,
+  //     duration: 5000,
+  //     rotate: -360,
+  //   };
 
-    this.logoAnimations.push(
-      anime({
-        ...sharedAnimationSettings,
-        easing: "cubicBezier(.5, .05, .1, .3)",
-      }),
-      anime({
-        ...sharedAnimationSettings,
-        easing: "linear",
-      }),
-      anime({
-        ...sharedAnimationSettings,
-        easing: "easeInOutSine",
-      }),
-      anime({
-        ...sharedAnimationSettings,
-        easing: "spring(1, 80, 10, 0)",
-      })
-    );
+  //   this.logoAnimations.push(
+  //     anime({
+  //       ...sharedAnimationSettings,
+  //       easing: "cubicBezier(.5, .05, .1, .3)",
+  //     }),
+  //     anime({
+  //       ...sharedAnimationSettings,
+  //       easing: "linear",
+  //     }),
+  //     anime({
+  //       ...sharedAnimationSettings,
+  //       easing: "easeInOutSine",
+  //     }),
+  //     anime({
+  //       ...sharedAnimationSettings,
+  //       easing: "spring(1, 80, 10, 0)",
+  //     })
+  //   );
 
-    this.setLogoAnimation();
-  }
+  //   this.setLogoAnimation();
+  // }
 
   setLogoAnimation() {
     this.logoAnimation?.pause();
