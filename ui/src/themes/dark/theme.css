@@ -1,6 +1,6 @@
 :root {
   --surface-a:#2a323d;
-  --surface-b:#20262e;
+  --surface-b:#323b47;
   --surface-c:rgba(255, 255, 255, 0.04);
   --surface-d:#3f4b5b;
   --surface-e:#2a323d;
@@ -10,7 +10,7 @@
   --primary-color:#4dacff;
   --primary-color-text:#151515;
   --font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
-  --surface-0: #20262e;
+  --surface-0: #323b47;
   --surface-50: #363c43;
   --surface-100: #4d5158;
   --surface-200: #63676d;
@@ -30,12 +30,12 @@
   --gray-600: #63676d;
   --gray-700: #4d5158;
   --gray-800: #363c43;
-  --gray-900: #20262e;
+  --gray-900: #323b47;
   --content-padding:1.25rem;
   --inline-spacing:0.5rem;
   --border-radius:4px;
-  --surface-ground:#20262e;
-  --surface-section:#20262e;
+  --surface-ground:#323b47;
+  --surface-section:#323b47;
   --surface-card:#2a323d;
   --surface-overlay:#2a323d;
   --surface-border:#3f4b5b;
@@ -569,7 +569,7 @@ p-calendar.p-calendar-clearable.p-calendar-w-btn .p-calendar-clear-icon {
   }
 }
 .p-cascadeselect {
-  background: #20262e;
+  background: #323b47;
   border: 1px solid #3f4b5b;
   transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
   border-radius: 4px;
@@ -682,7 +682,7 @@ p-cascadeselect.p-cascadeselect-clearable .p-cascadeselect-clear-icon {
 }
 .p-checkbox .p-checkbox-box {
   border: 1px solid #3f4b5b;
-  background: #20262e;
+  background: #323b47;
   width: 20px;
   height: 20px;
   color: rgba(255, 255, 255, 0.87);
@@ -807,7 +807,7 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
 }
 
 .p-dropdown {
-  background: #20262e;
+  background: #323b47;
   border: 1px solid #3f4b5b;
   transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
   border-radius: 4px;
@@ -982,7 +982,7 @@ p-dropdown.ng-dirty.ng-invalid > .p-dropdown {
   border: 1px solid #3f4b5b;
 }
 .p-editor-container .p-editor-content .ql-editor {
-  background: #20262e;
+  background: #323b47;
   color: rgba(255, 255, 255, 0.87);
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
@@ -1172,7 +1172,7 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 1rem;
   color: rgba(255, 255, 255, 0.87);
-  background: #20262e;
+  background: #323b47;
   padding: 0.5rem 0.75rem;
   border: 1px solid #3f4b5b;
   transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
@@ -1340,7 +1340,7 @@ p-listbox.ng-dirty.ng-invalid > .p-listbox {
 }
 
 .p-multiselect {
-  background: #20262e;
+  background: #323b47;
   border: 1px solid #3f4b5b;
   transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
   border-radius: 4px;
@@ -1542,7 +1542,7 @@ p-password.p-password-clearable.p-password-mask .p-password-clear-icon {
 }
 .p-radiobutton .p-radiobutton-box {
   border: 1px solid #3f4b5b;
-  background: #20262e;
+  background: #323b47;
   width: 20px;
   height: 20px;
   color: rgba(255, 255, 255, 0.87);
@@ -1774,7 +1774,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 }
 
 .p-treeselect {
-  background: #20262e;
+  background: #323b47;
   border: 1px solid #3f4b5b;
   transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
   border-radius: 4px;
@@ -4787,7 +4787,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   margin: 0;
 }
 .p-contextmenu .p-menuitem.p-menuitem-active > .p-menuitem-link {
-  background: #20262e;
+  background: #323b47;
 }
 .p-contextmenu .p-menuitem.p-menuitem-active > .p-menuitem-link .p-menuitem-text {
   color: rgba(255, 255, 255, 0.87);
@@ -5002,7 +5002,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   margin: 0;
 }
 .p-megamenu .p-menuitem.p-menuitem-active > .p-menuitem-link {
-  background: #20262e;
+  background: #323b47;
 }
 .p-megamenu .p-menuitem.p-menuitem-active > .p-menuitem-link .p-menuitem-text {
   color: rgba(255, 255, 255, 0.87);
@@ -5231,7 +5231,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   margin: 0;
 }
 .p-menubar .p-menuitem.p-menuitem-active > .p-menuitem-link {
-  background: #20262e;
+  background: #323b47;
 }
 .p-menubar .p-menuitem.p-menuitem-active > .p-menuitem-link .p-menuitem-text {
   color: rgba(255, 255, 255, 0.87);
@@ -5562,7 +5562,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   box-shadow: none;
 }
 .p-slidemenu .p-slidemenu.p-slidemenu-active > .p-slidemenu-link {
-  background: #20262e;
+  background: #323b47;
 }
 .p-slidemenu .p-slidemenu.p-slidemenu-active > .p-slidemenu-link .p-slidemenu-text {
   color: rgba(255, 255, 255, 0.87);
@@ -5775,7 +5775,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   margin: 0;
 }
 .p-tieredmenu .p-menuitem.p-menuitem-active > .p-menuitem-link {
-  background: #20262e;
+  background: #323b47;
 }
 .p-tieredmenu .p-menuitem.p-menuitem-active > .p-menuitem-link .p-menuitem-text {
   color: rgba(255, 255, 255, 0.87);

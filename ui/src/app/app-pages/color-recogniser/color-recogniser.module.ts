@@ -21,7 +21,7 @@ import { RecogniseButtonComponent } from "./recognise-button/recognise-button.co
     FormsModule,
     ColorPickerModule,
     FileUploadModule,
-    HowToMixModule
+    HowToMixModule,
   ],
 })
 export class ColorRecogniserModule {}

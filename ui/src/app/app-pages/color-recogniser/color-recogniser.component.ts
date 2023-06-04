@@ -15,6 +15,7 @@ import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { DialogService } from "primeng/dynamicdialog";
 import { HowToMixComponent } from "src/app/shared/modules/how-to-mix/how-to-mix.component";
+import { FileUpload } from "primeng/fileupload";
 
 declare let Konva: any;
 declare let Mousetrap: any;
@@ -234,6 +235,7 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
   //   ] as any;
 
   selectedColor?: Color;
+  @ViewChild("imageUpload") imageUpload!: FileUpload;
 
   get imageZoom(): number {
     if (!this.konvaImage) return 1;
@@ -631,7 +633,7 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
         break;
     }
 
-    this.selection.stroke("rgba(0,0,255)");
+    this.selection.stroke("rgb(0,0,255)");
     this.selection.strokeWidth(BORDER_WIDTH);
     this.selection.visible(false);
     this.layer.add(this.selection);
@@ -722,16 +724,25 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
     );
   }
 
-  recognise() {
-    if (!this.selectedSelectionTool) throw new Error("Invalid selection!");
+  get isValidSelection(): boolean {
+    if (!this.selectedSelectionTool) return false;
 
     if (
       this.selectedSelectionTool.type === "RECTANGLE" ||
       this.selectedSelectionTool.type === "ELLIPSE"
     ) {
-      if (!this.selection.width() || !this.selection.height())
-        throw new Error("Invalid selection!");
+      if (!this.selection.width() || !this.selection.height()) return false;
     }
+
+    if (this.selectedSelectionTool.type === "FREE") {
+      if (!this.selection.points().length) return false;
+    }
+
+    return true;
+  }
+
+  recognise() {
+    if (!this.selectedSelectionTool) return;
 
     this.matchColors.length = 0;
     this.recogniseButtonDisabled = true;
@@ -838,9 +849,12 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
         })
         .pipe(
           map((colors) => {
-            this.$zone.run(() => {
-              this.matchColors = colors;
-            });
+            this.matchColors = colors;
+            setTimeout(() => {
+              this.matchColorTable.nativeElement.scrollIntoView({
+                behavior: "smooth",
+              });
+            }, 100);
           }),
           finalize(() => {
             this.recogniseButtonDisabled = false;

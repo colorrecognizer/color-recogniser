@@ -1,12 +1,15 @@
 <div
-  class="surface-overlay p-2 lg:px-5 shadow-2 flex align-items-center justify-content-between relative lg:static"
+  class="p-2 lg:px-5 shadow-2 flex align-items-center justify-content-between relative lg:static"
   style="min-height: 80px"
 >
+  <div class="block lg:hidden"></div>
   <img
+    #logo
     src="assets/images/logo.png"
     alt="Logo"
     height="40"
     class="mr-0 lg:mr-5"
+    (click)="setLogoAnimation()"
   />
   <a
     pRipple
@@ -21,7 +24,7 @@
     <i class="pi pi-bars text-4xl"></i>
   </a>
   <div
-    class="align-items-center flex-grow-1 justify-content-between hidden lg:flex absolute lg:static w-full surface-overlay left-0 top-100 z-1 shadow-2 lg:shadow-none"
+    class="align-items-center flex-grow-1 justify-content-between hidden lg:flex absolute lg:static w-full surface-overlay lg:surface-ground left-0 top-100 z-1 shadow-2 lg:shadow-none"
   >
     <ul
       class="list-none p-0 m-0 flex lg:align-items-center select-none flex-column lg:flex-row gap-2"
@@ -80,7 +83,6 @@
         >
           <li>
             <a
-              href="#"
               pRipple
               class="flex p-2 align-items-center text-600 hover:text-900 hover:surface-100 transition-colors transition-duration-150"
               (click)="toggleSystemThemeUsed()"

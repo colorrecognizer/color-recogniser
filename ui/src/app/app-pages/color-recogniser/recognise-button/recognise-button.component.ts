@@ -7,8 +7,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-
-declare let anime: any;
+import anime from "animejs";
 
 @Component({
   selector: "app-recognise-button",
@@ -24,11 +23,15 @@ export class RecogniseButtonComponent implements AfterViewInit {
     this._disabled = value;
     if (value) {
       this.normalAnimation?.pause();
-      this.loadingAnimation?.seek(this.loadingAnimation.duration * this.normalAnimation.progress / 100);
+      this.loadingAnimation?.seek(
+        (this.loadingAnimation.duration * this.normalAnimation.progress) / 100
+      );
       this.loadingAnimation?.play();
     } else {
       this.loadingAnimation?.pause();
-      this.normalAnimation?.seek(this.normalAnimation.duration * this.loadingAnimation.progress / 100);
+      this.normalAnimation?.seek(
+        (this.normalAnimation.duration * this.loadingAnimation.progress) / 100
+      );
       this.normalAnimation?.play();
     }
   }
