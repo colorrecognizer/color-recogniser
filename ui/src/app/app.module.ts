@@ -30,6 +30,7 @@ import {
 import { AngularResizeEventModule } from "angular-resize-event";
 import { HowToMixModule } from "./shared/modules/how-to-mix/how-to-mix.module";
 import { AngularFireAnalyticsModule } from "@angular/fire/compat/analytics";
+import { ScrollTopModule } from "primeng/scrolltop";
 
 @NgModule({
   declarations: [AppComponent, PageNotFoundComponent],
@@ -48,6 +49,7 @@ import { AngularFireAnalyticsModule } from "@angular/fire/compat/analytics";
     HttpClientModule,
     ConfirmPopupModule,
     HowToMixModule,
+    ScrollTopModule,
   ],
   providers: [
     // One way of configuring ngForage
