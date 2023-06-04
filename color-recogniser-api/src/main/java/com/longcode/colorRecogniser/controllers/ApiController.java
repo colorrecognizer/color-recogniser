@@ -49,8 +49,8 @@ public class ApiController {
     }
 
     @PostMapping("/recognise")
-    public ResponseEntity<List<Color>> recognise(@RequestParam("image") MultipartFile imageMultipartFile,
-                                                 @RequestParam("recogniserRequest") String recogniserRequestString) {
+    public ResponseEntity<List<RecogniserResponse>> recognise(@RequestParam("image") MultipartFile imageMultipartFile,
+                                                              @RequestParam("recogniserRequest") String recogniserRequestString) {
         try {
             RecogniserRequest recogniserRequest = new ObjectMapper().readValue(recogniserRequestString, RecogniserRequest.class);
             BufferedImage image = ImageIO.read(imageMultipartFile.getInputStream());
@@ -102,8 +102,18 @@ public class ApiController {
                     .blue((short) ab)
                     .build();
 
-            List<Color> result = allColors.stream().sorted((color1, color2) -> getDistance(color, color1) - getDistance(color, color2))
+            double total = Math.sqrt(Math.pow(Math.max(color.getRed(), 255 - color.getRed()), 2)
+                    + Math.pow(Math.max(color.getGreen(), 255 - color.getGreen()), 2)
+                    + Math.pow(Math.max(color.getBlue(), 255 - color.getBlue()), 2)
+            );
+
+            List<RecogniserResponse> result = allColors.stream()
+                    .sorted((color1, color2) -> getDistance(color, color1) - getDistance(color, color2))
                     .limit(10)
+                    .map(c -> RecogniserResponse.builder()
+                            .color(c)
+                            .matchPercentage(1 - Math.sqrt(getDistance(color, c)) / total)
+                            .build())
                     .toList();
 
             return ResponseEntity.ok(result);
@@ -132,5 +142,15 @@ public class ApiController {
          * Points for polygon. Assume that the polygon is not self-intersecting
          */
         private List<Point> points;
+    }
+
+    @Builder
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    private static class RecogniserResponse {
+        private Color color;
+        private double matchPercentage;
     }
 }

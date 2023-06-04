@@ -1119,7 +1119,7 @@ export class ApiApi {
      * @param body (optional) 
      * @return OK
      */
-    recognise(recogniserRequest: string, body: Body | undefined): Observable<Color[]> {
+    recognise(recogniserRequest: string, body: Body | undefined): Observable<RecogniserResponse[]> {
         let url_ = this.baseUrl + "/api/recognise?";
         if (recogniserRequest === undefined || recogniserRequest === null)
             throw new Error("The parameter 'recogniserRequest' must be defined and cannot be null.");
@@ -1146,14 +1146,14 @@ export class ApiApi {
                 try {
                     return this.processRecognise(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Color[]>;
+                    return _observableThrow(e) as any as Observable<RecogniserResponse[]>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Color[]>;
+                return _observableThrow(response_) as any as Observable<RecogniserResponse[]>;
         }));
     }
 
-    protected processRecognise(response: HttpResponseBase): Observable<Color[]> {
+    protected processRecognise(response: HttpResponseBase): Observable<RecogniserResponse[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1183,7 +1183,7 @@ export class ApiApi {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(Color.fromJS(item));
+                    result200!.push(RecogniserResponse.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -1335,10 +1335,10 @@ export class User implements IUser {
     enabled?: boolean;
     admin?: boolean;
     user?: boolean;
-    accountNonLocked?: boolean;
-    accountNonExpired?: boolean;
-    credentialsNonExpired?: boolean;
     authorities?: GrantedAuthority[];
+    accountNonLocked?: boolean;
+    credentialsNonExpired?: boolean;
+    accountNonExpired?: boolean;
 
     [key: string]: any;
 
@@ -1369,14 +1369,14 @@ export class User implements IUser {
             this.enabled = _data["enabled"];
             this.admin = _data["admin"];
             this.user = _data["user"];
-            this.accountNonLocked = _data["accountNonLocked"];
-            this.accountNonExpired = _data["accountNonExpired"];
-            this.credentialsNonExpired = _data["credentialsNonExpired"];
             if (Array.isArray(_data["authorities"])) {
                 this.authorities = [] as any;
                 for (let item of _data["authorities"])
                     this.authorities!.push(GrantedAuthority.fromJS(item));
             }
+            this.accountNonLocked = _data["accountNonLocked"];
+            this.credentialsNonExpired = _data["credentialsNonExpired"];
+            this.accountNonExpired = _data["accountNonExpired"];
         }
     }
 
@@ -1405,14 +1405,14 @@ export class User implements IUser {
         data["enabled"] = this.enabled;
         data["admin"] = this.admin;
         data["user"] = this.user;
-        data["accountNonLocked"] = this.accountNonLocked;
-        data["accountNonExpired"] = this.accountNonExpired;
-        data["credentialsNonExpired"] = this.credentialsNonExpired;
         if (Array.isArray(this.authorities)) {
             data["authorities"] = [];
             for (let item of this.authorities)
                 data["authorities"].push(item.toJSON());
         }
+        data["accountNonLocked"] = this.accountNonLocked;
+        data["credentialsNonExpired"] = this.credentialsNonExpired;
+        data["accountNonExpired"] = this.accountNonExpired;
         return data;
     }
 
@@ -1433,10 +1433,10 @@ export interface IUser {
     enabled?: boolean;
     admin?: boolean;
     user?: boolean;
-    accountNonLocked?: boolean;
-    accountNonExpired?: boolean;
-    credentialsNonExpired?: boolean;
     authorities?: GrantedAuthority[];
+    accountNonLocked?: boolean;
+    credentialsNonExpired?: boolean;
+    accountNonExpired?: boolean;
 
     [key: string]: any;
 }
@@ -1819,10 +1819,10 @@ export class PageUser implements IPageUser {
     content?: User[];
     number?: number;
     sort?: SortObject;
-    first?: boolean;
-    last?: boolean;
     numberOfElements?: number;
     pageable?: PageableObject;
+    first?: boolean;
+    last?: boolean;
     empty?: boolean;
 
     [key: string]: any;
@@ -1852,10 +1852,10 @@ export class PageUser implements IPageUser {
             }
             this.number = _data["number"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
-            this.first = _data["first"];
-            this.last = _data["last"];
             this.numberOfElements = _data["numberOfElements"];
             this.pageable = _data["pageable"] ? PageableObject.fromJS(_data["pageable"]) : <any>undefined;
+            this.first = _data["first"];
+            this.last = _data["last"];
             this.empty = _data["empty"];
         }
     }
@@ -1883,10 +1883,10 @@ export class PageUser implements IPageUser {
         }
         data["number"] = this.number;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
-        data["first"] = this.first;
-        data["last"] = this.last;
         data["numberOfElements"] = this.numberOfElements;
         data["pageable"] = this.pageable ? this.pageable.toJSON() : <any>undefined;
+        data["first"] = this.first;
+        data["last"] = this.last;
         data["empty"] = this.empty;
         return data;
     }
@@ -1906,10 +1906,10 @@ export interface IPageUser {
     content?: User[];
     number?: number;
     sort?: SortObject;
-    first?: boolean;
-    last?: boolean;
     numberOfElements?: number;
     pageable?: PageableObject;
+    first?: boolean;
+    last?: boolean;
     empty?: boolean;
 
     [key: string]: any;
@@ -1918,10 +1918,10 @@ export interface IPageUser {
 export class PageableObject implements IPageableObject {
     offset?: number;
     sort?: SortObject;
-    paged?: boolean;
-    unpaged?: boolean;
-    pageNumber?: number;
     pageSize?: number;
+    pageNumber?: number;
+    unpaged?: boolean;
+    paged?: boolean;
 
     [key: string]: any;
 
@@ -1942,10 +1942,10 @@ export class PageableObject implements IPageableObject {
             }
             this.offset = _data["offset"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
-            this.paged = _data["paged"];
-            this.unpaged = _data["unpaged"];
-            this.pageNumber = _data["pageNumber"];
             this.pageSize = _data["pageSize"];
+            this.pageNumber = _data["pageNumber"];
+            this.unpaged = _data["unpaged"];
+            this.paged = _data["paged"];
         }
     }
 
@@ -1964,10 +1964,10 @@ export class PageableObject implements IPageableObject {
         }
         data["offset"] = this.offset;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
-        data["paged"] = this.paged;
-        data["unpaged"] = this.unpaged;
-        data["pageNumber"] = this.pageNumber;
         data["pageSize"] = this.pageSize;
+        data["pageNumber"] = this.pageNumber;
+        data["unpaged"] = this.unpaged;
+        data["paged"] = this.paged;
         return data;
     }
 
@@ -1982,10 +1982,10 @@ export class PageableObject implements IPageableObject {
 export interface IPageableObject {
     offset?: number;
     sort?: SortObject;
-    paged?: boolean;
-    unpaged?: boolean;
-    pageNumber?: number;
     pageSize?: number;
+    pageNumber?: number;
+    unpaged?: boolean;
+    paged?: boolean;
 
     [key: string]: any;
 }
@@ -2237,10 +2237,10 @@ export class PageColor implements IPageColor {
     content?: Color[];
     number?: number;
     sort?: SortObject;
-    first?: boolean;
-    last?: boolean;
     numberOfElements?: number;
     pageable?: PageableObject;
+    first?: boolean;
+    last?: boolean;
     empty?: boolean;
 
     [key: string]: any;
@@ -2270,10 +2270,10 @@ export class PageColor implements IPageColor {
             }
             this.number = _data["number"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
-            this.first = _data["first"];
-            this.last = _data["last"];
             this.numberOfElements = _data["numberOfElements"];
             this.pageable = _data["pageable"] ? PageableObject.fromJS(_data["pageable"]) : <any>undefined;
+            this.first = _data["first"];
+            this.last = _data["last"];
             this.empty = _data["empty"];
         }
     }
@@ -2301,10 +2301,10 @@ export class PageColor implements IPageColor {
         }
         data["number"] = this.number;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
-        data["first"] = this.first;
-        data["last"] = this.last;
         data["numberOfElements"] = this.numberOfElements;
         data["pageable"] = this.pageable ? this.pageable.toJSON() : <any>undefined;
+        data["first"] = this.first;
+        data["last"] = this.last;
         data["empty"] = this.empty;
         return data;
     }
@@ -2324,11 +2324,70 @@ export interface IPageColor {
     content?: Color[];
     number?: number;
     sort?: SortObject;
-    first?: boolean;
-    last?: boolean;
     numberOfElements?: number;
     pageable?: PageableObject;
+    first?: boolean;
+    last?: boolean;
     empty?: boolean;
+
+    [key: string]: any;
+}
+
+export class RecogniserResponse implements IRecogniserResponse {
+    color?: Color;
+    matchPercentage?: number;
+
+    [key: string]: any;
+
+    constructor(data?: IRecogniserResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.color = _data["color"] ? Color.fromJS(_data["color"]) : <any>undefined;
+            this.matchPercentage = _data["matchPercentage"];
+        }
+    }
+
+    static fromJS(data: any): RecogniserResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new RecogniserResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["color"] = this.color ? this.color.toJSON() : <any>undefined;
+        data["matchPercentage"] = this.matchPercentage;
+        return data;
+    }
+
+    clone(): RecogniserResponse {
+        const json = this.toJSON();
+        let result = new RecogniserResponse();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IRecogniserResponse {
+    color?: Color;
+    matchPercentage?: number;
 
     [key: string]: any;
 }

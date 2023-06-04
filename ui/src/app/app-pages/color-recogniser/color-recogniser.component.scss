@@ -6,6 +6,7 @@
 
 :host ::ng-deep p-fileupload {
   span.p-fileupload-choose {
-    width: 10rem;
+    width: 100%;
+    margin: 0 !important;
   }
 }

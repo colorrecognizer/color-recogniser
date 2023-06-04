@@ -8,7 +8,11 @@ import {
 } from "@angular/core";
 import { ThemeService } from "src/app/shared/services/theme.service";
 import { SelectionTool } from "./selection-tool";
-import { ApiApi, Color } from "src/app/shared/auto-generated/apis";
+import {
+  ApiApi,
+  Color,
+  RecogniserResponse,
+} from "src/app/shared/auto-generated/apis";
 import { finalize, map } from "rxjs";
 import { MessageService } from "primeng/api";
 import { HttpClient } from "@angular/common/http";
@@ -90,7 +94,7 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
   private zoomTipShown = false;
   private moveTipShown = false;
   private tipShown = false;
-  matchColors: Color[] = [];
+  matchColors: RecogniserResponse[] = [];
   //   matchColors: Color[] = [
   //     {
   //       id: 1169,
@@ -844,12 +848,16 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
 
       this.selection.visible(true);
       this.$http
-        .post<Color[]>(`${environment.apiUrl}/api/recognise`, formData, {
-          responseType: "json",
-        })
+        .post<RecogniserResponse[]>(
+          `${environment.apiUrl}/api/recognise`,
+          formData,
+          {
+            responseType: "json",
+          }
+        )
         .pipe(
-          map((colors) => {
-            this.matchColors = colors;
+          map((res) => {
+            this.matchColors = res;
             setTimeout(() => {
               this.matchColorTable.nativeElement.scrollIntoView({
                 behavior: "smooth",
