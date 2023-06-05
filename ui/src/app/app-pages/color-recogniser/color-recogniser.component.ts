@@ -501,6 +501,9 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
         this.selection = new Konva.Line({
           points: [],
           closed: true,
+          // round cap for smoother lines
+          lineCap: "round",
+          lineJoin: "round",
         });
 
         break;
