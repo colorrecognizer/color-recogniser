@@ -71,6 +71,7 @@ export class TetradicPaletteComponent {
       draggable: true,
       data: {
         color: color,
+        showColorPalettesHidden: true,
       },
     });
   }

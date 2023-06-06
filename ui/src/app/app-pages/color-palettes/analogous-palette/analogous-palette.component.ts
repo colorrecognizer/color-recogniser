@@ -65,6 +65,7 @@ export class AnalogousPaletteComponent {
       draggable: true,
       data: {
         color: color,
+        showColorPalettesHidden: true
       },
     });
   }

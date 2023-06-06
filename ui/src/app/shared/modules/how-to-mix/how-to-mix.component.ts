@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { DynamicDialogRef, DynamicDialogConfig } from "primeng/dynamicdialog";
 import { CMYKColor, Color } from "../../auto-generated/apis";
 import { ThemeService } from "../../services/theme.service";
-import { ColorUtils } from "../../utils";
+import { ColorUtils, RouteEnum } from "../../utils";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-how-to-mix",
@@ -13,13 +14,18 @@ import { ColorUtils } from "../../utils";
 export class HowToMixComponent {
   color: Color;
   textColor: "white" | "black" = "black";
+  showColorPalettesHidden = false;
 
   constructor(
     private $dynamicDialogRef: DynamicDialogRef,
     private $dynamicDialogConfig: DynamicDialogConfig,
-    private $theme: ThemeService
+    private $theme: ThemeService,
+    private $router: Router
   ) {
     this.color = $dynamicDialogConfig.data?.color as Color;
+    this.showColorPalettesHidden =
+      !!$dynamicDialogConfig.data?.showColorPalettesHidden;
+      
     $theme.theme.subscribe((theme) => {
       this.textColor = theme === "dark-theme" ? "white" : "black";
     });
@@ -124,5 +130,13 @@ export class HowToMixComponent {
   get blackPercentage(): number {
     const color = this.color.cmyk?.black || 0;
     return Math.round(color * 100);
+  }
+
+  showColorPalettes() {
+    const url = this.$router.serializeUrl(
+      this.$router.createUrlTree([RouteEnum.ColorPalettes, this.color.hexValue])
+    );
+
+    window.open(url, "_blank");
   }
 }

@@ -55,6 +55,7 @@ export class LighteningMonochromaticPaletteComponent {
       draggable: true,
       data: {
         color: color,
+        showColorPalettesHidden: true
       },
     });
   }
