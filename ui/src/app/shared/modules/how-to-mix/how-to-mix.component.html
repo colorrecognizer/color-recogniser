@@ -1,6 +1,11 @@
 <div class="grid">
   <div class="col-12">
-    <h1 class="text-center">RGB</h1>
+    <div class="flex justify-content-center align-items-center gap-2">
+      <h1>RGB {{ color.hexValue }}</h1>
+      <app-copy-to-clipboard-button
+        [content]="color.hexValue"
+      ></app-copy-to-clipboard-button>
+    </div>
     <div>
       <svg version="1.1" viewBox="0 0 600 400">
         <style type="text/css">
@@ -272,7 +277,13 @@
           }
         </style>
         <g>
-          <rect x="309.44" y="169.75" width="120" height="120" [attr.fill]="cmykCyan"/>
+          <rect
+            x="309.44"
+            y="169.75"
+            width="120"
+            height="120"
+            [attr.fill]="cmykCyan"
+          />
         </g>
         <g>
           <path
@@ -300,7 +311,13 @@
           />
         </g>
         <g>
-          <rect x="309.44" y="409.75" width="120" height="120" [attr.fill]="cmykYellow"/>
+          <rect
+            x="309.44"
+            y="409.75"
+            width="120"
+            height="120"
+            [attr.fill]="cmykYellow"
+          />
         </g>
         <g>
           <path
@@ -323,10 +340,22 @@
           />
         </g>
         <g>
-          <rect x="309.44" y="289.75" width="120" height="120" [attr.fill]="color.hexValue"/>
+          <rect
+            x="309.44"
+            y="289.75"
+            width="120"
+            height="120"
+            [attr.fill]="color.hexValue"
+          />
         </g>
         <g>
-          <rect x="429.44" y="289.75" width="120" height="120" [attr.fill]="cmykMagenta"/>
+          <rect
+            x="429.44"
+            y="289.75"
+            width="120"
+            height="120"
+            [attr.fill]="cmykMagenta"
+          />
         </g>
         <g>
           <path
@@ -352,8 +381,13 @@
           points="249.44,349.75 159.66,259.97 98.54,259.97 "
           [attr.stroke]="textColor"
         />
-        <text transform="matrix(1 0 0 1 157.6333 254.4453)" class="cmyk-st8 cmyk-st9" text-anchor="end" [attr.fill]="textColor">
-          Black({{blackPercentage}}%)
+        <text
+          transform="matrix(1 0 0 1 157.6333 254.4453)"
+          class="cmyk-st8 cmyk-st9"
+          text-anchor="end"
+          [attr.fill]="textColor"
+        >
+          Black({{ blackPercentage }}%)
         </text>
         <polyline
           class="cmyk-st6"
@@ -370,14 +404,28 @@
           points="489.44,349.75 489.44,469.75 669.44,649.75 747.95,649.75 "
           [attr.stroke]="textColor"
         />
-        <text transform="matrix(1 0 0 1 162.807 138.0244)" class="cmyk-st8 cmyk-st9" text-anchor="end" [attr.fill]="textColor">
-          Cyan({{cyanPercentage}}%)
+        <text
+          transform="matrix(1 0 0 1 162.807 138.0244)"
+          class="cmyk-st8 cmyk-st9"
+          text-anchor="end"
+          [attr.fill]="textColor"
+        >
+          Cyan({{ cyanPercentage }}%)
         </text>
-        <text transform="matrix(1 0 0 1 130.2753 404.0244)" class="cmyk-st8 cmyk-st9" text-anchor="end" [attr.fill]="textColor">
-          Yellow({{yellowPercentage}}%)
+        <text
+          transform="matrix(1 0 0 1 130.2753 404.0244)"
+          class="cmyk-st8 cmyk-st9"
+          text-anchor="end"
+          [attr.fill]="textColor"
+        >
+          Yellow({{ yellowPercentage }}%)
         </text>
-        <text transform="matrix(1 0 0 1 669.3505 643.0244)" class="cmyk-st8 cmyk-st9" [attr.fill]="textColor">
-          Magenta({{magentaPercentage}}%)
+        <text
+          transform="matrix(1 0 0 1 669.3505 643.0244)"
+          class="cmyk-st8 cmyk-st9"
+          [attr.fill]="textColor"
+        >
+          Magenta({{ magentaPercentage }}%)
         </text>
       </svg>
     </div>

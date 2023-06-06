@@ -233,7 +233,6 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
     });
 
     // Bubbles
-    console.log(this.bubbles);
     this.bubbles.forEach(
       (b) =>
         (b.nativeElement.style.animationDuration = `calc(125s / ${

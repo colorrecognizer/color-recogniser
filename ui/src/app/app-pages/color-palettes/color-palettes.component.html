@@ -1,0 +1,26 @@
+<div class="grid grid-nogutter justify-content-center">
+  <div class="col-12 lg:col-6 flex flex-column gap-2 lg:gap-5">
+    <div [ngClass]="cardCss">
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="flex flex-column gap-2">
+          <formly-form
+            [model]="model"
+            [fields]="fields"
+            [options]="options"
+            [form]="form"
+          ></formly-form>
+
+          <app-submit-button
+            [form]="form"
+            label="Generate Palettes"
+            icon="pi pi-table"
+          ></app-submit-button>
+        </div>
+      </form>
+    </div>
+    <app-lightening-monochromatic-palette
+      [cardCss]="cardCss"
+      [color]="color"
+    ></app-lightening-monochromatic-palette>
+  </div>
+</div>

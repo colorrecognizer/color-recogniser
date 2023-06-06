@@ -26,6 +26,13 @@ const routes: Routes = [
           roles: ["ADMIN"],
         },
       },
+      {
+        path: "palettes",
+        loadChildren: () =>
+          import("./color-palettes/color-palettes.module").then(
+            (m) => m.ColorPalettesModule
+          ),
+      },
     ],
   },
 ];

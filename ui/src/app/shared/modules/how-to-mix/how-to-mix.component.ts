@@ -59,7 +59,8 @@ export class HowToMixComponent {
   }
 
   get cmykCyan(): string {
-    return ColorUtils.toRGB(
+    return ColorUtils.toHex(
+      "cmyk",
       new CMYKColor({
         cyan: this.color.cmyk?.cyan,
         magenta: 0,
@@ -70,7 +71,8 @@ export class HowToMixComponent {
   }
 
   get cmykMagenta(): string {
-    return ColorUtils.toRGB(
+    return ColorUtils.toHex(
+      "cmyk",
       new CMYKColor({
         cyan: 0,
         magenta: this.color.cmyk?.magenta,
@@ -81,7 +83,8 @@ export class HowToMixComponent {
   }
 
   get cmykYellow(): string {
-    return ColorUtils.toRGB(
+    return ColorUtils.toHex(
+      "cmyk",
       new CMYKColor({
         cyan: 0,
         magenta: 0,
@@ -92,7 +95,8 @@ export class HowToMixComponent {
   }
 
   get cmykBlack(): string {
-    return ColorUtils.toRGB(
+    return ColorUtils.toHex(
+      "cmyk",
       new CMYKColor({
         cyan: 0,
         magenta: 0,

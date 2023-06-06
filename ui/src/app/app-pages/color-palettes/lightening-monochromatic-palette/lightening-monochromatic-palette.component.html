@@ -1,0 +1,20 @@
+<div [ngClass]="cardCss" class="flex flex-column gap-2">
+  <h1 class="text-900 m-0">Monochromatic (Lightening)</h1>
+  <span> <strong>Steps: </strong> {{ steps }} </span>
+  <p-slider
+    [min]="3"
+    [max]="10"
+    [(ngModel)]="steps"
+    [step]="1"
+    class="w-full"
+  ></p-slider>
+  <div class="flex">
+    <div
+      *ngFor="let e of [].constructor(steps); let i = index"
+      class="flex-grow-1 cursor-pointer grow"
+      style="height: 5rem"
+      [ngStyle]="{ 'background-color': getColor(i) }"
+      (click)="showHowToMix(getColor(i))"
+    ></div>
+  </div>
+</div>
