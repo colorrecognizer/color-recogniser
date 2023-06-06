@@ -97,6 +97,7 @@ public class ApiController {
 
             List<Color> allColors = this.colorService.getAll();
             Color color = Color.builder()
+                    .name("Unnamed color")
                     .red((short) ar)
                     .green((short) ag)
                     .blue((short) ab)
@@ -107,14 +108,21 @@ public class ApiController {
                     + Math.pow(Math.max(color.getBlue(), 255 - color.getBlue()), 2)
             );
 
-            List<RecogniserResponse> result = allColors.stream()
+            List<RecogniserResponse> result = new java.util.ArrayList<>(allColors.stream()
                     .sorted((color1, color2) -> getDistance(color, color1) - getDistance(color, color2))
                     .limit(10)
                     .map(c -> RecogniserResponse.builder()
                             .color(c)
                             .matchPercentage(1 - Math.sqrt(getDistance(color, c)) / total)
                             .build())
-                    .toList();
+                    .toList());
+
+            if (result.get(0).matchPercentage < 1) {
+                result.add(0, RecogniserResponse.builder()
+                        .color(color)
+                        .matchPercentage(1)
+                        .build());
+            }
 
             return ResponseEntity.ok(result);
         } catch (IOException e) {
