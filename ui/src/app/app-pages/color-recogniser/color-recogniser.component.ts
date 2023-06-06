@@ -22,6 +22,7 @@ import { environment } from "src/environments/environment";
 import { DialogService } from "primeng/dynamicdialog";
 import { HowToMixComponent } from "src/app/shared/modules/how-to-mix/how-to-mix.component";
 import { FileUpload } from "primeng/fileupload";
+import { Title } from "@angular/platform-browser";
 
 declare let Konva: any;
 declare let Mousetrap: any;
@@ -153,8 +154,11 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
     private $message: MessageService,
     private $http: HttpClient,
     private $zone: NgZone,
-    private $dialog: DialogService
+    private $dialog: DialogService,
+    private $title: Title
   ) {
+    this.$title.setTitle("Color Recogniser");
+
     $theme.theme.subscribe((theme) => {
       this.border.stroke(theme === "light-theme" ? "black" : "white");
     });

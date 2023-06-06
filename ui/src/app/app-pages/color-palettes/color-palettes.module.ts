@@ -9,11 +9,15 @@ import { LighteningMonochromaticPaletteComponent } from "./lightening-monochroma
 import { RegularlyUsedPrimengModule } from "src/app/shared/modules/regularly-used-primeng.module";
 import { FormsModule } from "@angular/forms";
 import { SliderModule } from "primeng/slider";
+import { AnalogousPaletteComponent } from "./analogous-palette/analogous-palette.component";
+import { TetradicPaletteComponent } from "./tetradic-palette/tetradic-palette.component";
 
 @NgModule({
   declarations: [
     ColorPalettesComponent,
     LighteningMonochromaticPaletteComponent,
+    AnalogousPaletteComponent,
+    TetradicPaletteComponent,
   ],
   imports: [
     CommonModule,

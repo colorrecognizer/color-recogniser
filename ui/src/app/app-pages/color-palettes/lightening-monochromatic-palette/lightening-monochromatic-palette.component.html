@@ -1,5 +1,7 @@
 <div [ngClass]="cardCss" class="flex flex-column gap-2">
-  <h1 class="text-900 m-0">Monochromatic (Lightening)</h1>
+  <h1 class="text-900 m-0">
+    Monochromatic ({{ isDarkening ? "Darkening" : "Lightening" }})
+  </h1>
   <span> <strong>Steps: </strong> {{ steps }} </span>
   <p-slider
     [min]="3"

@@ -11,6 +11,7 @@ import { ColorUtils, HSLColor } from "src/app/shared/utils";
 })
 export class LighteningMonochromaticPaletteComponent {
   @Input() cardCss = "";
+  @Input() isDarkening = false;
 
   private _color: Color = new Color({
     red: 0,
@@ -37,7 +38,9 @@ export class LighteningMonochromaticPaletteComponent {
     const result = ColorUtils.toHex("hsl", {
       h: this.hsl.h,
       s: this.hsl.s,
-      l: this.hsl.l + ((100 - this.hsl.l) * step) / this.steps,
+      l: this.isDarkening
+        ? this.hsl.l - (this.hsl.l * step) / this.steps
+        : this.hsl.l + ((100 - this.hsl.l) * step) / this.steps,
     });
 
     return result;

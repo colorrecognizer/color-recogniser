@@ -1,0 +1,22 @@
+<div [ngClass]="cardCss" class="flex flex-column gap-2">
+  <h1 class="text-900 m-0">Tetradic (Compound Complementary)</h1>
+  <span>
+    <strong>Hue variation: </strong> {{ hueVariation | number : "1.0-0" }}
+  </span>
+  <p-slider
+    [min]="30"
+    [max]="150"
+    [step]="1"
+    [(ngModel)]="hueVariation"
+    class="w-full"
+  ></p-slider>
+  <div class="flex">
+    <div
+      *ngFor="let c of colors"
+      class="flex-grow-1 cursor-pointer grow"
+      style="height: 5rem"
+      [ngStyle]="{ 'background-color': c.hexValue }"
+      (click)="showHowToMix(c)"
+    ></div>
+  </div>
+</div>

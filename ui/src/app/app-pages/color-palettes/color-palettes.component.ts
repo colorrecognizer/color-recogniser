@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { FormGroup } from "@angular/forms";
+import { Title } from "@angular/platform-browser";
 import { FormlyFormOptions, FormlyFieldConfig } from "@ngx-formly/core";
 import { Color } from "src/app/shared/auto-generated/apis";
 import { ColorPickerTypeComponent } from "src/app/shared/modules/formly-form/color-picker-type/color-picker-type.component";
@@ -15,8 +16,8 @@ export class ColorPalettesComponent {
   model: any = {
     color: {
       r: 0,
-      g: 0,
-      b: 0,
+      g: 34,
+      b: 238,
     },
   };
 
@@ -37,6 +38,11 @@ export class ColorPalettesComponent {
     green: this.model.color.g,
     blue: this.model.color.b,
   });
+
+  /// Methods
+  constructor(private $title: Title) {
+    $title.setTitle("Color Palettes");
+  }
 
   submit() {
     this.color = new Color({

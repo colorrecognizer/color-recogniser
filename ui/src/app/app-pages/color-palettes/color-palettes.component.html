@@ -22,5 +22,42 @@
       [cardCss]="cardCss"
       [color]="color"
     ></app-lightening-monochromatic-palette>
+    <app-lightening-monochromatic-palette
+      [cardCss]="cardCss"
+      [color]="color"
+      [isDarkening]="true"
+    ></app-lightening-monochromatic-palette>
+
+    <app-analogous-palette [cardCss]="cardCss" [color]="color">
+    </app-analogous-palette>
+
+    <app-analogous-palette
+      [cardCss]="cardCss"
+      [color]="color"
+      label="Triadic"
+      [hueVariation]="120"
+    >
+    </app-analogous-palette>
+
+    <app-analogous-palette
+      [cardCss]="cardCss"
+      [color]="color"
+      label="Split - complementary"
+      [hueVariation]="150"
+    >
+    </app-analogous-palette>
+
+    <app-analogous-palette
+      [cardCss]="cardCss"
+      [color]="color"
+      label="Complementary"
+      [hueVariation]="180"
+    >
+    </app-analogous-palette>
+
+    <app-tetradic-palette
+      [cardCss]="cardCss"
+      [color]="color"
+    ></app-tetradic-palette>
   </div>
 </div>

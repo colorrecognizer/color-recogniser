@@ -12,6 +12,7 @@ import { ColorComponent } from "./color/color.component";
 import { SearchRequest } from "src/app/shared/auto-generated/apis";
 import { TableLazyLoadEvent } from "primeng/table";
 import { TableUtils, Utils } from "src/app/shared/utils";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-color-management",
@@ -29,8 +30,11 @@ export class ColorManagementComponent implements OnDestroy {
     private $colorApi: ColorApi,
     private $message: MessageService,
     private $confirmation: ConfirmationService,
-    private $dialog: DialogService
-  ) {}
+    private $dialog: DialogService,
+    private $title: Title
+  ) {
+    $title.setTitle("Color Management");
+  }
 
   ngOnDestroy(): void {
     if (this.colorEditorDialogRef) this.colorEditorDialogRef.close();
