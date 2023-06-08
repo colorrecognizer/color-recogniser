@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
-import { DynamicDialogRef, DynamicDialogConfig } from "primeng/dynamicdialog";
+import { DynamicDialogConfig } from "primeng/dynamicdialog";
 import { CMYKColor, Color } from "../../auto-generated/apis";
 import { ThemeService } from "../../services/theme.service";
-import { ColorUtils, RouteEnum } from "../../utils";
+import { ColorUtils, RouteEnum, Utils } from "../../utils";
 import { Router } from "@angular/router";
 
 @Component({
@@ -17,18 +17,21 @@ export class HowToMixComponent {
   showColorPalettesHidden = false;
 
   constructor(
-    private $dynamicDialogRef: DynamicDialogRef,
-    private $dynamicDialogConfig: DynamicDialogConfig,
-    private $theme: ThemeService,
+    $dynamicDialogConfig: DynamicDialogConfig,
+    $theme: ThemeService,
     private $router: Router
   ) {
     this.color = $dynamicDialogConfig.data?.color as Color;
     this.showColorPalettesHidden =
       !!$dynamicDialogConfig.data?.showColorPalettesHidden;
-      
+
     $theme.theme.subscribe((theme) => {
       this.textColor = theme === "dark-theme" ? "white" : "black";
     });
+  }
+
+  navigateToCMYK() {
+    Utils.openUrlInNewWindow(this.$router, [RouteEnum.CMYKAnimation]);
   }
 
   get rgbRed(): string {
@@ -133,10 +136,9 @@ export class HowToMixComponent {
   }
 
   showColorPalettes() {
-    const url = this.$router.serializeUrl(
-      this.$router.createUrlTree([RouteEnum.ColorPalettes, this.color.hexValue])
-    );
-
-    window.open(url, "_blank");
+    Utils.openUrlInNewWindow(this.$router, [
+      RouteEnum.ColorPalettes,
+      this.color.hexValue,
+    ]);
   }
 }

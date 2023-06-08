@@ -33,6 +33,13 @@ const routes: Routes = [
             (m) => m.ColorPalettesModule
           ),
       },
+      {
+        path: "cmyk-animation",
+        loadChildren: () =>
+          import(
+            "./cmyk-color-mixing-animation/cmyk-color-mixing-animation.module"
+          ).then((m) => m.CmykColorMixingAnimationModule),
+      },
     ],
   },
 ];

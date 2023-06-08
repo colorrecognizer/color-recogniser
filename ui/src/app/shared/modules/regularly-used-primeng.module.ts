@@ -24,7 +24,7 @@ const modules = [
   RadioButtonModule,
   InputNumberModule,
   DividerModule,
-  DropdownModule
+  DropdownModule,
 ];
 
 @NgModule({

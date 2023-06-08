@@ -4,4 +4,5 @@ export enum RouteEnum {
   Register = "/auth/register",
   ColorManagement = "/color-management",
   ColorPalettes = "/palettes",
+  CMYKAnimation = "/cmyk-animation",
 }
