@@ -4,6 +4,7 @@ import {
   ElementRef,
   ViewChild,
 } from "@angular/core";
+import { Router } from "@angular/router";
 import anime from "animejs";
 import { map } from "rxjs";
 import { User } from "src/app/shared/auto-generated/apis";
@@ -28,7 +29,11 @@ export class NavbarComponent {
   logoAnimationIndex = 0;
   palettesUrl = RouteEnum.ColorPalettes;
 
-  constructor(private $theme: ThemeService, private $auth: AuthService) {
+  constructor(
+    private $theme: ThemeService,
+    private $auth: AuthService,
+    private $router: Router
+  ) {
     $auth
       .getCurrentUser()
       .pipe(map((user) => (this.currentUser = user)))
@@ -87,5 +92,9 @@ export class NavbarComponent {
 
   toggleSystemThemeUsed() {
     this.$theme.toggleSystemThemeUsed();
+  }
+
+  navigateToColorRecogniser() {
+    this.$router.navigate([RouteEnum.HomePage]);
   }
 }

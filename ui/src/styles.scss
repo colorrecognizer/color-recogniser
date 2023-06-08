@@ -52,3 +52,21 @@ p-dynamicdialog .p-dialog {
     width: 50vw;
   }
 }
+
+.custom-icon-tiktok {
+    display:block;
+    background:black;
+    color:white;
+    text-decoration:none;
+
+    &:before {
+        content: "";
+        background: url("assets/svgs/logo-tiktok.svg");
+        background-size: cover;
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        margin-left: -10px;
+        margin-top: -10px;
+    }
+}
