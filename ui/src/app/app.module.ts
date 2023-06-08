@@ -14,7 +14,6 @@ import { ConfirmationService, MessageService } from "primeng/api";
 import { HttpErrorHandlerService } from "./shared/services/http-error-handler.service";
 import { ToastModule } from "primeng/toast";
 import { PageNotFoundComponent } from "./page-not-found/page-not-found.component";
-import { FormlyFormModule } from "./shared/modules/formly-form/formly-form.module";
 import { AuthService } from "./shared/services/auth.service";
 import { AuthGuard } from "./shared/services/auth.guard";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
@@ -28,9 +27,10 @@ import {
   DynamicDialogRef,
 } from "primeng/dynamicdialog";
 import { AngularResizeEventModule } from "angular-resize-event";
-import { HowToMixModule } from "./shared/modules/how-to-mix/how-to-mix.module";
 import { AngularFireAnalyticsModule } from "@angular/fire/compat/analytics";
 import { ScrollTopModule } from "primeng/scrolltop";
+import { FormlyFormModule } from "./shared/components/formly-form/formly-form.module";
+import { HowToMixModule } from "./shared/components/how-to-mix/how-to-mix.module";
 
 @NgModule({
   declarations: [AppComponent, PageNotFoundComponent],

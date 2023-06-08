@@ -5,7 +5,7 @@ import { ActivatedRoute } from "@angular/router";
 import { FormlyFormOptions, FormlyFieldConfig } from "@ngx-formly/core";
 import { Subscription } from "rxjs";
 import { Color } from "src/app/shared/auto-generated/apis";
-import { ColorPickerTypeComponent } from "src/app/shared/modules/formly-form/color-picker-type/color-picker-type.component";
+import { ColorPickerTypeComponent } from "src/app/shared/components/formly-form/color-picker-type/color-picker-type.component";
 import { ColorUtils } from "src/app/shared/utils";
 
 @Component({

@@ -20,9 +20,9 @@ import { MessageService } from "primeng/api";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { DialogService } from "primeng/dynamicdialog";
-import { HowToMixComponent } from "src/app/shared/modules/how-to-mix/how-to-mix.component";
 import { FileUpload } from "primeng/fileupload";
 import { Title } from "@angular/platform-browser";
+import { HowToMixComponent } from "src/app/shared/components/how-to-mix/how-to-mix.component";
 
 declare let Konva: any;
 declare let Mousetrap: any;

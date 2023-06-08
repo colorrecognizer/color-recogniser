@@ -5,7 +5,7 @@ import { MessageService } from "primeng/api";
 import { DynamicDialogConfig, DynamicDialogRef } from "primeng/dynamicdialog";
 import { map, finalize } from "rxjs";
 import { Color, ColorApi } from "src/app/shared/auto-generated/apis";
-import { ColorPickerTypeComponent } from "src/app/shared/modules/formly-form/color-picker-type/color-picker-type.component";
+import { ColorPickerTypeComponent } from "src/app/shared/components/formly-form/color-picker-type/color-picker-type.component";
 
 @Component({
   selector: "app-color",

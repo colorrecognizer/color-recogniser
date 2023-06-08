@@ -1,7 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { DialogService } from "primeng/dynamicdialog";
 import { Color } from "src/app/shared/auto-generated/apis";
-import { HowToMixComponent } from "src/app/shared/modules/how-to-mix/how-to-mix.component";
+import { HowToMixComponent } from "src/app/shared/components/how-to-mix/how-to-mix.component";
 import { ColorUtils, HSLColor } from "src/app/shared/utils";
 
 @Component({
