@@ -1,5 +1,5 @@
 <div
-  class="p-2 lg:px-5 shadow-2 flex align-items-center justify-content-between relative lg:static"
+  class="p-3 lg:px-5 shadow-2 flex align-items-center justify-content-between relative lg:static"
   style="min-height: 80px"
 >
   <div class="block lg:hidden" style="width: 2rem"></div>
@@ -26,12 +26,12 @@
     class="align-items-center flex-grow-1 justify-content-between hidden lg:flex absolute lg:static w-full surface-overlay lg:surface-ground left-0 top-100 z-2 shadow-2 lg:shadow-none"
   >
     <ul
-      class="list-none p-0 m-0 flex lg:align-items-center select-none flex-column lg:flex-row lg:gap-2"
+      class="list-none p-0 m-0 flex lg:align-items-center select-none flex-column lg:flex-row lg:gap-3"
     >
       <li>
         <a
           pRipple
-          class="flex p-2 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-colors transition-duration-150"
+          class="flex p-3 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-colors transition-duration-150"
           [routerLink]="homeUrl"
           routerLinkActive="text-900 surface-100"
           [routerLinkActiveOptions]="{ exact: true }"
@@ -43,7 +43,7 @@
       <li>
         <a
           pRipple
-          class="flex p-2 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-colors transition-duration-150"
+          class="flex p-3 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-colors transition-duration-150"
           [routerLink]="palettesUrl"
           routerLinkActive="text-900 surface-100"
           [routerLinkActiveOptions]="{ exact: true }"
@@ -55,7 +55,7 @@
       <li *ngIf="currentUser?.admin">
         <a
           pRipple
-          class="flex p-2 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-colors transition-duration-150"
+          class="flex p-3 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-colors transition-duration-150"
           [routerLink]="colorManagementUrl"
           routerLinkActive="text-900 surface-100"
           [routerLinkActiveOptions]="{ exact: true }"
@@ -72,7 +72,7 @@
       <li class="lg:relative">
         <a
           pRipple
-          class="flex p-2 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-colors transition-duration-150"
+          class="flex p-3 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-colors transition-duration-150"
           pStyleClass="@next"
           enterClass="hidden"
           enterActiveClass="fadein"
@@ -95,7 +95,7 @@
           <li>
             <a
               pRipple
-              class="flex p-2 align-items-center text-600 hover:text-900 hover:surface-100 transition-colors transition-duration-150"
+              class="flex p-3 align-items-center text-600 hover:text-900 hover:surface-100 transition-colors transition-duration-150"
               (click)="toggleSystemThemeUsed()"
             >
               <p-checkbox
@@ -112,7 +112,7 @@
             <a
               *ngIf="!systemThemeUsed"
               pRipple
-              class="flex p-2 align-items-center text-600 hover:text-900 hover:surface-100 transition-colors transition-duration-150"
+              class="flex p-3 align-items-center text-600 hover:text-900 hover:surface-100 transition-colors transition-duration-150"
               (click)="toggleTheme()"
             >
               <i class="mr-2" [ngClass]="themeIcon"></i>

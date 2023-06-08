@@ -1,9 +1,9 @@
-<div class="flex flex-column gap-2">
+<div class="flex flex-column gap-3">
   <app-back-button></app-back-button>
 
-  <div class="text-center flex flex-column gap-2">
+  <div class="text-center flex flex-column gap-3">
     <div class="text-900 text-3xl font-medium">Welcome Back</div>
-    <div class="flex flex-wrap gap-2 justify-content-center">
+    <div class="flex flex-wrap gap-3 justify-content-center">
       <span class="text-600 font-medium line-height-3"
         >Don't have an account?</span
       >
@@ -17,7 +17,7 @@
   </div>
 
   <form [formGroup]="form" (ngSubmit)="login()">
-    <div class="flex flex-column gap-2">
+    <div class="flex flex-column gap-3">
       <formly-form
         [model]="model"
         [fields]="fields"

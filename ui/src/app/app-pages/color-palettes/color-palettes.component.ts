@@ -35,7 +35,7 @@ export class ColorPalettesComponent implements OnDestroy {
     },
   ];
 
-  readonly cardCss = "surface-card p-2 lg:p-5 shadow-2 border-round";
+  readonly cardCss = "surface-card p-3 lg:p-5 shadow-2 border-round";
   color = new Color({
     red: this.model.color.r,
     green: this.model.color.g,
