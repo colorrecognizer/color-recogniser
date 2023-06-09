@@ -21,7 +21,7 @@ import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { DialogService } from "primeng/dynamicdialog";
 import { FileUpload } from "primeng/fileupload";
-import { Title } from "@angular/platform-browser";
+import { Meta, Title } from "@angular/platform-browser";
 import { HowToMixComponent } from "src/app/shared/components/how-to-mix/how-to-mix.component";
 
 declare let Konva: any;
@@ -96,7 +96,6 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
   private ctrlPressed = false;
   private zoomTipShown = false;
   private moveTipShown = false;
-  private tipShown = false;
   matchColors: RecogniserResponse[] = [];
   selectedColor?: Color;
   @ViewChild("imageUpload") imageUpload!: FileUpload;
@@ -149,19 +148,26 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
   }
 
   constructor(
-    private $theme: ThemeService,
-    private $api: ApiApi,
+    $theme: ThemeService,
     private $message: MessageService,
     private $http: HttpClient,
-    private $zone: NgZone,
     private $dialog: DialogService,
-    private $title: Title
+    private $title: Title,
+    $meta: Meta
   ) {
     this.$title.setTitle("Color Recogniser");
 
     $theme.theme.subscribe((theme) => {
       this.border.stroke(theme === "light-theme" ? "black" : "white");
     });
+
+    $meta.addTags([
+      {
+        name: "description",
+        content:
+          "Discover a world of vibrant colors with Color Recogniser. Our easy-to-use tool helps you recognize and explore colors in photos, making it perfect for kids, art teachers, artists, photographers, and designers. Unleash your creativity and unlock the palette of possibilities with our accurate color recognition tool.",
+      },
+    ]);
   }
 
   ngOnInit(): void {

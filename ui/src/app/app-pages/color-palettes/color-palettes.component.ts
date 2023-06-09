@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { Title } from "@angular/platform-browser";
+import { Meta, Title } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
 import { FormlyFormOptions, FormlyFieldConfig } from "@ngx-formly/core";
 import { Subscription } from "rxjs";
@@ -45,8 +45,15 @@ export class ColorPalettesComponent implements OnDestroy {
   private routeSub: Subscription;
 
   /// Methods
-  constructor(private $title: Title, private $route: ActivatedRoute) {
+  constructor($title: Title, $route: ActivatedRoute, $meta: Meta) {
     $title.setTitle("Color Palettes");
+    $meta.addTags([
+      {
+        name: "description",
+        content:
+          "Discover a world of captivating color palettes on our Color Palettes page. Explore a diverse collection of harmonious color combinations for your designs, artworks, and creative projects. Get inspired and find the perfect color schemes to elevate your creations.",
+      },
+    ]);
 
     this.routeSub = $route.params.subscribe((params) => {
       if (!params["hex"]) return;

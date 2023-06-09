@@ -1,4 +1,7 @@
-<div class="surface-section p-3 lg:p-5 text-center flex flex-column gap-3">
+<footer
+  #footer
+  class="surface-section p-3 lg:p-5 text-center flex flex-column gap-3"
+>
   <div class="flex flex-wrap gap-3 align-items-center justify-content-center">
     <img
       src="assets/images/logo.png"
@@ -6,8 +9,9 @@
       style="height: 3rem"
       class="cursor-pointer"
       (click)="navigateToColorRecogniser()"
+      #logo
     />
-    <h1 class="cursor-pointer" (click)="navigateToColorRecogniser()">
+    <h1 class="cursor-pointer ml2" (click)="navigateToColorRecogniser()">
       Color Recogniser
     </h1>
   </div>
@@ -20,7 +24,7 @@
   </ul> -->
   <div class="flex align-items-center justify-content-center gap-3 lg:gap-5">
     <a
-      class="cursor-pointer border-circle bg-bluegray-100 block inline-flex justify-content-center align-items-center"
+      class="icon cursor-pointer border-circle bg-bluegray-100 block inline-flex justify-content-center align-items-center"
       style="width: 2.5rem; height: 2.5rem"
       href="https://www.tiktok.com/@longhl104"
       target="_blank"
@@ -28,7 +32,7 @@
       <i class="pi custom-icon-tiktok"></i>
     </a>
     <a
-      class="cursor-pointer border-circle bg-bluegray-100 block inline-flex justify-content-center align-items-center"
+      class="icon cursor-pointer border-circle bg-bluegray-100 block inline-flex justify-content-center align-items-center"
       style="width: 2.5rem; height: 2.5rem; color: black"
       href="https://github.com/longhl104"
       target="_blank"
@@ -36,7 +40,7 @@
       <i class="pi pi-github"></i>
     </a>
     <a
-      class="cursor-pointer border-circle bg-bluegray-100 block inline-flex justify-content-center align-items-center"
+      class="icon cursor-pointer border-circle bg-bluegray-100 block inline-flex justify-content-center align-items-center"
       style="width: 2.5rem; height: 2.5rem; color: black"
       href="https://www.youtube.com/channel/UC-F-FbAu6EL_ByF2PmJESmw"
       target="_blank"
@@ -47,5 +51,12 @@
   <div class="text-center">
     <!-- <a class="mr-5 text-sm text-600 cursor-pointer">Privacy Policy</a>
     <a class="text-sm text-600 cursor-pointer">Terms of Service</a> -->
+    <span class="text-sm text-600">
+      ©2023 Color Recogniser | Developed by
+      <a href="https://duy-long-nguyen-resume.web.app/" target="_blank">
+        Duy Long Nguyen
+      </a>
+      | All Rights Reserved
+    </span>
   </div>
-</div>
+</footer>

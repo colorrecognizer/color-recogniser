@@ -13,18 +13,10 @@ export class AppComponent {
 
   constructor(
     private $primengConfig: PrimeNGConfig,
-    private $theme: ThemeService,
-    private $title: Title,
-    private $meta: Meta
+    $title: Title,
   ) {
     this.$primengConfig.ripple = true;
     $title.setTitle("Color Recogniser");
-    $meta.addTags([
-      {
-        name: "description",
-        content:
-          "Discover a world of vibrant colors with Color Recogniser. Our easy-to-use tool helps you recognize and explore colors in photos, making it perfect for kids, art teachers, artists, photographers, and designers. Unleash your creativity and unlock the palette of possibilities with our accurate color recognition tool.",
-      },
-    ]);
+
   }
 }
