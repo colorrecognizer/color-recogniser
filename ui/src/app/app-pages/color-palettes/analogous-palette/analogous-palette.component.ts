@@ -1,4 +1,12 @@
-import { Component, Input } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  ViewChild,
+} from "@angular/core";
+import anime from "animejs";
 import { DialogService } from "primeng/dynamicdialog";
 import { Color } from "src/app/shared/auto-generated/apis";
 import { HowToMixComponent } from "src/app/shared/components/how-to-mix/how-to-mix.component";
@@ -9,7 +17,7 @@ import { ColorUtils } from "src/app/shared/utils";
   templateUrl: "./analogous-palette.component.html",
   styleUrls: ["./analogous-palette.component.scss"],
 })
-export class AnalogousPaletteComponent {
+export class AnalogousPaletteComponent implements AfterViewInit {
   @Input() cardCss = "";
   colors: Color[] = [];
   @Input() label = "Analogous";
@@ -39,8 +47,22 @@ export class AnalogousPaletteComponent {
     return this._hueVariation;
   }
 
+  @ViewChild("card") card!: ElementRef<HTMLDivElement>;
+  animation?: anime.AnimeInstance;
+
   /// Methods
   constructor(private $dialog: DialogService) {}
+
+  ngAfterViewInit(): void {
+    this.animation = anime({
+      targets: ".grow",
+      scale: [
+        { value: 0.5, easing: "easeOutSine", duration: 500 },
+        { value: 1, easing: "easeInOutQuad", duration: 1000 },
+      ],
+      delay: anime.stagger(200),
+    });
+  }
 
   refresh() {
     this.colors.length = 0;
@@ -65,8 +87,19 @@ export class AnalogousPaletteComponent {
       draggable: true,
       data: {
         color: color,
-        showColorPalettesHidden: true
+        showColorPalettesHidden: true,
       },
     });
+  }
+
+  @HostListener("document:scroll", ["$event"])
+  public onViewportScroll() {
+    // ⤵️ Captures / defines current window height when called
+    const windowHeight = window.innerHeight;
+    const boundingRect = this.card.nativeElement.getBoundingClientRect();
+
+    if (boundingRect.top >= 0 && boundingRect.bottom <= windowHeight) {
+      this.animation?.play();
+    }
   }
 }

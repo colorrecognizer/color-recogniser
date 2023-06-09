@@ -18,7 +18,6 @@ export class FooterComponent implements AfterViewInit {
   @ViewChild("footer") footer!: ElementRef<HTMLDivElement>;
   @ViewChild("logo") logo!: ElementRef<HTMLImageElement>;
   animations: anime.AnimeInstance[] = [];
-  isAnimationPlaying = false;
 
   constructor(private $router: Router) {}
 
@@ -32,7 +31,9 @@ export class FooterComponent implements AfterViewInit {
       })
     );
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const textWrapper = document.querySelector(".ml2")!;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     textWrapper.innerHTML = textWrapper.textContent!.replace(
       /\S/g,
       "<span class='letter'>$&</span>"
@@ -70,20 +71,8 @@ export class FooterComponent implements AfterViewInit {
     const windowHeight = window.innerHeight;
     const boundingRect = this.footer.nativeElement.getBoundingClientRect();
 
-    // ⤵️ IF the top of the element is greater or = to 0 (it's not ABOVE the viewport)
-    // AND IF the bottom of the element is less than or = to viewport height
-    // show the corresponding icon after half a second
-    // else hide all icons
     if (boundingRect.top >= 0 && boundingRect.bottom <= windowHeight) {
-      if (!this.isAnimationPlaying) {
-        this.isAnimationPlaying = true;
-        this.animations.forEach((a) => a.play());
-      }
-    } else {
-      if (this.isAnimationPlaying) {
-        this.isAnimationPlaying = false;
-        this.animations.forEach((a) => a.pause());
-      }
+      this.animations.forEach((a) => a.play());
     }
   }
 }

@@ -2,7 +2,6 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  NgZone,
   OnInit,
   QueryList,
   ViewChild,
@@ -11,7 +10,6 @@ import {
 import { ThemeService } from "src/app/shared/services/theme.service";
 import { SelectionTool } from "./selection-tool";
 import {
-  ApiApi,
   Color,
   RecogniserResponse,
 } from "src/app/shared/auto-generated/apis";
@@ -164,6 +162,16 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
     $meta.addTags([
       {
         name: "description",
+        content:
+          "Discover a world of vibrant colors with Color Recogniser. Our easy-to-use tool helps you recognize and explore colors in photos, making it perfect for kids, art teachers, artists, photographers, and designers. Unleash your creativity and unlock the palette of possibilities with our accurate color recognition tool.",
+      },
+      {
+        name: "og:title",
+        content:
+          "Color Recogniser",
+      },
+      {
+        name: "og:description",
         content:
           "Discover a world of vibrant colors with Color Recogniser. Our easy-to-use tool helps you recognize and explore colors in photos, making it perfect for kids, art teachers, artists, photographers, and designers. Unleash your creativity and unlock the palette of possibilities with our accurate color recognition tool.",
       },

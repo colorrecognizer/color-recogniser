@@ -10,10 +10,10 @@
     [step]="1"
     class="w-full"
   ></p-slider>
-  <div class="flex">
+  <div class="flex flex-wrap gap-1">
     <div
       *ngFor="let e of [].constructor(steps); let i = index"
-      class="flex-grow-1 cursor-pointer grow"
+      class="flex-grow-1 cursor-pointer grow border-round-md"
       style="height: 5rem"
       [ngStyle]="{ 'background-color': getColor(i) }"
       (click)="showHowToMix(getColor(i))"

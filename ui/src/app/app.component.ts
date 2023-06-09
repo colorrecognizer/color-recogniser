@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { PrimeNGConfig } from "primeng/api";
-import { ThemeService } from "./shared/services/theme.service";
 import { Meta, Title } from "@angular/platform-browser";
 
 @Component({
@@ -14,9 +13,15 @@ export class AppComponent {
   constructor(
     private $primengConfig: PrimeNGConfig,
     $title: Title,
+    private $meta: Meta
   ) {
     this.$primengConfig.ripple = true;
     $title.setTitle("Color Recogniser");
-
+    // $meta.addTags([
+    //   {
+    //     name: "og:image",
+    //     content: "https://colorrecogniser.com/assets/images/logo.png",
+    //   },
+    // ]);
   }
 }
