@@ -61,7 +61,7 @@ export class FooterComponent implements AfterViewInit {
     );
   }
 
-  navigateToColorRecogniser() {
+  navigateToColorRecognizer() {
     this.$router.navigate([RouteEnum.HomePage]);
   }
 

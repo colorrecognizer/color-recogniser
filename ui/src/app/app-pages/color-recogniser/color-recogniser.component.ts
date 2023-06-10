@@ -45,7 +45,7 @@ function getDistance(p1: { x: any; y: any }, p2: { x: any; y: any }) {
   templateUrl: "./color-recogniser.component.html",
   styleUrls: ["./color-recogniser.component.scss"],
 })
-export class ColorRecogniserComponent implements OnInit, AfterViewInit {
+export class ColorRecognizerComponent implements OnInit, AfterViewInit {
   stage: any;
   layer: any;
   imageObj: any;
@@ -153,7 +153,7 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
     private $title: Title,
     $meta: Meta
   ) {
-    this.$title.setTitle("Color Recogniser");
+    this.$title.setTitle("Color Recognizer");
 
     $theme.theme.subscribe((theme) => {
       this.border.stroke(theme === "light-theme" ? "black" : "white");
@@ -163,17 +163,17 @@ export class ColorRecogniserComponent implements OnInit, AfterViewInit {
       {
         name: "description",
         content:
-          "Discover a world of vibrant colors with Color Recogniser. Our easy-to-use tool helps you recognize and explore colors in photos, making it perfect for kids, art teachers, artists, photographers, and designers. Unleash your creativity and unlock the palette of possibilities with our accurate color recognition tool.",
+          "Discover a world of vibrant colors with Color Recognizer. Our easy-to-use tool helps you recognize and explore colors in photos, making it perfect for kids, art teachers, artists, photographers, and designers. Unleash your creativity and unlock the palette of possibilities with our accurate color recognition tool.",
       },
       {
         name: "og:title",
         content:
-          "Color Recogniser",
+          "Color Recognizer",
       },
       {
         name: "og:description",
         content:
-          "Discover a world of vibrant colors with Color Recogniser. Our easy-to-use tool helps you recognize and explore colors in photos, making it perfect for kids, art teachers, artists, photographers, and designers. Unleash your creativity and unlock the palette of possibilities with our accurate color recognition tool.",
+          "Discover a world of vibrant colors with Color Recognizer. Our easy-to-use tool helps you recognize and explore colors in photos, making it perfect for kids, art teachers, artists, photographers, and designers. Unleash your creativity and unlock the palette of possibilities with our accurate color recognition tool.",
       },
     ]);
   }

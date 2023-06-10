@@ -56,7 +56,7 @@ import { HowToMixModule } from "./shared/components/how-to-mix/how-to-mix.module
     {
       provide: DEFAULT_CONFIG,
       useValue: {
-        name: "ColorRecogniser",
+        name: "ColorRecognizer",
         driver: [
           // defaults to indexedDB -> webSQL -> localStorage
           Driver.INDEXED_DB,

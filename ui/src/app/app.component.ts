@@ -16,11 +16,11 @@ export class AppComponent {
     private $meta: Meta
   ) {
     this.$primengConfig.ripple = true;
-    $title.setTitle("Color Recogniser");
+    $title.setTitle("Color Recognizer");
     // $meta.addTags([
     //   {
     //     name: "og:image",
-    //     content: "https://colorrecogniser.com/assets/images/logo.png",
+    //     content: "https://colorrecognizer.io/assets/images/logo.png",
     //   },
     // ]);
   }

@@ -1,4 +1,14 @@
-import { Component, Input } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from "@angular/core";
+import anime from "animejs";
 import { DialogService } from "primeng/dynamicdialog";
 import { Color } from "src/app/shared/auto-generated/apis";
 import { HowToMixComponent } from "src/app/shared/components/how-to-mix/how-to-mix.component";
@@ -9,7 +19,7 @@ import { ColorUtils } from "src/app/shared/utils";
   templateUrl: "./tetradic-palette.component.html",
   styleUrls: ["./tetradic-palette.component.scss"],
 })
-export class TetradicPaletteComponent {
+export class TetradicPaletteComponent implements AfterViewInit {
   @Input() cardCss = "";
   colors: Color[] = [];
   @Input() label = "Analogous";
@@ -39,8 +49,24 @@ export class TetradicPaletteComponent {
     return this._hueVariation;
   }
 
+  @ViewChild("card") card!: ElementRef<HTMLDivElement>;
+  animation?: anime.AnimeInstance;
+  shouldPlayAnimation = true;
+  @ViewChildren("grow") grows!: QueryList<ElementRef<HTMLDivElement>>;
+
   /// Methods
   constructor(private $dialog: DialogService) {}
+
+  ngAfterViewInit(): void {
+    this.animation = anime({
+      targets: this.grows.map((g) => g.nativeElement),
+      scale: [
+        { value: 0.5, easing: "easeOutSine", duration: 500 },
+        { value: 1, easing: "easeInOutQuad", duration: 1000 },
+      ],
+      delay: anime.stagger(200),
+    });
+  }
 
   refresh() {
     this.colors.length = 0;
@@ -74,5 +100,21 @@ export class TetradicPaletteComponent {
         showColorPalettesHidden: true,
       },
     });
+  }
+
+  @HostListener("document:scroll", ["$event"])
+  public onViewportScroll() {
+    // ⤵️ Captures / defines current window height when called
+    const windowHeight = window.innerHeight;
+    const boundingRect = this.card.nativeElement.getBoundingClientRect();
+
+    if (boundingRect.top >= 0 && boundingRect.bottom <= windowHeight) {
+      if (this.shouldPlayAnimation) {
+        this.shouldPlayAnimation = false;
+        this.animation?.play();
+      }
+    } else {
+      this.shouldPlayAnimation = true;
+    }
   }
 }

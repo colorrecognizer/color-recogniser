@@ -12,7 +12,7 @@ const routes: Routes = [
         path: "",
         loadChildren: () =>
           import("./color-recogniser/color-recogniser.module").then(
-            (m) => m.ColorRecogniserModule
+            (m) => m.ColorRecognizerModule
           ),
       },
       {

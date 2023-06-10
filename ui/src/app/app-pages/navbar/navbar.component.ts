@@ -94,7 +94,7 @@ export class NavbarComponent {
     this.$theme.toggleSystemThemeUsed();
   }
 
-  navigateToColorRecogniser() {
+  navigateToColorRecognizer() {
     this.$router.navigate([RouteEnum.HomePage]);
   }
 }

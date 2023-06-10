@@ -1,4 +1,4 @@
-<div [ngClass]="cardCss" class="flex flex-column gap-3">
+<div #card [ngClass]="cardCss" class="flex flex-column gap-3">
   <h1 class="text-900 m-0">Tetradic (Compound Complementary)</h1>
   <span>
     <strong>Hue variation: </strong> {{ hueVariation | number : "1.0-0" }}
@@ -13,6 +13,7 @@
   <div class="flex flex-wrap gap-1">
     <div
       *ngFor="let c of colors"
+      #grow
       class="flex-grow-1 cursor-pointer border-round-md grow"
       style="height: 5rem"
       [ngStyle]="{ 'background-color': c.hexValue }"

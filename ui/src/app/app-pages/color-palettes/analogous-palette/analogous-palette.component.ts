@@ -4,7 +4,9 @@ import {
   ElementRef,
   HostListener,
   Input,
+  QueryList,
   ViewChild,
+  ViewChildren,
 } from "@angular/core";
 import anime from "animejs";
 import { DialogService } from "primeng/dynamicdialog";
@@ -49,13 +51,15 @@ export class AnalogousPaletteComponent implements AfterViewInit {
 
   @ViewChild("card") card!: ElementRef<HTMLDivElement>;
   animation?: anime.AnimeInstance;
+  shouldPlayAnimation = true;
+  @ViewChildren("grow") grows!: QueryList<ElementRef<HTMLDivElement>>;
 
   /// Methods
   constructor(private $dialog: DialogService) {}
 
   ngAfterViewInit(): void {
     this.animation = anime({
-      targets: ".grow",
+      targets: this.grows.map((g) => g.nativeElement),
       scale: [
         { value: 0.5, easing: "easeOutSine", duration: 500 },
         { value: 1, easing: "easeInOutQuad", duration: 1000 },
@@ -99,7 +103,12 @@ export class AnalogousPaletteComponent implements AfterViewInit {
     const boundingRect = this.card.nativeElement.getBoundingClientRect();
 
     if (boundingRect.top >= 0 && boundingRect.bottom <= windowHeight) {
-      this.animation?.play();
+      if (this.shouldPlayAnimation) {
+        this.shouldPlayAnimation = false;
+        this.animation?.play();
+      }
+    } else {
+      this.shouldPlayAnimation = true;
     }
   }
 }
