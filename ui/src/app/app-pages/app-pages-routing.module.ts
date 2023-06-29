@@ -40,6 +40,11 @@ const routes: Routes = [
             "./cmyk-color-mixing-animation/cmyk-color-mixing-animation.module"
           ).then((m) => m.CmykColorMixingAnimationModule),
       },
+      {
+        path: "dev-tools",
+        loadChildren: () =>
+          import("./dev-tools/dev-tools.module").then((m) => m.DevToolsModule),
+      },
     ],
   },
 ];

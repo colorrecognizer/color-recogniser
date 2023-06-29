@@ -9,11 +9,13 @@ import com.longcode.colorRecogniser.models.enums.SelectionType;
 import com.longcode.colorRecogniser.models.shallowModels.Point;
 import com.longcode.colorRecogniser.services.modelServices.ColorService;
 import com.longcode.colorRecogniser.utils.GeometryUtils;
+import com.longcode.colorRecogniser.utils.RandomUtils;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +27,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/api")
@@ -160,5 +163,64 @@ public class ApiController {
     private static class RecogniserResponse {
         private Color color;
         private double matchPercentage;
+    }
+
+    @PostMapping("/generate-tfn")
+    public ResponseEntity<String[]> generateTFN(@RequestBody String[] selectedDigits) {
+        int len;
+        if (selectedDigits.length == 2) {
+            len = RandomUtils.randIntRange(8, 9);
+        } else if (selectedDigits[0].equals("8")) {
+            len = 8;
+        } else len = 9;
+
+        String tfn;
+        do {
+            tfn = randomizeBaseTFN(len);
+        } while (!validateTFN(tfn));
+
+        return ResponseEntity.ok(new String[]{tfn});
+    }
+
+    private boolean validateTFN(String tfn) {
+        if(StringUtils.isEmpty(tfn))
+            return false;
+
+        if(tfn.length() != 8 && tfn.length() != 9)
+            return false;
+
+        int checksum = 0;
+        int[] factors;
+        if(tfn.length() == 9) {
+            factors = new int[]{10, 7, 8, 4, 6, 3, 5, 2, 1};
+        } else {
+            factors = new int[]{10, 7, 8, 4, 6, 3, 5, 1};
+        }
+
+        for(int i = 0; i < tfn.length(); ++i) {
+            checksum += (tfn.charAt(i) - '0') * factors[i];
+        }
+
+        return checksum % 11 == 0;
+    }
+
+    private String randomizeBaseTFN(int len) {
+        String numericString = "0123456789";
+        // create StringBuffer size of AlphaNumericString
+        StringBuilder sb = new StringBuilder(len);
+
+        for (int i = 0; i < len; i++) {
+            // generate a random number between
+            // 0 to AlphaNumericString variable length
+            int index
+                    = (int) (numericString.length()
+                    * Math.random());
+
+            // add Character one by one in end of sb
+            sb.append(numericString
+                    .charAt(index));
+        }
+
+        return sb.toString();
     }
 }

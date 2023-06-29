@@ -1,0 +1,43 @@
+<div class="flex flex-column gap-3">
+  <div class="flex flex-wrap gap-3">
+    <p-button
+      label="Generate"
+      (onClick)="generate()"
+      [disabled]="generateButtonDisabled"
+    ></p-button>
+
+    <div class="flex align-items-center gap-1">
+      <p-checkbox
+        name="digit"
+        value="8"
+        [(ngModel)]="selectedDigits"
+        (onChange)="selectDigit('8')"
+        inputId="8-digit"
+      ></p-checkbox>
+      <label for="8-digit"> 8 digits </label>
+    </div>
+
+    <div class="flex align-items-center gap-1">
+      <p-checkbox
+        name="digit"
+        value="9"
+        [(ngModel)]="selectedDigits"
+        inputId="9-digit"
+        (onChange)="selectDigit('9')"
+      ></p-checkbox>
+      <label for="9-digit"> 9 digits </label>
+    </div>
+  </div>
+
+  <div class="flex flex-wrap gap-3">
+    <p-chip
+      class="cursor-pointer"
+      *ngFor="let tfn of tfns"
+      [label]="tfn"
+      pTooltip="Copy to clipboard"
+      tooltipPosition="top"
+      (click)="copyToClipboard(tfn)"
+      [styleClass]="tfn.length === 8 ? 'surface-500' : ''"
+    ></p-chip>
+  </div>
+</div>
