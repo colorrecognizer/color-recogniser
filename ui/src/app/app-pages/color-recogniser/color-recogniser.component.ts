@@ -238,7 +238,7 @@ export class ColorRecognizerComponent implements OnInit, AfterViewInit {
     this.layer.add(this.border);
 
     this.setToDefault();
-    this.setImageDragLimit();
+    // this.setImageDragLimit();
 
     this.setStageZoom();
 
