@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component } from "@angular/core";
 import { finalize, map } from "rxjs";
 import { ApiApi } from "src/app/shared/auto-generated/apis";
 

@@ -9,9 +9,16 @@ import { TfnGeneratorComponent } from "./tfn-generator/tfn-generator.component";
 import { FormsModule } from "@angular/forms";
 import { ChipModule } from "primeng/chip";
 import { FileDiffComponent } from "./file-diff/file-diff.component";
+import { JsonEscapeUnescapeComponent } from "./json-escape-unescape/json-escape-unescape.component";
+import { HighlightModule } from "ngx-highlightjs";
 
 @NgModule({
-  declarations: [DevToolsComponent, TfnGeneratorComponent, FileDiffComponent],
+  declarations: [
+    DevToolsComponent,
+    TfnGeneratorComponent,
+    FileDiffComponent,
+    JsonEscapeUnescapeComponent,
+  ],
   imports: [
     CommonModule,
     DevToolsRoutingModule,
@@ -19,6 +26,7 @@ import { FileDiffComponent } from "./file-diff/file-diff.component";
     TabViewModule,
     FormsModule,
     ChipModule,
+    HighlightModule,
   ],
 })
 export class DevToolsModule {}

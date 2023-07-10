@@ -1970,8 +1970,8 @@ export class PageUser implements IPageUser {
     content?: User[];
     number?: number;
     sort?: SortObject;
-    pageable?: PageableObject;
     numberOfElements?: number;
+    pageable?: PageableObject;
     empty?: boolean;
 
     [key: string]: any;
@@ -2003,8 +2003,8 @@ export class PageUser implements IPageUser {
             }
             this.number = _data["number"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
-            this.pageable = _data["pageable"] ? PageableObject.fromJS(_data["pageable"]) : <any>undefined;
             this.numberOfElements = _data["numberOfElements"];
+            this.pageable = _data["pageable"] ? PageableObject.fromJS(_data["pageable"]) : <any>undefined;
             this.empty = _data["empty"];
         }
     }
@@ -2034,8 +2034,8 @@ export class PageUser implements IPageUser {
         }
         data["number"] = this.number;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
-        data["pageable"] = this.pageable ? this.pageable.toJSON() : <any>undefined;
         data["numberOfElements"] = this.numberOfElements;
+        data["pageable"] = this.pageable ? this.pageable.toJSON() : <any>undefined;
         data["empty"] = this.empty;
         return data;
     }
@@ -2057,8 +2057,8 @@ export interface IPageUser {
     content?: User[];
     number?: number;
     sort?: SortObject;
-    pageable?: PageableObject;
     numberOfElements?: number;
+    pageable?: PageableObject;
     empty?: boolean;
 
     [key: string]: any;
@@ -2388,8 +2388,8 @@ export class PageColor implements IPageColor {
     content?: Color[];
     number?: number;
     sort?: SortObject;
-    pageable?: PageableObject;
     numberOfElements?: number;
+    pageable?: PageableObject;
     empty?: boolean;
 
     [key: string]: any;
@@ -2421,8 +2421,8 @@ export class PageColor implements IPageColor {
             }
             this.number = _data["number"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
-            this.pageable = _data["pageable"] ? PageableObject.fromJS(_data["pageable"]) : <any>undefined;
             this.numberOfElements = _data["numberOfElements"];
+            this.pageable = _data["pageable"] ? PageableObject.fromJS(_data["pageable"]) : <any>undefined;
             this.empty = _data["empty"];
         }
     }
@@ -2452,8 +2452,8 @@ export class PageColor implements IPageColor {
         }
         data["number"] = this.number;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
-        data["pageable"] = this.pageable ? this.pageable.toJSON() : <any>undefined;
         data["numberOfElements"] = this.numberOfElements;
+        data["pageable"] = this.pageable ? this.pageable.toJSON() : <any>undefined;
         data["empty"] = this.empty;
         return data;
     }
@@ -2475,8 +2475,8 @@ export interface IPageColor {
     content?: Color[];
     number?: number;
     sort?: SortObject;
-    pageable?: PageableObject;
     numberOfElements?: number;
+    pageable?: PageableObject;
     empty?: boolean;
 
     [key: string]: any;

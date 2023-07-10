@@ -6,8 +6,11 @@ const tabs = [
   {
     name: "TFN Generator",
   },
+  //   {
+  //     name: "File Diff",
+  //   },
   {
-    name: "File Diff",
+    name: "JSON Escape / Unescape",
   },
 ];
 
@@ -19,16 +22,17 @@ const tabs = [
 export class DevToolsComponent {
   constructor(private $title: Title, $meta: Meta) {
     $title.setTitle(tabs[0].name);
-    $meta.addTags([
-        {
-          name: "description",
-          content:
-            "Useful tools for developers.",
-        },
-      ]);
+
+    $meta.updateTag(
+      {
+        name: "og:description",
+        content: "All-in-one tools for developers.",
+      },
+      "property='og:description'"
+    );
   }
 
   onTabChange(event: TabViewChangeEvent) {
-    this.$title.setTitle(tabs[event.index].name);   
+    this.$title.setTitle(tabs[event.index].name);
   }
 }

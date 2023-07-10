@@ -1,0 +1,14 @@
+<div class="flex flex-column gap-3">
+  <textarea rows="5" pInputTextarea [(ngModel)]="srcString"></textarea>
+  <div class="flex flex-wrap gap-3">
+    <p-button
+      label="Escape"
+      (onClick)="escape()"
+    ></p-button>
+    <p-button
+      label="Unescape"
+      (onClick)="unescape()"
+    ></p-button>
+  </div>
+  <textarea rows="5" pInputTextarea [(ngModel)]="destString"></textarea>
+</div>
