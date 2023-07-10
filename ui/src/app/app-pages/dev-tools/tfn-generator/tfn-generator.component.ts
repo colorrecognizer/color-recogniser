@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { Title } from "@angular/platform-browser";
 import { MessageService } from "primeng/api";
 import { finalize } from "rxjs";
 import { ApiApi } from "src/app/shared/auto-generated/apis";
@@ -14,7 +15,9 @@ export class TfnGeneratorComponent {
   generateButtonDisabled = false;
 
   // Methods
-  constructor(private $api: ApiApi, private $message: MessageService) {}
+  constructor(private $api: ApiApi, private $message: MessageService) {
+    // $title.setTitle("TFN Generator");
+  }
 
   selectDigit(digit: string) {
     if (this.selectedDigits.length) return;

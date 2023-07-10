@@ -1279,6 +1279,77 @@ export class ApiApi {
     /**
      * @return OK
      */
+    diff(body: string[]): Observable<ResultsString> {
+        let url_ = this.baseUrl + "/api/diff";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "*/*"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDiff(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDiff(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ResultsString>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ResultsString>;
+        }));
+    }
+
+    protected processDiff(response: HttpResponseBase): Observable<ResultsString> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 400) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result400: any = null;
+            let resultData400 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData400) {
+                result400 = {} as any;
+                for (let key in resultData400) {
+                    if (resultData400.hasOwnProperty(key))
+                        (<any>result400)![key] = resultData400[key] !== undefined ? resultData400[key] : <any>null;
+                }
+            }
+            else {
+                result400 = <any>null;
+            }
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+            }));
+        } else if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ResultsString.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
     test(longParameter: string): Observable<string> {
         let url_ = this.baseUrl + "/api/test?";
         if (longParameter === undefined || longParameter === null)
@@ -1411,12 +1482,12 @@ export class User implements IUser {
     roles?: Roles[];
     userStatus?: UserStatus;
     enabled?: boolean;
-    admin?: boolean;
-    user?: boolean;
+    authorities?: GrantedAuthority[];
     accountNonExpired?: boolean;
     accountNonLocked?: boolean;
     credentialsNonExpired?: boolean;
-    authorities?: GrantedAuthority[];
+    admin?: boolean;
+    user?: boolean;
 
     [key: string]: any;
 
@@ -1445,16 +1516,16 @@ export class User implements IUser {
             }
             this.userStatus = _data["userStatus"];
             this.enabled = _data["enabled"];
-            this.admin = _data["admin"];
-            this.user = _data["user"];
-            this.accountNonExpired = _data["accountNonExpired"];
-            this.accountNonLocked = _data["accountNonLocked"];
-            this.credentialsNonExpired = _data["credentialsNonExpired"];
             if (Array.isArray(_data["authorities"])) {
                 this.authorities = [] as any;
                 for (let item of _data["authorities"])
                     this.authorities!.push(GrantedAuthority.fromJS(item));
             }
+            this.accountNonExpired = _data["accountNonExpired"];
+            this.accountNonLocked = _data["accountNonLocked"];
+            this.credentialsNonExpired = _data["credentialsNonExpired"];
+            this.admin = _data["admin"];
+            this.user = _data["user"];
         }
     }
 
@@ -1481,16 +1552,16 @@ export class User implements IUser {
         }
         data["userStatus"] = this.userStatus;
         data["enabled"] = this.enabled;
-        data["admin"] = this.admin;
-        data["user"] = this.user;
-        data["accountNonExpired"] = this.accountNonExpired;
-        data["accountNonLocked"] = this.accountNonLocked;
-        data["credentialsNonExpired"] = this.credentialsNonExpired;
         if (Array.isArray(this.authorities)) {
             data["authorities"] = [];
             for (let item of this.authorities)
                 data["authorities"].push(item.toJSON());
         }
+        data["accountNonExpired"] = this.accountNonExpired;
+        data["accountNonLocked"] = this.accountNonLocked;
+        data["credentialsNonExpired"] = this.credentialsNonExpired;
+        data["admin"] = this.admin;
+        data["user"] = this.user;
         return data;
     }
 
@@ -1509,12 +1580,12 @@ export interface IUser {
     roles?: Roles[];
     userStatus?: UserStatus;
     enabled?: boolean;
-    admin?: boolean;
-    user?: boolean;
+    authorities?: GrantedAuthority[];
     accountNonExpired?: boolean;
     accountNonLocked?: boolean;
     credentialsNonExpired?: boolean;
-    authorities?: GrantedAuthority[];
+    admin?: boolean;
+    user?: boolean;
 
     [key: string]: any;
 }
@@ -1592,8 +1663,8 @@ export class Color implements IColor {
     red?: number;
     green?: number;
     blue?: number;
-    cmyk?: CMYKColor;
     hexValue?: string;
+    cmyk?: CMYKColor;
 
     [key: string]: any;
 
@@ -1617,8 +1688,8 @@ export class Color implements IColor {
             this.red = _data["red"];
             this.green = _data["green"];
             this.blue = _data["blue"];
-            this.cmyk = _data["cmyk"] ? CMYKColor.fromJS(_data["cmyk"]) : <any>undefined;
             this.hexValue = _data["hexValue"];
+            this.cmyk = _data["cmyk"] ? CMYKColor.fromJS(_data["cmyk"]) : <any>undefined;
         }
     }
 
@@ -1640,8 +1711,8 @@ export class Color implements IColor {
         data["red"] = this.red;
         data["green"] = this.green;
         data["blue"] = this.blue;
-        data["cmyk"] = this.cmyk ? this.cmyk.toJSON() : <any>undefined;
         data["hexValue"] = this.hexValue;
+        data["cmyk"] = this.cmyk ? this.cmyk.toJSON() : <any>undefined;
         return data;
     }
 
@@ -1659,8 +1730,8 @@ export interface IColor {
     red?: number;
     green?: number;
     blue?: number;
-    cmyk?: CMYKColor;
     hexValue?: string;
+    cmyk?: CMYKColor;
 
     [key: string]: any;
 }
@@ -1891,8 +1962,8 @@ export interface ISortRequest {
 }
 
 export class PageUser implements IPageUser {
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     first?: boolean;
     last?: boolean;
     size?: number;
@@ -1920,8 +1991,8 @@ export class PageUser implements IPageUser {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.totalElements = _data["totalElements"];
             this.totalPages = _data["totalPages"];
+            this.totalElements = _data["totalElements"];
             this.first = _data["first"];
             this.last = _data["last"];
             this.size = _data["size"];
@@ -1951,8 +2022,8 @@ export class PageUser implements IPageUser {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["totalElements"] = this.totalElements;
         data["totalPages"] = this.totalPages;
+        data["totalElements"] = this.totalElements;
         data["first"] = this.first;
         data["last"] = this.last;
         data["size"] = this.size;
@@ -1978,8 +2049,8 @@ export class PageUser implements IPageUser {
 }
 
 export interface IPageUser {
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     first?: boolean;
     last?: boolean;
     size?: number;
@@ -1996,10 +2067,10 @@ export interface IPageUser {
 export class PageableObject implements IPageableObject {
     offset?: number;
     sort?: SortObject;
-    paged?: boolean;
-    unpaged?: boolean;
     pageNumber?: number;
     pageSize?: number;
+    paged?: boolean;
+    unpaged?: boolean;
 
     [key: string]: any;
 
@@ -2020,10 +2091,10 @@ export class PageableObject implements IPageableObject {
             }
             this.offset = _data["offset"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
-            this.paged = _data["paged"];
-            this.unpaged = _data["unpaged"];
             this.pageNumber = _data["pageNumber"];
             this.pageSize = _data["pageSize"];
+            this.paged = _data["paged"];
+            this.unpaged = _data["unpaged"];
         }
     }
 
@@ -2042,10 +2113,10 @@ export class PageableObject implements IPageableObject {
         }
         data["offset"] = this.offset;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
-        data["paged"] = this.paged;
-        data["unpaged"] = this.unpaged;
         data["pageNumber"] = this.pageNumber;
         data["pageSize"] = this.pageSize;
+        data["paged"] = this.paged;
+        data["unpaged"] = this.unpaged;
         return data;
     }
 
@@ -2060,18 +2131,18 @@ export class PageableObject implements IPageableObject {
 export interface IPageableObject {
     offset?: number;
     sort?: SortObject;
-    paged?: boolean;
-    unpaged?: boolean;
     pageNumber?: number;
     pageSize?: number;
+    paged?: boolean;
+    unpaged?: boolean;
 
     [key: string]: any;
 }
 
 export class SortObject implements ISortObject {
     empty?: boolean;
-    unsorted?: boolean;
     sorted?: boolean;
+    unsorted?: boolean;
 
     [key: string]: any;
 
@@ -2091,8 +2162,8 @@ export class SortObject implements ISortObject {
                     this[property] = _data[property];
             }
             this.empty = _data["empty"];
-            this.unsorted = _data["unsorted"];
             this.sorted = _data["sorted"];
+            this.unsorted = _data["unsorted"];
         }
     }
 
@@ -2110,8 +2181,8 @@ export class SortObject implements ISortObject {
                 data[property] = this[property];
         }
         data["empty"] = this.empty;
-        data["unsorted"] = this.unsorted;
         data["sorted"] = this.sorted;
+        data["unsorted"] = this.unsorted;
         return data;
     }
 
@@ -2125,8 +2196,8 @@ export class SortObject implements ISortObject {
 
 export interface ISortObject {
     empty?: boolean;
-    unsorted?: boolean;
     sorted?: boolean;
+    unsorted?: boolean;
 
     [key: string]: any;
 }
@@ -2309,8 +2380,8 @@ export interface ILoginRequest {
 }
 
 export class PageColor implements IPageColor {
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     first?: boolean;
     last?: boolean;
     size?: number;
@@ -2338,8 +2409,8 @@ export class PageColor implements IPageColor {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.totalElements = _data["totalElements"];
             this.totalPages = _data["totalPages"];
+            this.totalElements = _data["totalElements"];
             this.first = _data["first"];
             this.last = _data["last"];
             this.size = _data["size"];
@@ -2369,8 +2440,8 @@ export class PageColor implements IPageColor {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["totalElements"] = this.totalElements;
         data["totalPages"] = this.totalPages;
+        data["totalElements"] = this.totalElements;
         data["first"] = this.first;
         data["last"] = this.last;
         data["size"] = this.size;
@@ -2396,8 +2467,8 @@ export class PageColor implements IPageColor {
 }
 
 export interface IPageColor {
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     first?: boolean;
     last?: boolean;
     size?: number;
@@ -2466,6 +2537,330 @@ export class RecogniserResponse implements IRecogniserResponse {
 export interface IRecogniserResponse {
     color?: Color;
     matchPercentage?: number;
+
+    [key: string]: any;
+}
+
+export class PairInteger implements IPairInteger {
+    first?: number;
+    last?: number;
+
+    [key: string]: any;
+
+    constructor(data?: IPairInteger) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.first = _data["first"];
+            this.last = _data["last"];
+        }
+    }
+
+    static fromJS(data: any): PairInteger {
+        data = typeof data === 'object' ? data : {};
+        let result = new PairInteger();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["first"] = this.first;
+        data["last"] = this.last;
+        return data;
+    }
+
+    clone(): PairInteger {
+        const json = this.toJSON();
+        let result = new PairInteger();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IPairInteger {
+    first?: number;
+    last?: number;
+
+    [key: string]: any;
+}
+
+export class ResultsString implements IResultsString {
+    forwardVs?: V[];
+    reverseVs?: V[];
+    snakes?: SnakeString[];
+
+    [key: string]: any;
+
+    constructor(data?: IResultsString) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            if (Array.isArray(_data["forwardVs"])) {
+                this.forwardVs = [] as any;
+                for (let item of _data["forwardVs"])
+                    this.forwardVs!.push(V.fromJS(item));
+            }
+            if (Array.isArray(_data["reverseVs"])) {
+                this.reverseVs = [] as any;
+                for (let item of _data["reverseVs"])
+                    this.reverseVs!.push(V.fromJS(item));
+            }
+            if (Array.isArray(_data["snakes"])) {
+                this.snakes = [] as any;
+                for (let item of _data["snakes"])
+                    this.snakes!.push(SnakeString.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ResultsString {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResultsString();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        if (Array.isArray(this.forwardVs)) {
+            data["forwardVs"] = [];
+            for (let item of this.forwardVs)
+                data["forwardVs"].push(item.toJSON());
+        }
+        if (Array.isArray(this.reverseVs)) {
+            data["reverseVs"] = [];
+            for (let item of this.reverseVs)
+                data["reverseVs"].push(item.toJSON());
+        }
+        if (Array.isArray(this.snakes)) {
+            data["snakes"] = [];
+            for (let item of this.snakes)
+                data["snakes"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): ResultsString {
+        const json = this.toJSON();
+        let result = new ResultsString();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IResultsString {
+    forwardVs?: V[];
+    reverseVs?: V[];
+    snakes?: SnakeString[];
+
+    [key: string]: any;
+}
+
+export class SnakeString implements ISnakeString {
+    xStart?: number;
+    yStart?: number;
+    aDeleted?: number;
+    bInserted?: number;
+    diagonalLength?: number;
+    isForward?: boolean;
+    dELTA?: number;
+    startPoint?: PairInteger;
+    midPoint?: PairInteger;
+    endPoint?: PairInteger;
+    middlePoint?: boolean;
+    d?: number;
+    xmid?: number;
+    ymid?: number;
+    xend?: number;
+    yend?: number;
+
+    [key: string]: any;
+
+    constructor(data?: ISnakeString) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.xStart = _data["XStart"];
+            this.yStart = _data["YStart"];
+            this.aDeleted = _data["ADeleted"];
+            this.bInserted = _data["BInserted"];
+            this.diagonalLength = _data["DiagonalLength"];
+            this.isForward = _data["IsForward"];
+            this.dELTA = _data["DELTA"];
+            this.startPoint = _data["startPoint"] ? PairInteger.fromJS(_data["startPoint"]) : <any>undefined;
+            this.midPoint = _data["midPoint"] ? PairInteger.fromJS(_data["midPoint"]) : <any>undefined;
+            this.endPoint = _data["endPoint"] ? PairInteger.fromJS(_data["endPoint"]) : <any>undefined;
+            this.middlePoint = _data["middlePoint"];
+            this.d = _data["d"];
+            this.xmid = _data["xmid"];
+            this.ymid = _data["ymid"];
+            this.xend = _data["xend"];
+            this.yend = _data["yend"];
+        }
+    }
+
+    static fromJS(data: any): SnakeString {
+        data = typeof data === 'object' ? data : {};
+        let result = new SnakeString();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["XStart"] = this.xStart;
+        data["YStart"] = this.yStart;
+        data["ADeleted"] = this.aDeleted;
+        data["BInserted"] = this.bInserted;
+        data["DiagonalLength"] = this.diagonalLength;
+        data["IsForward"] = this.isForward;
+        data["DELTA"] = this.dELTA;
+        data["startPoint"] = this.startPoint ? this.startPoint.toJSON() : <any>undefined;
+        data["midPoint"] = this.midPoint ? this.midPoint.toJSON() : <any>undefined;
+        data["endPoint"] = this.endPoint ? this.endPoint.toJSON() : <any>undefined;
+        data["middlePoint"] = this.middlePoint;
+        data["d"] = this.d;
+        data["xmid"] = this.xmid;
+        data["ymid"] = this.ymid;
+        data["xend"] = this.xend;
+        data["yend"] = this.yend;
+        return data;
+    }
+
+    clone(): SnakeString {
+        const json = this.toJSON();
+        let result = new SnakeString();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ISnakeString {
+    xStart?: number;
+    yStart?: number;
+    aDeleted?: number;
+    bInserted?: number;
+    diagonalLength?: number;
+    isForward?: boolean;
+    dELTA?: number;
+    startPoint?: PairInteger;
+    midPoint?: PairInteger;
+    endPoint?: PairInteger;
+    middlePoint?: boolean;
+    d?: number;
+    xmid?: number;
+    ymid?: number;
+    xend?: number;
+    yend?: number;
+
+    [key: string]: any;
+}
+
+export class V implements IV {
+    m?: number;
+    forward?: boolean;
+    n?: number;
+
+    [key: string]: any;
+
+    constructor(data?: IV) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.m = _data["m"];
+            this.forward = _data["forward"];
+            this.n = _data["n"];
+        }
+    }
+
+    static fromJS(data: any): V {
+        data = typeof data === 'object' ? data : {};
+        let result = new V();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["m"] = this.m;
+        data["forward"] = this.forward;
+        data["n"] = this.n;
+        return data;
+    }
+
+    clone(): V {
+        const json = this.toJSON();
+        let result = new V();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IV {
+    m?: number;
+    forward?: boolean;
+    n?: number;
 
     [key: string]: any;
 }

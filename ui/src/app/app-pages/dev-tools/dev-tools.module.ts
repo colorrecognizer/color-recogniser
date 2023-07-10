@@ -8,9 +8,10 @@ import { TabViewModule } from "primeng/tabview";
 import { TfnGeneratorComponent } from "./tfn-generator/tfn-generator.component";
 import { FormsModule } from "@angular/forms";
 import { ChipModule } from "primeng/chip";
+import { FileDiffComponent } from "./file-diff/file-diff.component";
 
 @NgModule({
-  declarations: [DevToolsComponent, TfnGeneratorComponent],
+  declarations: [DevToolsComponent, TfnGeneratorComponent, FileDiffComponent],
   imports: [
     CommonModule,
     DevToolsRoutingModule,

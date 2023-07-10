@@ -1,0 +1,16 @@
+<div class="grid">
+  <div class="col-12 lg:col-6">
+    <h2>File 1</h2>
+    <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="file1"></textarea>
+  </div>
+  <div class="col-12 lg:col-6">
+    <h2>File 2</h2>
+    <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="file2"></textarea>
+  </div>
+</div>
+
+<p-button
+  label="Diff"
+  (onClick)="diff()"
+  [disabled]="diffButtonDisabled"
+></p-button>

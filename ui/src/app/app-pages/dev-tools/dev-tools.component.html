@@ -1,7 +1,10 @@
 <div class="card">
-  <p-tabView>
+  <p-tabView (onChange)="onTabChange($event)">
     <p-tabPanel header="TFN Generator">
         <app-tfn-generator></app-tfn-generator>
     </p-tabPanel>
+    <!-- <p-tabPanel header="File Diff">
+        <app-file-diff></app-file-diff>
+    </p-tabPanel> -->
   </p-tabView>
 </div>

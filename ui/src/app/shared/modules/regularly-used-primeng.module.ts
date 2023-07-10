@@ -11,6 +11,7 @@ import { RadioButtonModule } from "primeng/radiobutton";
 import { InputNumberModule } from "primeng/inputnumber";
 import { DividerModule } from "primeng/divider";
 import { DropdownModule } from "primeng/dropdown";
+import { InputTextareaModule } from "primeng/inputtextarea";
 
 const modules = [
   ButtonModule,
@@ -25,6 +26,7 @@ const modules = [
   InputNumberModule,
   DividerModule,
   DropdownModule,
+  InputTextareaModule,
 ];
 
 @NgModule({
