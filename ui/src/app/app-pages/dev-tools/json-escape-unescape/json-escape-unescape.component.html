@@ -1,14 +1,21 @@
 <div class="flex flex-column gap-3">
   <textarea rows="5" pInputTextarea [(ngModel)]="srcString"></textarea>
   <div class="flex flex-wrap gap-3">
-    <p-button
-      label="Escape"
-      (onClick)="escape()"
-    ></p-button>
-    <p-button
-      label="Unescape"
-      (onClick)="unescape()"
-    ></p-button>
+    <p-button label="Escape" (onClick)="escape()"></p-button>
+    <p-button label="Unescape" (onClick)="unescape()"></p-button>
   </div>
-  <textarea rows="5" pInputTextarea [(ngModel)]="destString"></textarea>
+  <div class="relative">
+    <div class="absolute right-0 p-3" [hidden]="!destString">
+      <app-copy-to-clipboard-button
+        [content]="destString"
+        [contentDisplayed]="false"
+      ></app-copy-to-clipboard-button>
+    </div>
+    <textarea
+      rows="5"
+      pInputTextarea
+      [(ngModel)]="destString"
+      [autoResize]="true"
+    ></textarea>
+  </div>
 </div>

@@ -8,6 +8,7 @@ import { MessageService } from "primeng/api";
 })
 export class CopyToClipboardButtonComponent {
   @Input() content?: string;
+  @Input() contentDisplayed = true;
 
   constructor(private $message: MessageService) {}
 
@@ -18,7 +19,10 @@ export class CopyToClipboardButtonComponent {
     this.$message.add({
       severity: "info",
       summary: "",
-      detail: `Copied to clipboard: ${this.content}`,
+      detail:
+        "Copied to clipboard" +
+        (this.contentDisplayed ? `: ${this.content}` : "") +
+        ".",
       icon: "pi pi-copy",
     });
   }

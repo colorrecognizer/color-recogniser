@@ -11,6 +11,7 @@ import { ChipModule } from "primeng/chip";
 import { FileDiffComponent } from "./file-diff/file-diff.component";
 import { JsonEscapeUnescapeComponent } from "./json-escape-unescape/json-escape-unescape.component";
 import { HighlightModule } from "ngx-highlightjs";
+import { CopyToClipboardButtonModule } from "src/app/shared/components/copy-to-clipboard-button/copy-to-clipboard-button.module";
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { HighlightModule } from "ngx-highlightjs";
     FormsModule,
     ChipModule,
     HighlightModule,
+    CopyToClipboardButtonModule,
   ],
 })
 export class DevToolsModule {}
