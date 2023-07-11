@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { finalize, map } from "rxjs";
-import { ApiApi } from "src/app/shared/auto-generated/apis";
+import { ApiApi, Diff } from "src/app/shared/auto-generated/apis";
 
 @Component({
   selector: "app-file-diff",
@@ -11,6 +11,7 @@ export class FileDiffComponent {
   diffButtonDisabled = false;
   file1 = "";
   file2 = "";
+  diffs: Diff[] = [];
 
   constructor(private $api: ApiApi) {}
 
@@ -20,12 +21,25 @@ export class FileDiffComponent {
       .diff([this.file1, this.file2])
       .pipe(
         map((items) => {
-          console.log(items);
+          this.diffs = items;
         }),
         finalize(() => {
           this.diffButtonDisabled = false;
         })
       )
       .subscribe();
+  }
+
+  getClass(diff: Diff) {
+    switch (diff.operation) {
+      case "DELETE":
+        return "bg-red-200";
+      case "EQUAL":
+        break;
+      case "INSERT":
+        return "bg-green-200";
+    }
+
+    return "";
   }
 }

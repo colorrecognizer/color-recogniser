@@ -5,8 +5,7 @@ import com.longcode.colorRecogniser.config.ApiException;
 import com.longcode.colorRecogniser.models.Color;
 import com.longcode.colorRecogniser.models.enums.SelectionType;
 import com.longcode.colorRecogniser.models.shallowModels.Point;
-import com.longcode.colorRecogniser.models.shallowModels.diff.LinearDiff;
-import com.longcode.colorRecogniser.models.shallowModels.diff.Results;
+import com.longcode.colorRecogniser.models.shallowModels.diff.diff_match_patch;
 import com.longcode.colorRecogniser.services.modelServices.ColorService;
 import com.longcode.colorRecogniser.utils.GeometryUtils;
 import com.longcode.colorRecogniser.utils.RandomUtils;
@@ -21,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -219,12 +219,15 @@ public class ApiController {
     }
 
     @PostMapping("/diff")
-    public ResponseEntity<Results<String>> diff(@RequestBody String[] files) {
+    public ResponseEntity<LinkedList<diff_match_patch.Diff>> diff(@RequestBody String[] files) {
         if (files == null || files.length != 2)
             throw new ApiException("Invalid input!");
 
         try {
-            return ResponseEntity.ok(LinearDiff.Compare(files[0], files[1]));
+            var dmp = new diff_match_patch();
+            var result = dmp.diff_main(files[0], files[1]);
+            dmp.diff_cleanupSemantic(result);
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
             throw new ApiException(e.getMessage());
         }

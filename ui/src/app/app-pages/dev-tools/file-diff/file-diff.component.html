@@ -1,16 +1,52 @@
-<div class="grid">
-  <div class="col-12 lg:col-6">
-    <h2>File 1</h2>
-    <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="file1"></textarea>
+<div class="flex flex-column gap-3">
+  <div class="grid">
+    <div class="col-12 lg:col-6">
+      <h2>Text 1</h2>
+      <textarea
+        rows="5"
+        cols="30"
+        pInputTextarea
+        [(ngModel)]="file1"
+      ></textarea>
+    </div>
+    <div class="col-12 lg:col-6">
+      <h2>Text 2</h2>
+      <textarea
+        rows="5"
+        cols="30"
+        pInputTextarea
+        [(ngModel)]="file2"
+      ></textarea>
+    </div>
   </div>
-  <div class="col-12 lg:col-6">
-    <h2>File 2</h2>
-    <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="file2"></textarea>
+
+  <p-button
+    label="Diff"
+    (onClick)="diff()"
+    [disabled]="diffButtonDisabled"
+  ></p-button>
+
+  <div id="diff">
+    <ng-container *ngFor="let diff of diffs">
+      <span
+        *ngIf="diff.operation === 'EQUAL'"
+        [ngClass]="getClass(diff)"
+        [innerText]="diff.text"
+      >
+      </span>
+      <del
+        *ngIf="diff.operation === 'DELETE'"
+        [ngClass]="getClass(diff)"
+        [innerText]="diff.text"
+      >
+      </del>
+      <ins
+        *ngIf="diff.operation === 'INSERT'"
+        [ngClass]="getClass(diff)"
+        [innerText]="diff.text"
+      >
+      </ins>
+      <!--  -->
+    </ng-container>
   </div>
 </div>
-
-<p-button
-  label="Diff"
-  (onClick)="diff()"
-  [disabled]="diffButtonDisabled"
-></p-button>

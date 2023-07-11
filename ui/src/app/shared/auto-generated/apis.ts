@@ -1279,7 +1279,7 @@ export class ApiApi {
     /**
      * @return OK
      */
-    diff(body: string[]): Observable<ResultsString> {
+    diff(body: string[]): Observable<Diff[]> {
         let url_ = this.baseUrl + "/api/diff";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1302,14 +1302,14 @@ export class ApiApi {
                 try {
                     return this.processDiff(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<ResultsString>;
+                    return _observableThrow(e) as any as Observable<Diff[]>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<ResultsString>;
+                return _observableThrow(response_) as any as Observable<Diff[]>;
         }));
     }
 
-    protected processDiff(response: HttpResponseBase): Observable<ResultsString> {
+    protected processDiff(response: HttpResponseBase): Observable<Diff[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1336,7 +1336,14 @@ export class ApiApi {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ResultsString.fromJS(resultData200);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(Diff.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1482,10 +1489,10 @@ export class User implements IUser {
     roles?: Roles[];
     userStatus?: UserStatus;
     enabled?: boolean;
-    authorities?: GrantedAuthority[];
     accountNonExpired?: boolean;
     accountNonLocked?: boolean;
     credentialsNonExpired?: boolean;
+    authorities?: GrantedAuthority[];
     admin?: boolean;
     user?: boolean;
 
@@ -1516,14 +1523,14 @@ export class User implements IUser {
             }
             this.userStatus = _data["userStatus"];
             this.enabled = _data["enabled"];
+            this.accountNonExpired = _data["accountNonExpired"];
+            this.accountNonLocked = _data["accountNonLocked"];
+            this.credentialsNonExpired = _data["credentialsNonExpired"];
             if (Array.isArray(_data["authorities"])) {
                 this.authorities = [] as any;
                 for (let item of _data["authorities"])
                     this.authorities!.push(GrantedAuthority.fromJS(item));
             }
-            this.accountNonExpired = _data["accountNonExpired"];
-            this.accountNonLocked = _data["accountNonLocked"];
-            this.credentialsNonExpired = _data["credentialsNonExpired"];
             this.admin = _data["admin"];
             this.user = _data["user"];
         }
@@ -1552,14 +1559,14 @@ export class User implements IUser {
         }
         data["userStatus"] = this.userStatus;
         data["enabled"] = this.enabled;
+        data["accountNonExpired"] = this.accountNonExpired;
+        data["accountNonLocked"] = this.accountNonLocked;
+        data["credentialsNonExpired"] = this.credentialsNonExpired;
         if (Array.isArray(this.authorities)) {
             data["authorities"] = [];
             for (let item of this.authorities)
                 data["authorities"].push(item.toJSON());
         }
-        data["accountNonExpired"] = this.accountNonExpired;
-        data["accountNonLocked"] = this.accountNonLocked;
-        data["credentialsNonExpired"] = this.credentialsNonExpired;
         data["admin"] = this.admin;
         data["user"] = this.user;
         return data;
@@ -1580,10 +1587,10 @@ export interface IUser {
     roles?: Roles[];
     userStatus?: UserStatus;
     enabled?: boolean;
-    authorities?: GrantedAuthority[];
     accountNonExpired?: boolean;
     accountNonLocked?: boolean;
     credentialsNonExpired?: boolean;
+    authorities?: GrantedAuthority[];
     admin?: boolean;
     user?: boolean;
 
@@ -1970,8 +1977,8 @@ export class PageUser implements IPageUser {
     content?: User[];
     number?: number;
     sort?: SortObject;
-    numberOfElements?: number;
     pageable?: PageableObject;
+    numberOfElements?: number;
     empty?: boolean;
 
     [key: string]: any;
@@ -2003,8 +2010,8 @@ export class PageUser implements IPageUser {
             }
             this.number = _data["number"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
-            this.numberOfElements = _data["numberOfElements"];
             this.pageable = _data["pageable"] ? PageableObject.fromJS(_data["pageable"]) : <any>undefined;
+            this.numberOfElements = _data["numberOfElements"];
             this.empty = _data["empty"];
         }
     }
@@ -2034,8 +2041,8 @@ export class PageUser implements IPageUser {
         }
         data["number"] = this.number;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
-        data["numberOfElements"] = this.numberOfElements;
         data["pageable"] = this.pageable ? this.pageable.toJSON() : <any>undefined;
+        data["numberOfElements"] = this.numberOfElements;
         data["empty"] = this.empty;
         return data;
     }
@@ -2057,8 +2064,8 @@ export interface IPageUser {
     content?: User[];
     number?: number;
     sort?: SortObject;
-    numberOfElements?: number;
     pageable?: PageableObject;
+    numberOfElements?: number;
     empty?: boolean;
 
     [key: string]: any;
@@ -2141,8 +2148,8 @@ export interface IPageableObject {
 
 export class SortObject implements ISortObject {
     empty?: boolean;
-    sorted?: boolean;
     unsorted?: boolean;
+    sorted?: boolean;
 
     [key: string]: any;
 
@@ -2162,8 +2169,8 @@ export class SortObject implements ISortObject {
                     this[property] = _data[property];
             }
             this.empty = _data["empty"];
-            this.sorted = _data["sorted"];
             this.unsorted = _data["unsorted"];
+            this.sorted = _data["sorted"];
         }
     }
 
@@ -2181,8 +2188,8 @@ export class SortObject implements ISortObject {
                 data[property] = this[property];
         }
         data["empty"] = this.empty;
-        data["sorted"] = this.sorted;
         data["unsorted"] = this.unsorted;
+        data["sorted"] = this.sorted;
         return data;
     }
 
@@ -2196,8 +2203,8 @@ export class SortObject implements ISortObject {
 
 export interface ISortObject {
     empty?: boolean;
-    sorted?: boolean;
     unsorted?: boolean;
+    sorted?: boolean;
 
     [key: string]: any;
 }
@@ -2388,8 +2395,8 @@ export class PageColor implements IPageColor {
     content?: Color[];
     number?: number;
     sort?: SortObject;
-    numberOfElements?: number;
     pageable?: PageableObject;
+    numberOfElements?: number;
     empty?: boolean;
 
     [key: string]: any;
@@ -2421,8 +2428,8 @@ export class PageColor implements IPageColor {
             }
             this.number = _data["number"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
-            this.numberOfElements = _data["numberOfElements"];
             this.pageable = _data["pageable"] ? PageableObject.fromJS(_data["pageable"]) : <any>undefined;
+            this.numberOfElements = _data["numberOfElements"];
             this.empty = _data["empty"];
         }
     }
@@ -2452,8 +2459,8 @@ export class PageColor implements IPageColor {
         }
         data["number"] = this.number;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
-        data["numberOfElements"] = this.numberOfElements;
         data["pageable"] = this.pageable ? this.pageable.toJSON() : <any>undefined;
+        data["numberOfElements"] = this.numberOfElements;
         data["empty"] = this.empty;
         return data;
     }
@@ -2475,8 +2482,8 @@ export interface IPageColor {
     content?: Color[];
     number?: number;
     sort?: SortObject;
-    numberOfElements?: number;
     pageable?: PageableObject;
+    numberOfElements?: number;
     empty?: boolean;
 
     [key: string]: any;
@@ -2541,13 +2548,13 @@ export interface IRecogniserResponse {
     [key: string]: any;
 }
 
-export class PairInteger implements IPairInteger {
-    first?: number;
-    last?: number;
+export class Diff implements IDiff {
+    operation?: DiffOperation;
+    text?: string;
 
     [key: string]: any;
 
-    constructor(data?: IPairInteger) {
+    constructor(data?: IDiff) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2562,14 +2569,14 @@ export class PairInteger implements IPairInteger {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.first = _data["first"];
-            this.last = _data["last"];
+            this.operation = _data["operation"];
+            this.text = _data["text"];
         }
     }
 
-    static fromJS(data: any): PairInteger {
+    static fromJS(data: any): Diff {
         data = typeof data === 'object' ? data : {};
-        let result = new PairInteger();
+        let result = new Diff();
         result.init(data);
         return result;
     }
@@ -2580,287 +2587,22 @@ export class PairInteger implements IPairInteger {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["first"] = this.first;
-        data["last"] = this.last;
+        data["operation"] = this.operation;
+        data["text"] = this.text;
         return data;
     }
 
-    clone(): PairInteger {
+    clone(): Diff {
         const json = this.toJSON();
-        let result = new PairInteger();
+        let result = new Diff();
         result.init(json);
         return result;
     }
 }
 
-export interface IPairInteger {
-    first?: number;
-    last?: number;
-
-    [key: string]: any;
-}
-
-export class ResultsString implements IResultsString {
-    forwardVs?: V[];
-    reverseVs?: V[];
-    snakes?: SnakeString[];
-
-    [key: string]: any;
-
-    constructor(data?: IResultsString) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            if (Array.isArray(_data["forwardVs"])) {
-                this.forwardVs = [] as any;
-                for (let item of _data["forwardVs"])
-                    this.forwardVs!.push(V.fromJS(item));
-            }
-            if (Array.isArray(_data["reverseVs"])) {
-                this.reverseVs = [] as any;
-                for (let item of _data["reverseVs"])
-                    this.reverseVs!.push(V.fromJS(item));
-            }
-            if (Array.isArray(_data["snakes"])) {
-                this.snakes = [] as any;
-                for (let item of _data["snakes"])
-                    this.snakes!.push(SnakeString.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): ResultsString {
-        data = typeof data === 'object' ? data : {};
-        let result = new ResultsString();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        if (Array.isArray(this.forwardVs)) {
-            data["forwardVs"] = [];
-            for (let item of this.forwardVs)
-                data["forwardVs"].push(item.toJSON());
-        }
-        if (Array.isArray(this.reverseVs)) {
-            data["reverseVs"] = [];
-            for (let item of this.reverseVs)
-                data["reverseVs"].push(item.toJSON());
-        }
-        if (Array.isArray(this.snakes)) {
-            data["snakes"] = [];
-            for (let item of this.snakes)
-                data["snakes"].push(item.toJSON());
-        }
-        return data;
-    }
-
-    clone(): ResultsString {
-        const json = this.toJSON();
-        let result = new ResultsString();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IResultsString {
-    forwardVs?: V[];
-    reverseVs?: V[];
-    snakes?: SnakeString[];
-
-    [key: string]: any;
-}
-
-export class SnakeString implements ISnakeString {
-    xStart?: number;
-    yStart?: number;
-    aDeleted?: number;
-    bInserted?: number;
-    diagonalLength?: number;
-    isForward?: boolean;
-    dELTA?: number;
-    startPoint?: PairInteger;
-    midPoint?: PairInteger;
-    endPoint?: PairInteger;
-    middlePoint?: boolean;
-    d?: number;
-    xmid?: number;
-    ymid?: number;
-    xend?: number;
-    yend?: number;
-
-    [key: string]: any;
-
-    constructor(data?: ISnakeString) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.xStart = _data["XStart"];
-            this.yStart = _data["YStart"];
-            this.aDeleted = _data["ADeleted"];
-            this.bInserted = _data["BInserted"];
-            this.diagonalLength = _data["DiagonalLength"];
-            this.isForward = _data["IsForward"];
-            this.dELTA = _data["DELTA"];
-            this.startPoint = _data["startPoint"] ? PairInteger.fromJS(_data["startPoint"]) : <any>undefined;
-            this.midPoint = _data["midPoint"] ? PairInteger.fromJS(_data["midPoint"]) : <any>undefined;
-            this.endPoint = _data["endPoint"] ? PairInteger.fromJS(_data["endPoint"]) : <any>undefined;
-            this.middlePoint = _data["middlePoint"];
-            this.d = _data["d"];
-            this.xmid = _data["xmid"];
-            this.ymid = _data["ymid"];
-            this.xend = _data["xend"];
-            this.yend = _data["yend"];
-        }
-    }
-
-    static fromJS(data: any): SnakeString {
-        data = typeof data === 'object' ? data : {};
-        let result = new SnakeString();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["XStart"] = this.xStart;
-        data["YStart"] = this.yStart;
-        data["ADeleted"] = this.aDeleted;
-        data["BInserted"] = this.bInserted;
-        data["DiagonalLength"] = this.diagonalLength;
-        data["IsForward"] = this.isForward;
-        data["DELTA"] = this.dELTA;
-        data["startPoint"] = this.startPoint ? this.startPoint.toJSON() : <any>undefined;
-        data["midPoint"] = this.midPoint ? this.midPoint.toJSON() : <any>undefined;
-        data["endPoint"] = this.endPoint ? this.endPoint.toJSON() : <any>undefined;
-        data["middlePoint"] = this.middlePoint;
-        data["d"] = this.d;
-        data["xmid"] = this.xmid;
-        data["ymid"] = this.ymid;
-        data["xend"] = this.xend;
-        data["yend"] = this.yend;
-        return data;
-    }
-
-    clone(): SnakeString {
-        const json = this.toJSON();
-        let result = new SnakeString();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface ISnakeString {
-    xStart?: number;
-    yStart?: number;
-    aDeleted?: number;
-    bInserted?: number;
-    diagonalLength?: number;
-    isForward?: boolean;
-    dELTA?: number;
-    startPoint?: PairInteger;
-    midPoint?: PairInteger;
-    endPoint?: PairInteger;
-    middlePoint?: boolean;
-    d?: number;
-    xmid?: number;
-    ymid?: number;
-    xend?: number;
-    yend?: number;
-
-    [key: string]: any;
-}
-
-export class V implements IV {
-    m?: number;
-    forward?: boolean;
-    n?: number;
-
-    [key: string]: any;
-
-    constructor(data?: IV) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.m = _data["m"];
-            this.forward = _data["forward"];
-            this.n = _data["n"];
-        }
-    }
-
-    static fromJS(data: any): V {
-        data = typeof data === 'object' ? data : {};
-        let result = new V();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["m"] = this.m;
-        data["forward"] = this.forward;
-        data["n"] = this.n;
-        return data;
-    }
-
-    clone(): V {
-        const json = this.toJSON();
-        let result = new V();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IV {
-    m?: number;
-    forward?: boolean;
-    n?: number;
+export interface IDiff {
+    operation?: DiffOperation;
+    text?: string;
 
     [key: string]: any;
 }
@@ -2929,6 +2671,8 @@ export type FilterRequestOperator = "EQUALS" | "NOT_EQUALS" | "STARTS_WITH" | "C
 export type FilterRequestFieldType = "BOOLEAN" | "STRING";
 
 export type SortRequestDirection = "ASC" | "DESC";
+
+export type DiffOperation = "DELETE" | "INSERT" | "EQUAL";
 
 export interface FileParameter {
     data: any;

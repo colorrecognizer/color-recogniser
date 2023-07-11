@@ -1,13 +1,13 @@
 <div class="card">
-  <p-tabView (onChange)="onTabChange($event)">
+  <p-tabView (onChange)="onTabChange($event)" [activeIndex]="activeIndex">
     <p-tabPanel header="TFN Generator">
-        <app-tfn-generator></app-tfn-generator>
+      <app-tfn-generator></app-tfn-generator>
     </p-tabPanel>
-    <!-- <p-tabPanel header="File Diff">
-        <app-file-diff></app-file-diff>
-    </p-tabPanel> -->
+    <p-tabPanel header="Text Diff">
+      <app-file-diff></app-file-diff>
+    </p-tabPanel>
     <p-tabPanel header="JSON Escape / Unescape">
-        <app-json-escape-unescape></app-json-escape-unescape>
+      <app-json-escape-unescape></app-json-escape-unescape>
     </p-tabPanel>
   </p-tabView>
 </div>
