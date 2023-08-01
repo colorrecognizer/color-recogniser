@@ -5,4 +5,5 @@ export enum RouteEnum {
   ColorManagement = "/color-management",
   ColorPalettes = "/palettes",
   CMYKAnimation = "/cmyk-animation",
+  DevTools = "/dev-tools"
 }

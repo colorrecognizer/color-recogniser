@@ -89,4 +89,28 @@ export class JsonEscapeUnescapeComponent {
 
     this.destString = builder;
   }
+
+  beautify() {
+    try {
+      const obj = JSON.parse(this.srcString);
+      this.destString = JSON.stringify(obj, null, 2);
+    } catch {
+      throw Error("Invalid JSON format!");
+    }
+  }
+
+  onTextareaKeyDown(event: KeyboardEvent, textArea: HTMLTextAreaElement) {
+    if (event.key === "Tab") {
+      textArea.setRangeText(
+        "  ",
+        textArea.selectionStart,
+        textArea.selectionStart,
+        "end"
+      );
+
+      return false;
+    }
+
+    return true;
+  }
 }

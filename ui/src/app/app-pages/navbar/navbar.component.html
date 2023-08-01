@@ -53,6 +53,18 @@
           <span> Color Palettes </span>
         </a>
       </li>
+      <li>
+        <a
+          pRipple
+          class="flex p-3 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-colors transition-duration-150"
+          [routerLink]="devToolsUrl"
+          routerLinkActive="text-900 surface-100"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <i class="pi pi-wrench mr-2"></i>
+          <span> Dev Tools </span>
+        </a>
+      </li>
       <li *ngIf="currentUser?.admin">
         <a
           pRipple

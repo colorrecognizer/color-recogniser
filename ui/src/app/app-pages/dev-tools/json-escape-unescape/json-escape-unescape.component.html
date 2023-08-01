@@ -1,8 +1,27 @@
 <div class="flex flex-column gap-3">
-  <textarea rows="5" pInputTextarea [(ngModel)]="srcString"></textarea>
+  <textarea
+    #srcTextarea
+    rows="5"
+    pInputTextarea
+    [(ngModel)]="srcString"
+    (keydown)="onTextareaKeyDown($event, srcTextarea)"
+  ></textarea>
   <div class="flex flex-wrap gap-3">
-    <p-button label="Escape" (onClick)="escape()"></p-button>
-    <p-button label="Unescape" (onClick)="unescape()"></p-button>
+    <p-button
+      [disabled]="buttonsDisabled"
+      label="Escape"
+      (onClick)="escape()"
+    ></p-button>
+    <p-button
+      [disabled]="buttonsDisabled"
+      label="Unescape"
+      (onClick)="unescape()"
+    ></p-button>
+    <p-button
+      [disabled]="buttonsDisabled"
+      label="Beautify"
+      (onClick)="beautify()"
+    ></p-button>
   </div>
   <div class="relative">
     <div class="absolute right-0 p-3" [hidden]="!destString">
@@ -12,10 +31,12 @@
       ></app-copy-to-clipboard-button>
     </div>
     <textarea
+      #destTextarea
       rows="5"
       pInputTextarea
       [(ngModel)]="destString"
       [autoResize]="true"
+      (keydown)="onTextareaKeyDown($event, destTextarea)"
     ></textarea>
   </div>
 </div>
