@@ -23,6 +23,8 @@ import com.google.auth.oauth2.GoogleCredentials;
 
 /* Class to demonstrate the use of Gmail Create Email API  */
 public class EmailUtils {
+    private static final String APPLICATION_NAME = "Color Recognizer";
+
     /**
      * Create a MimeMessage using the parameters provided.
      *
@@ -84,6 +86,24 @@ public class EmailUtils {
                                     String messageSubject,
                                     String bodyText)
             throws MessagingException, IOException {
+        /* Load pre-authorized user credentials from the environment.
+           TODO(developer) - See https://developers.google.com/identity for
+            guides on implementing OAuth2 for your application.*/
+        GoogleCredentials credentials = GoogleCredentials.getApplicationDefault()
+                .createScoped(GmailScopes.GMAIL_COMPOSE,
+                        GmailScopes.GMAIL_SEND,
+                        GmailScopes.MAIL_GOOGLE_COM,
+                        GmailScopes.GMAIL_MODIFY);
+
+        HttpRequestInitializer requestInitializer = new HttpCredentialsAdapter(credentials);
+
+        // Create the gmail API client
+        Gmail service = new Gmail.Builder(new NetHttpTransport(),
+                GsonFactory.getDefaultInstance(),
+                requestInitializer)
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+
         // Create the email content
 //        String messageSubject = "Test message";
 //        String bodyText = "lorem ipsum.";
@@ -108,7 +128,7 @@ public class EmailUtils {
 
         try {
             // Create send message
-            message = ColorRecogniserApplication.gmailService.users().messages().send("me", message).execute();
+            message = service.users().messages().send("me", message).execute();
             System.out.println("Message id: " + message.getId());
             System.out.println(message.toPrettyString());
             return message;
