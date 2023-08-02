@@ -1,8 +1,13 @@
 import { Component } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { FormlyFormOptions, FormlyFieldConfig } from "@ngx-formly/core";
-import { finalize } from "rxjs";
-import { ApiApi, ContactUs, LoginRequest } from "src/app/shared/auto-generated/apis";
+import { MessageService } from "primeng/api";
+import { finalize, map } from "rxjs";
+import {
+  ApiApi,
+  ContactUs,
+  LoginRequest,
+} from "src/app/shared/auto-generated/apis";
 
 @Component({
   selector: "app-contact-us",
@@ -54,13 +59,20 @@ export class ContactUsComponent {
     },
   ];
 
-  constructor(private $api: ApiApi) {}
+  constructor(private $api: ApiApi, private $message: MessageService) {}
 
   send() {
     this.form.disable();
     this.$api
       .sendContactUs(this.model)
       .pipe(
+        map(() => {
+          this.$message.add({
+            severity: "success",
+            summary: "Message sent to our team!",
+            detail: "Thank you for your support!",
+          });
+        }),
         finalize(() => {
           this.form.enable();
         })
