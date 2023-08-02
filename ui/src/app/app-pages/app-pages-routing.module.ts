@@ -45,6 +45,20 @@ const routes: Routes = [
         loadChildren: () =>
           import("./dev-tools/dev-tools.module").then((m) => m.DevToolsModule),
       },
+      {
+        path: "contact-us",
+        loadChildren: () =>
+          import("./contact-us/contact-us.module").then(
+            (m) => m.ContactUsModule
+          ),
+      },
+      {
+        path: "privacy-policy",
+        loadChildren: () =>
+          import("./privacy-policy/privacy-policy.module").then(
+            (m) => m.PrivacyPolicyModule
+          ),
+      },
     ],
   },
 ];

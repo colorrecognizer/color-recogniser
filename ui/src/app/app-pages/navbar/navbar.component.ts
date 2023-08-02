@@ -29,6 +29,7 @@ export class NavbarComponent {
   logoAnimationIndex = 0;
   palettesUrl = RouteEnum.ColorPalettes;
   devToolsUrl = RouteEnum.DevTools;
+  contactUsUrl = RouteEnum.ContactUs;
 
   constructor(
     private $theme: ThemeService,

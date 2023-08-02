@@ -4,20 +4,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.longcode.colorRecogniser.config.ApiException;
 import com.longcode.colorRecogniser.models.Color;
 import com.longcode.colorRecogniser.models.enums.SelectionType;
+import com.longcode.colorRecogniser.models.shallowModels.ContactUs;
 import com.longcode.colorRecogniser.models.shallowModels.Point;
 import com.longcode.colorRecogniser.models.shallowModels.diff.diff_match_patch;
 import com.longcode.colorRecogniser.services.modelServices.ColorService;
+import com.longcode.colorRecogniser.utils.EmailUtils;
 import com.longcode.colorRecogniser.utils.GeometryUtils;
 import com.longcode.colorRecogniser.utils.RandomUtils;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import javax.mail.MessagingException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -28,6 +33,9 @@ import java.util.List;
 @Getter
 public class ApiController {
     private ColorService colorService;
+
+    @Value("${app.contact-email}")
+    private String CONTACT_EMAIL;
 
     @Autowired
     public void setColorService(ColorService colorService) {
@@ -229,6 +237,27 @@ public class ApiController {
             dmp.diff_cleanupSemantic(result);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
+            throw new ApiException(e.getMessage());
+        }
+    }
+
+    @PostMapping("/send-contact-us")
+    public void sendContactUs(@RequestBody @Valid ContactUs contactUs) {
+        String subject = String.format("Color Recognizer User Feedback - %s", contactUs.getName());
+        if (!StringUtils.isEmpty(contactUs.getCompanyName())) {
+            subject += String.format(" from company [%s]", contactUs.getCompanyName());
+        }
+
+        String message = String.format("From email [%s]:\n", contactUs.getEmail());
+
+        try {
+            EmailUtils.sendEmail(
+                    contactUs.getEmail(),
+                    CONTACT_EMAIL,
+                    subject,
+                    message + contactUs.getMessage()
+            );
+        } catch (MessagingException | IOException e) {
             throw new ApiException(e.getMessage());
         }
     }

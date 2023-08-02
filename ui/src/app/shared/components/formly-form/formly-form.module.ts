@@ -9,7 +9,12 @@ import { InputTextModule } from "primeng/inputtext";
 const modules = [
   ReactiveFormsModule,
   FormlyModule.forRoot({
-    validators: [{ name: "email", validation: Validators.email }],
+    validators: [
+      {
+        name: "email",
+        validation: Validators.email,
+      },
+    ],
     validationMessages: [
       { name: "email", message: "Invalid email address" },
       { name: "required", message: "This field is required" },

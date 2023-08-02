@@ -18,6 +18,7 @@ export class FooterComponent implements AfterViewInit {
   @ViewChild("footer") footer!: ElementRef<HTMLDivElement>;
   @ViewChild("logo") logo!: ElementRef<HTMLImageElement>;
   animations: anime.AnimeInstance[] = [];
+  privacyPolicyUrl = RouteEnum.PrivacyPolicy;
 
   constructor(private $router: Router) {}
 

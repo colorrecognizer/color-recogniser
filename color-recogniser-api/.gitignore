@@ -45,3 +45,7 @@ src/main/resources/application.properties
 ### MySQL
 mysql/my.cnf
 mysql/backup/backup.sql
+
+### Tokens
+/tokens/
+src/main/resources/credentials.json
