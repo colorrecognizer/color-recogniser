@@ -6,6 +6,7 @@ import { ContactUsComponent } from "./contact-us.component";
 import { RegularlyUsedPrimengModule } from "src/app/shared/modules/regularly-used-primeng.module";
 import { FormlyFormModule } from "src/app/shared/components/formly-form/formly-form.module";
 import { SubmitButtonModule } from "src/app/shared/components/submit-button/submit-button.module";
+import { AdCarouselModule } from "src/app/shared/components/ad-carousel/ad-carousel.module";
 
 @NgModule({
   declarations: [ContactUsComponent],
@@ -15,6 +16,7 @@ import { SubmitButtonModule } from "src/app/shared/components/submit-button/subm
     RegularlyUsedPrimengModule,
     FormlyFormModule,
     SubmitButtonModule,
+    AdCarouselModule,
   ],
 })
 export class ContactUsModule {}

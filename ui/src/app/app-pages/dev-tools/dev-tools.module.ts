@@ -12,6 +12,7 @@ import { FileDiffComponent } from "./file-diff/file-diff.component";
 import { JsonEscapeUnescapeComponent } from "./json-escape-unescape/json-escape-unescape.component";
 import { HighlightModule } from "ngx-highlightjs";
 import { CopyToClipboardButtonModule } from "src/app/shared/components/copy-to-clipboard-button/copy-to-clipboard-button.module";
+import { AdCarouselModule } from "src/app/shared/components/ad-carousel/ad-carousel.module";
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { CopyToClipboardButtonModule } from "src/app/shared/components/copy-to-c
     ChipModule,
     HighlightModule,
     CopyToClipboardButtonModule,
+    AdCarouselModule,
   ],
 })
 export class DevToolsModule {}
