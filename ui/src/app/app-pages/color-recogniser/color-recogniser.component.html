@@ -23,7 +23,7 @@
   </div>
   <div class="col-12 lg:col-6">
     <div
-      class="surface-card p-3 lg:p-5 shadow-2 border-round flex flex-column gap-3"
+      class="surface-card p-3 lg:p-5 shadow-2 border-round-md flex flex-column gap-3"
     >
       <p-fileUpload
         #imageUpload
@@ -43,7 +43,7 @@
         </ng-template>
         <ng-template pTemplate="content" let-files>
           <div
-            class="border-dashed border-round-xl surface-border flex flex-column align-items-center justify-content-center cursor-pointer"
+            class="border-dashed border-round-md-xl surface-border flex flex-column align-items-center justify-content-center cursor-pointer"
             style="height: 30rem"
             *ngIf="!imageObj"
             (click)="imageUpload.choose()"
@@ -153,7 +153,7 @@
   </div>
   <div class="col-12 lg:col-6 pl-0 pt-2 lg:pl-5 lg:pt-0">
     <div
-      class="surface-card p-3 lg:p-5 shadow-2 border-round flex flex-column gap-3"
+      class="surface-card p-3 lg:p-5 shadow-2 border-round-md flex flex-column gap-3"
       #matchColorTable
       *ngIf="matchColors.length"
     >
