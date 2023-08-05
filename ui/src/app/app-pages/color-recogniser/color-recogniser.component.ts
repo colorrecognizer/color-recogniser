@@ -9,10 +9,7 @@ import {
 } from "@angular/core";
 import { ThemeService } from "src/app/shared/services/theme.service";
 import { SelectionTool } from "./selection-tool";
-import {
-  Color,
-  RecogniserResponse,
-} from "src/app/shared/auto-generated/apis";
+import { Color, RecogniserResponse } from "src/app/shared/auto-generated/apis";
 import { finalize, map } from "rxjs";
 import { MessageService } from "primeng/api";
 import { HttpClient } from "@angular/common/http";
@@ -167,8 +164,7 @@ export class ColorRecognizerComponent implements OnInit, AfterViewInit {
       },
       {
         name: "og:title",
-        content:
-          "Color Recognizer",
+        content: "Color Recognizer",
       },
       {
         name: "og:description",
@@ -455,7 +451,12 @@ export class ColorRecognizerComponent implements OnInit, AfterViewInit {
       // canvasWidth / canvasHeight = imageWidth / imageHeight
       // canvasHeight = canvasWidth / (imageWidth / imageHeight)
       const stageWidth = this.canvasWidth;
-      const stageHeight = this.canvasWidth / (imageWidth / imageHeight);
+      const stageHeight = Math.min(
+        this.canvasWidth,
+        this.canvasWidth / (imageWidth / imageHeight)
+      );
+
+      const realStageHeight = this.canvasWidth / (imageWidth / imageHeight);
 
       const oldStageWidth = this.stage.width();
       this.stage.width(stageWidth);
@@ -465,7 +466,7 @@ export class ColorRecognizerComponent implements OnInit, AfterViewInit {
       this.konvaImage.x(this.konvaImage.x() * scale);
       this.konvaImage.y(this.konvaImage.y() * scale);
       this.konvaImage.width(stageWidth - BORDER_WIDTH);
-      this.konvaImage.height(stageHeight - BORDER_WIDTH);
+      this.konvaImage.height(realStageHeight - BORDER_WIDTH);
       this.border.points([
         0,
         0,
