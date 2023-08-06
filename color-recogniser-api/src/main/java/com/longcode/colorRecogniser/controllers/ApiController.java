@@ -10,11 +10,20 @@ import com.longcode.colorRecogniser.models.shallowModels.diff.diff_match_patch;
 import com.longcode.colorRecogniser.services.modelServices.ColorService;
 import com.longcode.colorRecogniser.utils.EmailUtils;
 import com.longcode.colorRecogniser.utils.GeometryUtils;
+import com.longcode.colorRecogniser.utils.HttpUtils;
 import com.longcode.colorRecogniser.utils.RandomUtils;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +34,12 @@ import javax.imageio.ImageIO;
 import javax.mail.MessagingException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.Comparator.comparingInt;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
 
 @RestController
 @RequestMapping("/api")
@@ -54,23 +67,23 @@ public class ApiController {
     }
 
     @PostMapping("/recognise")
-    public ResponseEntity<List<RecogniserResponse>> recognise(@RequestParam("image") MultipartFile imageMultipartFile,
-                                                              @RequestParam("recogniserRequest") String recogniserRequestString) {
+    public ResponseEntity<RecogniserResponse> recognise(@RequestParam("image") MultipartFile imageMultipartFile,
+                                                        @RequestParam("recogniserRequest") String recogniserRequestString) {
         try {
             RecogniserRequest recogniserRequest = new ObjectMapper().readValue(recogniserRequestString, RecogniserRequest.class);
             BufferedImage image = ImageIO.read(imageMultipartFile.getInputStream());
 
-
-            int steps = 300;
+            final int STEPS = 300;
             double minX = recogniserRequest.minX;
             double maxX = recogniserRequest.maxX;
             double minY = recogniserRequest.minY;
             double maxY = recogniserRequest.maxY;
             double ar = 0, ag = 0, ab = 0;
             int count = 0;
+            List<Color> colors = new ArrayList<>();
 
-            for (double px = minX; px < maxX; px += (maxX - minX) / steps) {
-                for (double py = minY; py < maxY; py += (maxY - minY) / steps) {
+            for (double px = minX; px < maxX; px += (maxX - minX) / STEPS) {
+                for (double py = minY; py < maxY; py += (maxY - minY) / STEPS) {
                     boolean isInside = false;
                     switch (recogniserRequest.selectionType) {
                         case RECTANGLE -> isInside = true;
@@ -93,43 +106,54 @@ public class ApiController {
                         int green = (clr & 0x0000ff00) >> 8;
                         int blue = clr & 0x000000ff;
 
-                        ar = (ar * (count - 1)) / count + red * 1.0 / count;
-                        ag = (ag * (count - 1)) / count + green * 1.0 / count;
-                        ab = (ab * (count - 1)) / count + blue * 1.0 / count;
+                        colors.add(Color.builder()
+                                .red((short) red)
+                                .green((short) green)
+                                .blue((short) blue)
+                                .build());
                     }
                 }
             }
 
+            var mapper = new ObjectMapper();
+            String jsonInput = mapper.writeValueAsString(colors);
+            String apiUrl = "http://localhost:5000/color/recognize"; // Replace with your actual API URL
+            String jsonOutput = HttpUtils.post(apiUrl, jsonInput);
             List<Color> allColors = this.colorService.getAll();
-            Color color = Color.builder()
-                    .name("Unnamed color")
-                    .red((short) ar)
-                    .green((short) ag)
-                    .blue((short) ab)
+            RecogniserResponse response = RecogniserResponse.builder()
+                    .colorCoverages(new ArrayList<>())
                     .build();
 
-            double total = Math.sqrt(Math.pow(Math.max(color.getRed(), 255 - color.getRed()), 2)
-                    + Math.pow(Math.max(color.getGreen(), 255 - color.getGreen()), 2)
-                    + Math.pow(Math.max(color.getBlue(), 255 - color.getBlue()), 2)
-            );
+            double[][] colorCoverages = mapper.readValue(jsonOutput, double[][].class);
 
-            List<RecogniserResponse> result = new java.util.ArrayList<>(allColors.stream()
-                    .sorted((color1, color2) -> getDistance(color, color1) - getDistance(color, color2))
-                    .limit(10)
-                    .map(c -> RecogniserResponse.builder()
-                            .color(c)
-                            .matchPercentage(1 - Math.sqrt(getDistance(color, c)) / total)
-                            .build())
-                    .toList());
+            for (int i = 0; i < colorCoverages.length; ++i) {
+                ColorCoverage colorCoverage = ColorCoverage.builder()
+                        .color(Color.builder()
+                                .red((short) colorCoverages[i][0])
+                                .green((short) colorCoverages[i][1])
+                                .blue((short) colorCoverages[i][2])
+                                .build())
+                        .coveragePercentage(colorCoverages[i][3])
+                        .build();
 
-            if (result.get(0).matchPercentage < 1) {
-                result.add(0, RecogniserResponse.builder()
-                        .color(color)
-                        .matchPercentage(1)
-                        .build());
+                double total = Math.sqrt(Math.pow(Math.max(colorCoverage.color.getRed(), 255 - colorCoverage.color.getRed()), 2)
+                        + Math.pow(Math.max(colorCoverage.color.getGreen(), 255 - colorCoverage.color.getGreen()), 2)
+                        + Math.pow(Math.max(colorCoverage.color.getBlue(), 255 - colorCoverage.color.getBlue()), 2)
+                );
+
+                colorCoverage.setColorMatches(new java.util.ArrayList<>(allColors.stream()
+                        .sorted((color1, color2) -> getDistance(colorCoverage.color, color1) - getDistance(colorCoverage.color, color2))
+                        .limit(3)
+                        .map(c -> ColorMatch.builder()
+                                .color(c)
+                                .matchPercentage(1 - Math.sqrt(getDistance(colorCoverage.color, c)) / total)
+                                .build())
+                        .toList()));
+
+                response.getColorCoverages().add(colorCoverage);
             }
 
-            return ResponseEntity.ok(result);
+            return ResponseEntity.ok(response);
         } catch (IOException e) {
             throw new ApiException(e.getMessage());
         }
@@ -150,6 +174,7 @@ public class ApiController {
         private double minY;
         private double maxY;
 
+        private int kValue;
 
         /**
          * Points for polygon. Assume that the polygon is not self-intersecting
@@ -163,6 +188,26 @@ public class ApiController {
     @AllArgsConstructor
     @NoArgsConstructor
     private static class RecogniserResponse {
+        private List<ColorCoverage> colorCoverages;
+    }
+
+    @Builder
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    private static class ColorCoverage {
+        private Color color;
+        private double coveragePercentage;
+        private List<ColorMatch> colorMatches;
+    }
+
+    @Builder
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    private static class ColorMatch {
         private Color color;
         private double matchPercentage;
     }

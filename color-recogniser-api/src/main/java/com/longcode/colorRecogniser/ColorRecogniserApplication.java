@@ -90,8 +90,8 @@ public class ColorRecogniserApplication {
 	}
 
 	public static void main(String[] args) throws GeneralSecurityException, IOException {
-		gmailStart();
-		SpringApplication.run(ColorRecogniserApplication.class, args);
+//		gmailStart();
+			SpringApplication.run(ColorRecogniserApplication.class, args);
 	}
 
 }

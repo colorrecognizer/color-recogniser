@@ -1186,7 +1186,7 @@ export class ApiApi {
      * @param body (optional) 
      * @return OK
      */
-    recognise(recogniserRequest: string, body: Body | undefined): Observable<RecogniserResponse[]> {
+    recognise(recogniserRequest: string, body: Body | undefined): Observable<RecogniserResponse> {
         let url_ = this.baseUrl + "/api/recognise?";
         if (recogniserRequest === undefined || recogniserRequest === null)
             throw new Error("The parameter 'recogniserRequest' must be defined and cannot be null.");
@@ -1213,14 +1213,14 @@ export class ApiApi {
                 try {
                     return this.processRecognise(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<RecogniserResponse[]>;
+                    return _observableThrow(e) as any as Observable<RecogniserResponse>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<RecogniserResponse[]>;
+                return _observableThrow(response_) as any as Observable<RecogniserResponse>;
         }));
     }
 
-    protected processRecognise(response: HttpResponseBase): Observable<RecogniserResponse[]> {
+    protected processRecognise(response: HttpResponseBase): Observable<RecogniserResponse> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1247,14 +1247,7 @@ export class ApiApi {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200!.push(RecogniserResponse.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
+            result200 = RecogniserResponse.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1556,12 +1549,12 @@ export class User implements IUser {
     roles?: Roles[];
     userStatus?: UserStatus;
     enabled?: boolean;
-    accountNonLocked?: boolean;
-    accountNonExpired?: boolean;
-    credentialsNonExpired?: boolean;
-    user?: boolean;
-    admin?: boolean;
     authorities?: GrantedAuthority[];
+    credentialsNonExpired?: boolean;
+    accountNonExpired?: boolean;
+    admin?: boolean;
+    user?: boolean;
+    accountNonLocked?: boolean;
 
     [key: string]: any;
 
@@ -1590,16 +1583,16 @@ export class User implements IUser {
             }
             this.userStatus = _data["userStatus"];
             this.enabled = _data["enabled"];
-            this.accountNonLocked = _data["accountNonLocked"];
-            this.accountNonExpired = _data["accountNonExpired"];
-            this.credentialsNonExpired = _data["credentialsNonExpired"];
-            this.user = _data["user"];
-            this.admin = _data["admin"];
             if (Array.isArray(_data["authorities"])) {
                 this.authorities = [] as any;
                 for (let item of _data["authorities"])
                     this.authorities!.push(GrantedAuthority.fromJS(item));
             }
+            this.credentialsNonExpired = _data["credentialsNonExpired"];
+            this.accountNonExpired = _data["accountNonExpired"];
+            this.admin = _data["admin"];
+            this.user = _data["user"];
+            this.accountNonLocked = _data["accountNonLocked"];
         }
     }
 
@@ -1626,16 +1619,16 @@ export class User implements IUser {
         }
         data["userStatus"] = this.userStatus;
         data["enabled"] = this.enabled;
-        data["accountNonLocked"] = this.accountNonLocked;
-        data["accountNonExpired"] = this.accountNonExpired;
-        data["credentialsNonExpired"] = this.credentialsNonExpired;
-        data["user"] = this.user;
-        data["admin"] = this.admin;
         if (Array.isArray(this.authorities)) {
             data["authorities"] = [];
             for (let item of this.authorities)
                 data["authorities"].push(item.toJSON());
         }
+        data["credentialsNonExpired"] = this.credentialsNonExpired;
+        data["accountNonExpired"] = this.accountNonExpired;
+        data["admin"] = this.admin;
+        data["user"] = this.user;
+        data["accountNonLocked"] = this.accountNonLocked;
         return data;
     }
 
@@ -1654,12 +1647,12 @@ export interface IUser {
     roles?: Roles[];
     userStatus?: UserStatus;
     enabled?: boolean;
-    accountNonLocked?: boolean;
-    accountNonExpired?: boolean;
-    credentialsNonExpired?: boolean;
-    user?: boolean;
-    admin?: boolean;
     authorities?: GrantedAuthority[];
+    credentialsNonExpired?: boolean;
+    accountNonExpired?: boolean;
+    admin?: boolean;
+    user?: boolean;
+    accountNonLocked?: boolean;
 
     [key: string]: any;
 }
@@ -1737,8 +1730,8 @@ export class Color implements IColor {
     red?: number;
     green?: number;
     blue?: number;
-    hexValue?: string;
     cmyk?: CMYKColor;
+    hexValue?: string;
 
     [key: string]: any;
 
@@ -1762,8 +1755,8 @@ export class Color implements IColor {
             this.red = _data["red"];
             this.green = _data["green"];
             this.blue = _data["blue"];
-            this.hexValue = _data["hexValue"];
             this.cmyk = _data["cmyk"] ? CMYKColor.fromJS(_data["cmyk"]) : <any>undefined;
+            this.hexValue = _data["hexValue"];
         }
     }
 
@@ -1785,8 +1778,8 @@ export class Color implements IColor {
         data["red"] = this.red;
         data["green"] = this.green;
         data["blue"] = this.blue;
-        data["hexValue"] = this.hexValue;
         data["cmyk"] = this.cmyk ? this.cmyk.toJSON() : <any>undefined;
+        data["hexValue"] = this.hexValue;
         return data;
     }
 
@@ -1804,8 +1797,8 @@ export interface IColor {
     red?: number;
     green?: number;
     blue?: number;
-    hexValue?: string;
     cmyk?: CMYKColor;
+    hexValue?: string;
 
     [key: string]: any;
 }
@@ -2036,8 +2029,8 @@ export interface ISortRequest {
 }
 
 export class PageUser implements IPageUser {
-    totalPages?: number;
     totalElements?: number;
+    totalPages?: number;
     size?: number;
     content?: User[];
     number?: number;
@@ -2065,8 +2058,8 @@ export class PageUser implements IPageUser {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.totalPages = _data["totalPages"];
             this.totalElements = _data["totalElements"];
+            this.totalPages = _data["totalPages"];
             this.size = _data["size"];
             if (Array.isArray(_data["content"])) {
                 this.content = [] as any;
@@ -2096,8 +2089,8 @@ export class PageUser implements IPageUser {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["totalPages"] = this.totalPages;
         data["totalElements"] = this.totalElements;
+        data["totalPages"] = this.totalPages;
         data["size"] = this.size;
         if (Array.isArray(this.content)) {
             data["content"] = [];
@@ -2123,8 +2116,8 @@ export class PageUser implements IPageUser {
 }
 
 export interface IPageUser {
-    totalPages?: number;
     totalElements?: number;
+    totalPages?: number;
     size?: number;
     content?: User[];
     number?: number;
@@ -2141,10 +2134,10 @@ export interface IPageUser {
 export class PageableObject implements IPageableObject {
     offset?: number;
     sort?: SortObject;
-    pageNumber?: number;
-    pageSize?: number;
-    unpaged?: boolean;
     paged?: boolean;
+    unpaged?: boolean;
+    pageSize?: number;
+    pageNumber?: number;
 
     [key: string]: any;
 
@@ -2165,10 +2158,10 @@ export class PageableObject implements IPageableObject {
             }
             this.offset = _data["offset"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
-            this.pageNumber = _data["pageNumber"];
-            this.pageSize = _data["pageSize"];
-            this.unpaged = _data["unpaged"];
             this.paged = _data["paged"];
+            this.unpaged = _data["unpaged"];
+            this.pageSize = _data["pageSize"];
+            this.pageNumber = _data["pageNumber"];
         }
     }
 
@@ -2187,10 +2180,10 @@ export class PageableObject implements IPageableObject {
         }
         data["offset"] = this.offset;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
-        data["pageNumber"] = this.pageNumber;
-        data["pageSize"] = this.pageSize;
-        data["unpaged"] = this.unpaged;
         data["paged"] = this.paged;
+        data["unpaged"] = this.unpaged;
+        data["pageSize"] = this.pageSize;
+        data["pageNumber"] = this.pageNumber;
         return data;
     }
 
@@ -2205,18 +2198,18 @@ export class PageableObject implements IPageableObject {
 export interface IPageableObject {
     offset?: number;
     sort?: SortObject;
-    pageNumber?: number;
-    pageSize?: number;
-    unpaged?: boolean;
     paged?: boolean;
+    unpaged?: boolean;
+    pageSize?: number;
+    pageNumber?: number;
 
     [key: string]: any;
 }
 
 export class SortObject implements ISortObject {
     empty?: boolean;
-    unsorted?: boolean;
     sorted?: boolean;
+    unsorted?: boolean;
 
     [key: string]: any;
 
@@ -2236,8 +2229,8 @@ export class SortObject implements ISortObject {
                     this[property] = _data[property];
             }
             this.empty = _data["empty"];
-            this.unsorted = _data["unsorted"];
             this.sorted = _data["sorted"];
+            this.unsorted = _data["unsorted"];
         }
     }
 
@@ -2255,8 +2248,8 @@ export class SortObject implements ISortObject {
                 data[property] = this[property];
         }
         data["empty"] = this.empty;
-        data["unsorted"] = this.unsorted;
         data["sorted"] = this.sorted;
+        data["unsorted"] = this.unsorted;
         return data;
     }
 
@@ -2270,8 +2263,8 @@ export class SortObject implements ISortObject {
 
 export interface ISortObject {
     empty?: boolean;
-    unsorted?: boolean;
     sorted?: boolean;
+    unsorted?: boolean;
 
     [key: string]: any;
 }
@@ -2454,8 +2447,8 @@ export interface ILoginRequest {
 }
 
 export class PageColor implements IPageColor {
-    totalPages?: number;
     totalElements?: number;
+    totalPages?: number;
     size?: number;
     content?: Color[];
     number?: number;
@@ -2483,8 +2476,8 @@ export class PageColor implements IPageColor {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.totalPages = _data["totalPages"];
             this.totalElements = _data["totalElements"];
+            this.totalPages = _data["totalPages"];
             this.size = _data["size"];
             if (Array.isArray(_data["content"])) {
                 this.content = [] as any;
@@ -2514,8 +2507,8 @@ export class PageColor implements IPageColor {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["totalPages"] = this.totalPages;
         data["totalElements"] = this.totalElements;
+        data["totalPages"] = this.totalPages;
         data["size"] = this.size;
         if (Array.isArray(this.content)) {
             data["content"] = [];
@@ -2541,8 +2534,8 @@ export class PageColor implements IPageColor {
 }
 
 export interface IPageColor {
-    totalPages?: number;
     totalElements?: number;
+    totalPages?: number;
     size?: number;
     content?: Color[];
     number?: number;
@@ -2627,13 +2620,84 @@ export interface IContactUs {
     [key: string]: any;
 }
 
-export class RecogniserResponse implements IRecogniserResponse {
+export class ColorCoverage implements IColorCoverage {
+    color?: Color;
+    coveragePercentage?: number;
+    colorMatches?: ColorMatch[];
+
+    [key: string]: any;
+
+    constructor(data?: IColorCoverage) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.color = _data["color"] ? Color.fromJS(_data["color"]) : <any>undefined;
+            this.coveragePercentage = _data["coveragePercentage"];
+            if (Array.isArray(_data["colorMatches"])) {
+                this.colorMatches = [] as any;
+                for (let item of _data["colorMatches"])
+                    this.colorMatches!.push(ColorMatch.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ColorCoverage {
+        data = typeof data === 'object' ? data : {};
+        let result = new ColorCoverage();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["color"] = this.color ? this.color.toJSON() : <any>undefined;
+        data["coveragePercentage"] = this.coveragePercentage;
+        if (Array.isArray(this.colorMatches)) {
+            data["colorMatches"] = [];
+            for (let item of this.colorMatches)
+                data["colorMatches"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): ColorCoverage {
+        const json = this.toJSON();
+        let result = new ColorCoverage();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IColorCoverage {
+    color?: Color;
+    coveragePercentage?: number;
+    colorMatches?: ColorMatch[];
+
+    [key: string]: any;
+}
+
+export class ColorMatch implements IColorMatch {
     color?: Color;
     matchPercentage?: number;
 
     [key: string]: any;
 
-    constructor(data?: IRecogniserResponse) {
+    constructor(data?: IColorMatch) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2653,9 +2717,9 @@ export class RecogniserResponse implements IRecogniserResponse {
         }
     }
 
-    static fromJS(data: any): RecogniserResponse {
+    static fromJS(data: any): ColorMatch {
         data = typeof data === 'object' ? data : {};
-        let result = new RecogniserResponse();
+        let result = new ColorMatch();
         result.init(data);
         return result;
     }
@@ -2671,6 +2735,70 @@ export class RecogniserResponse implements IRecogniserResponse {
         return data;
     }
 
+    clone(): ColorMatch {
+        const json = this.toJSON();
+        let result = new ColorMatch();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IColorMatch {
+    color?: Color;
+    matchPercentage?: number;
+
+    [key: string]: any;
+}
+
+export class RecogniserResponse implements IRecogniserResponse {
+    colorCoverages?: ColorCoverage[];
+
+    [key: string]: any;
+
+    constructor(data?: IRecogniserResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            if (Array.isArray(_data["colorCoverages"])) {
+                this.colorCoverages = [] as any;
+                for (let item of _data["colorCoverages"])
+                    this.colorCoverages!.push(ColorCoverage.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): RecogniserResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new RecogniserResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        if (Array.isArray(this.colorCoverages)) {
+            data["colorCoverages"] = [];
+            for (let item of this.colorCoverages)
+                data["colorCoverages"].push(item.toJSON());
+        }
+        return data;
+    }
+
     clone(): RecogniserResponse {
         const json = this.toJSON();
         let result = new RecogniserResponse();
@@ -2680,8 +2808,7 @@ export class RecogniserResponse implements IRecogniserResponse {
 }
 
 export interface IRecogniserResponse {
-    color?: Color;
-    matchPercentage?: number;
+    colorCoverages?: ColorCoverage[];
 
     [key: string]: any;
 }

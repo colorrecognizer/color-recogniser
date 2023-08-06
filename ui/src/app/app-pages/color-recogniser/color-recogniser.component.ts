@@ -9,7 +9,7 @@ import {
 } from "@angular/core";
 import { ThemeService } from "src/app/shared/services/theme.service";
 import { SelectionTool } from "./selection-tool";
-import { Color, RecogniserResponse } from "src/app/shared/auto-generated/apis";
+import { Color, ColorCoverage, ColorMatch, RecogniserResponse } from "src/app/shared/auto-generated/apis";
 import { finalize, map } from "rxjs";
 import { MessageService } from "primeng/api";
 import { HttpClient } from "@angular/common/http";
@@ -91,7 +91,7 @@ export class ColorRecognizerComponent implements OnInit, AfterViewInit {
   private ctrlPressed = false;
   private zoomTipShown = false;
   private moveTipShown = false;
-  matchColors: RecogniserResponse[] = [];
+  colorCoverages: ColorCoverage[] = [];
   selectedColor?: Color;
   @ViewChild("imageUpload") imageUpload!: FileUpload;
   @ViewChildren("bubbles") bubbles!: QueryList<ElementRef<HTMLSpanElement>>;
@@ -638,7 +638,7 @@ export class ColorRecognizerComponent implements OnInit, AfterViewInit {
   recognise() {
     if (!this.selectedSelectionTool) return;
 
-    this.matchColors.length = 0;
+    this.colorCoverages.length = 0;
     this.recogniseButtonDisabled = true;
 
     let minx = this.stage.width(),
@@ -733,12 +733,13 @@ export class ColorRecognizerComponent implements OnInit, AfterViewInit {
                   };
                 })
               : [],
+          kvalue: 5,
         })
       );
 
       this.selection.visible(true);
       this.$http
-        .post<RecogniserResponse[]>(
+        .post<RecogniserResponse>(
           `${environment.apiUrl}/api/recognise`,
           formData,
           {
@@ -747,7 +748,9 @@ export class ColorRecognizerComponent implements OnInit, AfterViewInit {
         )
         .pipe(
           map((res) => {
-            this.matchColors = res;
+            this.colorCoverages = res.colorCoverages || [];
+            this.colorCoverages = this.colorCoverages.sort((a, b) => b.coveragePercentage! - a.coveragePercentage!);
+
             setTimeout(() => {
               this.matchColorTable.nativeElement.scrollIntoView({
                 behavior: "smooth",
