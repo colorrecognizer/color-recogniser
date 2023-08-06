@@ -1,0 +1,21 @@
+<p-carousel
+  [value]="images"
+  [numVisible]="1"
+  [numScroll]="1"
+  [circular]="true"
+  [showNavigators]="false"
+  [showIndicators]="false"
+  [autoplayInterval]="5000"
+>
+  <ng-template let-image pTemplate="item">
+    <div class="text-center">
+      <a [routerLink]="homeUrl">
+        <img
+          [src]="image.src"
+          alt="Google Ads"
+          class="w-full lg:w-6 border-round-md"
+        />
+      </a>
+    </div>
+  </ng-template>
+</p-carousel>

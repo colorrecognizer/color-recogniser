@@ -21,6 +21,8 @@ import { TokenInterceptor } from "./shared/services/token.interceptor";
 import { API_BASE_URL } from "./shared/auto-generated/apis";
 import { environment } from "src/environments/environment";
 import { ConfirmPopupModule } from "primeng/confirmpopup";
+import { ConfirmDialogModule } from "primeng/confirmdialog";
+import { DialogModule } from "primeng/dialog";
 import {
   DialogService,
   DynamicDialogConfig,
@@ -50,6 +52,8 @@ import { HowToMixModule } from "./shared/components/how-to-mix/how-to-mix.module
     ConfirmPopupModule,
     HowToMixModule,
     ScrollTopModule,
+    ConfirmDialogModule,
+    DialogModule,
   ],
   providers: [
     // One way of configuring ngForage

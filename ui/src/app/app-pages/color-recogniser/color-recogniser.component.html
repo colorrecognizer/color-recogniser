@@ -23,7 +23,7 @@
   </div>
   <div class="col-12 lg:col-6">
     <div
-      class="surface-card p-3 lg:p-5 shadow-2 border-round flex flex-column gap-3"
+      class="surface-card p-3 lg:p-5 shadow-2 border-round-md flex flex-column gap-3"
     >
       <p-fileUpload
         #imageUpload
@@ -43,7 +43,7 @@
         </ng-template>
         <ng-template pTemplate="content" let-files>
           <div
-            class="border-dashed border-round-xl surface-border flex flex-column align-items-center justify-content-center cursor-pointer"
+            class="border-dashed border-round-md-xl surface-border flex flex-column align-items-center justify-content-center cursor-pointer"
             style="height: 30rem"
             *ngIf="!imageObj"
             (click)="imageUpload.choose()"
@@ -71,6 +71,7 @@
             icon="pi pi-replay"
             (onClick)="setToDefault()"
             pTooltip="Set to default"
+            label="Set to default"
             tooltipPosition="top"
             [disabled]="!canModifyImage"
           ></p-button>
@@ -81,7 +82,7 @@
             buttonLayout="horizontal"
             inputId="horizontal"
             spinnerMode="horizontal"
-            [step]="1"
+            [step]="5"
             incrementButtonIcon="pi pi-plus"
             decrementButtonIcon="pi pi-minus"
             suffix="%"
@@ -153,52 +154,71 @@
   </div>
   <div class="col-12 lg:col-6 pl-0 pt-2 lg:pl-5 lg:pt-0">
     <div
-      class="surface-card p-3 lg:p-5 shadow-2 border-round flex flex-column gap-3"
+      class="surface-card p-3 lg:p-5 shadow-2 border-round-md flex flex-column gap-3"
       #matchColorTable
-      *ngIf="matchColors.length"
+      *ngIf="colorCoverages.length"
     >
-      <p-table
-        [value]="matchColors"
-        responsiveLayout="stack"
-        styleClass="p-datatable-sm p-datatable-striped"
-        selectionMode="single"
-        [(selection)]="selectedColor"
-        (onRowSelect)="showHowToMix($event.data)"
-        (onRowUnselect)="showHowToMix($event.data)"
-        dataKey="name"
-      >
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Color Name</th>
-            <th>Code</th>
-            <th>Match Percentage</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-color>
-          <tr [pSelectableRow]="color.color">
-            <td>
-              <span class="p-column-title text-500">Color Name</span>
-              <div
-                class="flex justify-content-between align-items-center gap-3"
-              >
-                <span>{{ color.color.name }}</span>
-                <p-colorPicker
-                  [ngModel]="color.color.hexValue"
-                  [disabled]="true"
-                ></p-colorPicker>
-              </div>
-            </td>
-            <td>
-              <span class="p-column-title text-500"> Code </span>
-              {{ color.color.hexValue }}
-            </td>
-            <td>
-              <span class="p-column-title text-500"> Match Percentage </span>
-              {{ color.matchPercentage | percent : "1.2-2" }}
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
+      <p-accordion class="w-full">
+        <p-accordionTab *ngFor="let coverage of colorCoverages">
+          <ng-template pTemplate="header">
+            <div class="flex align-items-center gap-3 w-full">
+              <p-colorPicker
+                [ngModel]="coverage.color?.hexValue"
+                [disabled]="true"
+              ></p-colorPicker>
+              <div class="flex-grow-1">{{ coverage.color?.hexValue }}</div>
+              <span class="text-end">{{
+                coverage.coveragePercentage | percent : "1.2-2"
+              }}</span>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="content">
+            <h3 class="mt-0">Similar colors:</h3>
+            <p-table
+              [value]="coverage.colorMatches!"
+              responsiveLayout="stack"
+              styleClass="p-datatable-sm p-datatable-striped"
+              selectionMode="single"
+              (onRowSelect)="showHowToMix($event.data)"
+              (onRowUnselect)="showHowToMix($event.data)"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Color name</th>
+                  <th>Code</th>
+                  <th>Match %</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-color>
+                <tr [pSelectableRow]="color.color">
+                  <td>
+                    <span class="p-column-title text-500"> Color name </span>
+                    <div
+                      class="flex gap-3 justify-content-between gn-items-center"
+                    >
+                      <span>{{ color.color.name }}</span>
+                      <p-colorPicker
+                        [ngModel]="color.color.hexValue"
+                        [disabled]="true"
+                      ></p-colorPicker>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="p-column-title text-500"> Code </span>
+                    {{ color.color.hexValue }}
+                  </td>
+                  <td>
+                    <span class="p-column-title text-500">
+                      Match Percentage
+                    </span>
+                    {{ color.matchPercentage | percent : "1.2-2" }}
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-template>
+        </p-accordionTab>
+      </p-accordion>
     </div>
   </div>
 </div>

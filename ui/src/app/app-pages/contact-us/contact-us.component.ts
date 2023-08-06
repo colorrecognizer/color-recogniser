@@ -6,7 +6,6 @@ import { finalize, map } from "rxjs";
 import {
   ApiApi,
   ContactUs,
-  LoginRequest,
 } from "src/app/shared/auto-generated/apis";
 
 @Component({

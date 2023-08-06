@@ -2,3 +2,28 @@
 <p-confirmPopup></p-confirmPopup>
 <p-scrollTop></p-scrollTop>
 <router-outlet></router-outlet>
+
+<p-dialog
+  header="Cookie Consent"
+  [(visible)]="cookieDialogVisible"
+  [style]="{ width: '100vw' }"
+  position="bottom"
+  [modal]="true"
+  [dismissableMask]="true"
+>
+  <p>
+    This website uses cookies to enhance your experience. By continuing to use
+    this site, you consent to our use of cookies. To learn more how we use the
+    cookies, please see our
+    <a [routerLink]="privacyPolicyUrl">privacy policy</a>.
+  </p>
+  <ng-template pTemplate="footer">
+    <div class="text-center">
+      <p-button
+        icon="pi pi-check"
+        (click)="acceptCookies()"
+        label="Accept and close"
+      ></p-button>
+    </div>
+  </ng-template>
+</p-dialog>

@@ -28,6 +28,8 @@
       style="width: 2.5rem; height: 2.5rem"
       href="https://www.tiktok.com/@longhl104"
       target="_blank"
+      pTooltip="My TikTok Channel"
+      tooltipPosition="top"
     >
       <i class="pi custom-icon-tiktok"></i>
     </a>
@@ -36,6 +38,8 @@
       style="width: 2.5rem; height: 2.5rem; color: black"
       href="https://github.com/longhl104"
       target="_blank"
+      pTooltip="My GitHub Profile"
+      tooltipPosition="top"
     >
       <i class="pi pi-github"></i>
     </a>
@@ -44,19 +48,31 @@
       style="width: 2.5rem; height: 2.5rem; color: black"
       href="https://www.youtube.com/channel/UC-F-FbAu6EL_ByF2PmJESmw"
       target="_blank"
+      pTooltip="My YouTube Channel"
+      tooltipPosition="top"
     >
       <i class="pi pi-youtube"></i>
     </a>
   </div>
-  <div class="text-center">
+  <div class="text-center text-sm text-600">
     <!--<a class="text-sm text-600 cursor-pointer">Terms of Service</a> -->
-    <span class="text-sm text-600">
-      <a [routerLink]="privacyPolicyUrl" class="cursor-pointer">Privacy Policy</a>
+    <span>
+      <a [routerLink]="privacyPolicyUrl" class="cursor-pointer"
+        >Privacy Policy</a
+      >
       | ©2023 Color Recognizer | Developed by
       <a href="https://duy-long-nguyen-resume.web.app/" target="_blank">
         Duy Long Nguyen
       </a>
       | All Rights Reserved
+    </span>
+  </div>
+  <div class="text-center text-sm text-600">
+    <span>
+      Powered by
+      <a href="https://primeng.org/" target="_blank">
+        PrimeNG <i class="pi pi-prime"></i>
+      </a>
     </span>
   </div>
 </footer>
