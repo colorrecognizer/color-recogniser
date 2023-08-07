@@ -46,7 +46,6 @@ def recognize():
             merged_data[key] = value
 
     result = [[*key, value] for key, value in merged_data.items()]
-    print(result)
 
     # Return the processed data as the response
     return jsonify(result), 200

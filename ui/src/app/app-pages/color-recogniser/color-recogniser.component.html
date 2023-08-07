@@ -1,7 +1,7 @@
-<div class="grid grid-nogutter">
+<div class="flex flex-column align-items-center">
   <div
     id="banner"
-    class="col-12 surface-card flex justify-content-center relative overflow-hidden mb-3 lg:mb-5 -mt-3 lg:-mt-5 -ml-3 lg:-ml-5"
+    class="surface-card flex justify-content-center relative overflow-hidden mb-3 lg:mb-5 -mt-3 lg:-mt-5 -ml-3 lg:-ml-5"
   >
     <div class="text-center p-3 lg:p-5" style="max-width: 40rem; z-index: 1">
       <h1 class="text-6xl font-bold mb-3">Color Recognizer</h1>
@@ -21,204 +21,201 @@
       <span *ngFor="let e of [].constructor(30)" #bubbles></span>
     </div>
   </div>
-  <div class="col-12 lg:col-6">
-    <div
-      class="surface-card p-3 lg:p-5 shadow-2 border-round-md flex flex-column gap-3"
+  <div
+    class="w-full lg:w-6 surface-card p-3 lg:p-5 shadow-2 border-round-md flex flex-column gap-3"
+  >
+    <p-fileUpload
+      #imageUpload
+      mode="advanced"
+      chooseLabel="Upload image"
+      accept="image/*"
+      [auto]="true"
+      [customUpload]="true"
+      (uploadHandler)="setImage($event.files[0])"
+      (onClear)="removeImage()"
+      (onRemove)="removeImage()"
     >
-      <p-fileUpload
-        #imageUpload
-        mode="advanced"
-        chooseLabel="Upload image"
-        accept="image/*"
-        [auto]="true"
-        [customUpload]="true"
-        (uploadHandler)="setImage($event.files[0])"
-        (onClear)="removeImage()"
-        (onRemove)="removeImage()"
-      >
-        <ng-template pTemplate="toolbar">
-          <div class="text-center">
-            <small>The image won't be uploaded to any server</small>
-          </div>
-        </ng-template>
-        <ng-template pTemplate="content" let-files>
-          <div
-            class="border-dashed border-round-md-xl surface-border flex flex-column align-items-center justify-content-center cursor-pointer"
-            style="height: 30rem"
-            *ngIf="!imageObj"
-            (click)="imageUpload.choose()"
-          >
-            <span> or </span>
-            <span class="text-xl">
-              <i class="pi pi-image"></i> Drop image here
-            </span>
-          </div>
-        </ng-template>
-      </p-fileUpload>
-
-      <div class="grid grid-nogutter">
+      <ng-template pTemplate="toolbar">
+        <div class="text-center">
+          <small>The image won't be uploaded to any server</small>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="content" let-files>
         <div
-          class="col-10 lg:col-12"
-          #canvas
-          id="canvas"
-          (resized)="onCanvasResized()"
-        ></div>
-      </div>
+          class="border-dashed border-round-md-xl surface-border flex flex-column align-items-center justify-content-center cursor-pointer"
+          style="height: 30rem"
+          *ngIf="!imageObj"
+          (click)="imageUpload.choose()"
+        >
+          <span> or </span>
+          <span class="text-xl">
+            <i class="pi pi-image"></i> Drop image here
+          </span>
+        </div>
+      </ng-template>
+    </p-fileUpload>
 
-      <div class="flex flex-wrap align-items-center gap-3 sticky bottom-0">
-        <ng-container *ngIf="imageObj">
-          <p-button
-            icon="pi pi-replay"
-            (onClick)="setToDefault()"
-            pTooltip="Set to default"
-            label="Set to default"
-            tooltipPosition="top"
-            [disabled]="!canModifyImage"
-          ></p-button>
-
-          <p-inputNumber
-            [(ngModel)]="imageZoom"
-            [showButtons]="true"
-            buttonLayout="horizontal"
-            inputId="horizontal"
-            spinnerMode="horizontal"
-            [step]="5"
-            incrementButtonIcon="pi pi-plus"
-            decrementButtonIcon="pi pi-minus"
-            suffix="%"
-            inputStyleClass="w-5rem"
-            [disabled]="!canModifyImage"
-          ></p-inputNumber>
-
-          <p-dropdown
-            [options]="selectionTools"
-            [(ngModel)]="selectedSelectionTool"
-            optionLabel="label"
-            [showClear]="true"
-            placeholder="Selection tool"
-            (onChange)="onSelectionToolChanged()"
-            appendTo="body"
-          >
-            <ng-template pTemplate="selectedItem">
-              <div
-                class="flex align-items-center gap-3"
-                *ngIf="selectedSelectionTool"
-              >
-                <div class="flex gap-3 align-items-center">
-                  <i
-                    *ngIf="selectedSelectionTool.icon"
-                    [ngClass]="selectedSelectionTool.icon"
-                  ></i>
-                  <img
-                    *ngIf="selectedSelectionTool.svgPath"
-                    [src]="selectedSelectionTool.svgPath"
-                    alt="Free drawing icon"
-                    width="16"
-                    height="16"
-                  />
-                </div>
-              </div>
-            </ng-template>
-            <ng-template let-selectedSelectionTool pTemplate="item">
-              <div class="flex align-items-center gap-3">
-                <div class="flex gap-3 align-items-center">
-                  <i
-                    *ngIf="selectedSelectionTool.icon"
-                    [ngClass]="selectedSelectionTool.icon"
-                  ></i>
-                  <img
-                    *ngIf="selectedSelectionTool.svgPath"
-                    [src]="selectedSelectionTool.svgPath"
-                    alt="Free drawing icon"
-                    width="16"
-                    height="16"
-                  />
-                  <span>{{ selectedSelectionTool.label }}</span>
-                </div>
-              </div>
-            </ng-template>
-          </p-dropdown>
-        </ng-container>
-      </div>
-
-      <div>
-        <app-recognise-button
-          *ngIf="isValidSelection"
-          (clicked)="recognise()"
-          [disabled]="recogniseButtonDisabled"
-        ></app-recognise-button>
-      </div>
-
-      <!-- <canvas id="uploadedCanvas"></canvas> -->
+    <div class="grid grid-nogutter">
+      <div
+        class="col-10 lg:col-12"
+        #canvas
+        id="canvas"
+        (resized)="onCanvasResized()"
+      ></div>
     </div>
-  </div>
-  <div class="col-12 lg:col-6 pl-0 pt-2 lg:pl-5 lg:pt-0">
-    <div
-      class="surface-card p-3 lg:p-5 shadow-2 border-round-md flex flex-column gap-3"
-      #matchColorTable
-      *ngIf="colorCoverages.length"
-    >
-      <p-accordion class="w-full">
-        <p-accordionTab *ngFor="let coverage of colorCoverages">
-          <ng-template pTemplate="header">
-            <div class="flex align-items-center gap-3 w-full">
-              <p-colorPicker
-                [ngModel]="coverage.color?.hexValue"
-                [disabled]="true"
-              ></p-colorPicker>
-              <div class="flex-grow-1">{{ coverage.color?.hexValue }}</div>
-              <span class="text-end">{{
-                coverage.coveragePercentage | percent : "1.2-2"
-              }}</span>
+
+    <div class="flex flex-wrap align-items-center gap-3 sticky bottom-0">
+      <ng-container *ngIf="imageObj">
+        <p-button
+          icon="pi pi-replay"
+          (onClick)="setToDefault()"
+          pTooltip="Set to default"
+          label="Set to default"
+          tooltipPosition="top"
+          [disabled]="!canModifyImage"
+        ></p-button>
+
+        <p-inputNumber
+          [(ngModel)]="imageZoom"
+          [showButtons]="true"
+          buttonLayout="horizontal"
+          inputId="horizontal"
+          spinnerMode="horizontal"
+          [step]="5"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus"
+          suffix="%"
+          inputStyleClass="w-5rem"
+          [disabled]="!canModifyImage"
+        ></p-inputNumber>
+
+        <p-dropdown
+          [options]="selectionTools"
+          [(ngModel)]="selectedSelectionTool"
+          optionLabel="label"
+          [showClear]="true"
+          placeholder="Selection tool"
+          (onChange)="onSelectionToolChanged()"
+          appendTo="body"
+        >
+          <ng-template pTemplate="selectedItem">
+            <div
+              class="flex align-items-center gap-3"
+              *ngIf="selectedSelectionTool"
+            >
+              <div class="flex gap-3 align-items-center">
+                <i
+                  *ngIf="selectedSelectionTool.icon"
+                  [ngClass]="selectedSelectionTool.icon"
+                ></i>
+                <img
+                  *ngIf="selectedSelectionTool.svgPath"
+                  [src]="selectedSelectionTool.svgPath"
+                  alt="Free drawing icon"
+                  width="16"
+                  height="16"
+                />
+              </div>
             </div>
           </ng-template>
-          <ng-template pTemplate="content">
-            <h3 class="mt-0">Similar colors:</h3>
-            <p-table
-              [value]="coverage.colorMatches!"
-              responsiveLayout="stack"
-              styleClass="p-datatable-sm p-datatable-striped"
-              selectionMode="single"
-              (onRowSelect)="showHowToMix($event.data)"
-              (onRowUnselect)="showHowToMix($event.data)"
-            >
-              <ng-template pTemplate="header">
-                <tr>
-                  <th>Color name</th>
-                  <th>Code</th>
-                  <th>Match %</th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-color>
-                <tr [pSelectableRow]="color.color">
-                  <td>
-                    <span class="p-column-title text-500"> Color name </span>
-                    <div
-                      class="flex gap-3 justify-content-between gn-items-center"
-                    >
-                      <span>{{ color.color.name }}</span>
-                      <p-colorPicker
-                        [ngModel]="color.color.hexValue"
-                        [disabled]="true"
-                      ></p-colorPicker>
-                    </div>
-                  </td>
-                  <td>
-                    <span class="p-column-title text-500"> Code </span>
-                    {{ color.color.hexValue }}
-                  </td>
-                  <td>
-                    <span class="p-column-title text-500">
-                      Match Percentage
-                    </span>
-                    {{ color.matchPercentage | percent : "1.2-2" }}
-                  </td>
-                </tr>
-              </ng-template>
-            </p-table>
+          <ng-template let-selectedSelectionTool pTemplate="item">
+            <div class="flex align-items-center gap-3">
+              <div class="flex gap-3 align-items-center">
+                <i
+                  *ngIf="selectedSelectionTool.icon"
+                  [ngClass]="selectedSelectionTool.icon"
+                ></i>
+                <img
+                  *ngIf="selectedSelectionTool.svgPath"
+                  [src]="selectedSelectionTool.svgPath"
+                  alt="Free drawing icon"
+                  width="16"
+                  height="16"
+                />
+                <span>{{ selectedSelectionTool.label }}</span>
+              </div>
+            </div>
           </ng-template>
-        </p-accordionTab>
-      </p-accordion>
+        </p-dropdown>
+      </ng-container>
     </div>
+
+    <div>
+      <app-recognise-button
+        *ngIf="isValidSelection"
+        (clicked)="recognise()"
+        [disabled]="recogniseButtonDisabled"
+      ></app-recognise-button>
+    </div>
+
+    <!-- <canvas id="uploadedCanvas"></canvas> -->
+  </div>
+
+  <div
+    class="w-full lg:w-6 surface-card mt-3 lg:mt-5 p-3 lg:p-5 shadow-2 border-round-md flex flex-column gap-3 lg:sticky top-0"
+    #matchColorTable
+    *ngIf="colorCoverages.length"
+  >
+    <p-accordion class="w-full">
+      <p-accordionTab *ngFor="let coverage of colorCoverages">
+        <ng-template pTemplate="header">
+          <div class="flex align-items-center gap-3 w-full">
+            <p-colorPicker
+              [ngModel]="coverage.color?.hexValue"
+              [disabled]="true"
+            ></p-colorPicker>
+            <div class="flex-grow-1">{{ coverage.color?.hexValue }}</div>
+            <span class="text-end">{{
+              coverage.coveragePercentage | percent : "1.2-2"
+            }}</span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="content">
+          <h3 class="mt-0">Similar colors:</h3>
+          <p-table
+            [value]="coverage.colorMatches!"
+            responsiveLayout="stack"
+            styleClass="p-datatable-sm p-datatable-striped"
+            selectionMode="single"
+            (onRowSelect)="showHowToMix($event.data)"
+            (onRowUnselect)="showHowToMix($event.data)"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Color name</th>
+                <th>Code</th>
+                <th>Match %</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-color>
+              <tr [pSelectableRow]="color.color">
+                <td>
+                  <span class="p-column-title text-500"> Color name </span>
+                  <div
+                    class="flex gap-3 justify-content-between align-items-center"
+                  >
+                    <span>{{ color.color.name }}</span>
+                    <p-colorPicker
+                      [ngModel]="color.color.hexValue"
+                      [disabled]="true"
+                    ></p-colorPicker>
+                  </div>
+                </td>
+                <td>
+                  <span class="p-column-title text-500"> Code </span>
+                  {{ color.color.hexValue }}
+                </td>
+                <td>
+                  <span class="p-column-title text-500">
+                    Match Percentage
+                  </span>
+                  {{ color.matchPercentage | percent : "1.2-2" }}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </ng-template>
+      </p-accordionTab>
+    </p-accordion>
   </div>
 </div>
