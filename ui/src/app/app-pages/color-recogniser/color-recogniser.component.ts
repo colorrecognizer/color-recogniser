@@ -642,7 +642,23 @@ export class ColorRecognizerComponent implements OnInit, AfterViewInit {
   }
 
   recognise() {
-    if (!this.selectedSelectionTool) return;
+    if (!this.imageObj) {
+      this.$message.add({
+        severity: "warn",
+        summary: "Action needed",
+        detail: "Upload an image.",
+      });
+      return;
+    }
+
+    if (!this.selectedSelectionTool) {
+      this.$message.add({
+        severity: "warn",
+        summary: "Action needed",
+        detail: "Select the area to RECOGNIZE color.",
+      });
+      return;
+    }
 
     this.colorCoverages.length = 0;
     this.recogniseButtonDisabled = true;

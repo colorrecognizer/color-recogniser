@@ -13,7 +13,7 @@ import { PrimeNGConfig } from "primeng/api";
 import { Title } from "@angular/platform-browser";
 import { RouteEnum } from "./shared/utils";
 import { LocalforageService } from "./shared/services/localforage.service";
-import { Subject, map } from "rxjs";
+import { map } from "rxjs";
 import { DOCUMENT } from "@angular/common";
 
 const CookieConsentAcceptedDate = "CookieConsentAcceptedDate";
