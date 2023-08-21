@@ -651,7 +651,14 @@ export class ColorRecognizerComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    if (!this.selectedSelectionTool) {
+    if (
+      !this.selectedSelectionTool ||
+      ((this.selectedSelectionTool.type === "RECTANGLE" ||
+        this.selectedSelectionTool.type === "ELLIPSE") &&
+        (!this.selection.width() || !this.selection.height())) ||
+      (this.selectedSelectionTool.type === "FREE" &&
+        !this.selection.points().length)
+    ) {
       this.$message.add({
         severity: "warn",
         summary: "Action needed",
@@ -660,6 +667,7 @@ export class ColorRecognizerComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    console.log(this.selection);
     this.colorCoverages.length = 0;
     this.recogniseButtonDisabled = true;
 
