@@ -1,9 +1,20 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
-import { ConfirmationService, PrimeNGConfig } from "primeng/api";
-import { Meta, Title } from "@angular/platform-browser";
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Inject,
+  NgZone,
+  OnInit,
+  QueryList,
+  ViewChildren,
+  ViewEncapsulation,
+} from "@angular/core";
+import { PrimeNGConfig } from "primeng/api";
+import { Title } from "@angular/platform-browser";
 import { RouteEnum } from "./shared/utils";
 import { LocalforageService } from "./shared/services/localforage.service";
-import { map } from "rxjs";
+import { Subject, map } from "rxjs";
+import { DOCUMENT } from "@angular/common";
 
 const CookieConsentAcceptedDate = "CookieConsentAcceptedDate";
 
@@ -17,20 +28,18 @@ export class AppComponent implements OnInit {
   title = "color-recogniser";
   cookieDialogVisible = false;
   privacyPolicyUrl = RouteEnum.PrivacyPolicy;
+  @ViewChildren("cursor1,cursor2,cursor3,cursor4,cursor5")
+  cursorDivs!: QueryList<ElementRef<HTMLDivElement>>;
 
   constructor(
     private $primengConfig: PrimeNGConfig,
     $title: Title,
-    private $localForage: LocalforageService
+    private $localForage: LocalforageService,
+    @Inject(DOCUMENT) private $document: Document,
+    private $zone: NgZone
   ) {
     this.$primengConfig.ripple = true;
     $title.setTitle("Color Recognizer");
-    // $meta.addTags([
-    //   {
-    //     name: "og:image",
-    //     content: "https://colorrecognizer.io/assets/images/logo.png",
-    //   },
-    // ]);
   }
 
   ngOnInit(): void {
@@ -56,5 +65,12 @@ export class AppComponent implements OnInit {
     this.$localForage
       .setItem(CookieConsentAcceptedDate, new Date())
       .subscribe();
+  }
+
+  @HostListener("document:mousemove", ["$event"])
+  onMouseMove(e: MouseEvent) {
+    // animate background
+    this.$document.body.style.backgroundPositionX = e.pageX / -4 + "px";
+    this.$document.body.style.backgroundPositionY = e.pageY / -4 + "px";
   }
 }

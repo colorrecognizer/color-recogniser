@@ -8,6 +8,13 @@ html {
 body {
   font-family: var(--font-family);
   background-color: var(--surface-ground);
+  background-image: linear-gradient(
+      to right,
+      var(--surface-card) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, var(--surface-card) 1px, transparent 1px);
+  background-size: 5rem 5rem;
   color: var(--text-color);
   padding: 0;
   margin: 0;
@@ -54,21 +61,21 @@ p-dynamicdialog .p-dialog {
 }
 
 .custom-icon-tiktok {
-    display:block;
-    background:black;
-    color:white;
-    text-decoration:none;
+  display: block;
+  background: black;
+  color: white;
+  text-decoration: none;
 
-    &:before {
-        content: "";
-        background: url("assets/svgs/logo-tiktok.svg");
-        background-size: cover;
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        margin-left: -10px;
-        margin-top: -10px;
-    }
+  &:before {
+    content: "";
+    background: url("assets/svgs/logo-tiktok.svg");
+    background-size: cover;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    margin-left: -10px;
+    margin-top: -10px;
+  }
 }
 
 textarea {

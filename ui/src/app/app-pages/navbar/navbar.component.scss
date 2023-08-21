@@ -1,0 +1,9 @@
+@import "primeflex/primeflex.scss";
+
+#container {
+  background-color: var(--surface-overlay) !important;
+
+  @media (min-width: #{$lg}) {
+    background-color: transparent !important;
+  }
+}

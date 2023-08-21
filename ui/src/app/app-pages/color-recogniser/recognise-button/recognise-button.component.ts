@@ -15,8 +15,9 @@ import anime from "animejs";
   styleUrls: ["./recognise-button.component.scss"],
 })
 export class RecogniseButtonComponent implements AfterViewInit {
-  @ViewChild("logo") logo!: ElementRef<HTMLImageElement>;
+  @ViewChild("logo", { static: true }) logo!: ElementRef<HTMLImageElement>;
   @Output() clicked = new EventEmitter();
+  @ViewChild("button", { static: true }) button!: ElementRef<HTMLButtonElement>;
 
   _disabled = false;
   @Input() set disabled(value: boolean) {
@@ -67,5 +68,12 @@ export class RecogniseButtonComponent implements AfterViewInit {
 
   click() {
     this.clicked.emit();
+  }
+
+  onMouseMove(event: MouseEvent) {
+    const mx = event.pageX - this.button.nativeElement.offsetLeft;
+    const my = event.pageY - this.button.nativeElement.offsetTop;
+    this.button.nativeElement.style.setProperty("--x", mx + "px");
+    this.button.nativeElement.style.setProperty("--y", my + "px");
   }
 }

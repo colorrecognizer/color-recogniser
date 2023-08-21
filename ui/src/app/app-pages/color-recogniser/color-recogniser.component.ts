@@ -9,7 +9,11 @@ import {
 } from "@angular/core";
 import { ThemeService } from "src/app/shared/services/theme.service";
 import { SelectionTool } from "./selection-tool";
-import { Color, ColorCoverage, ColorMatch, RecogniserResponse } from "src/app/shared/auto-generated/apis";
+import {
+  Color,
+  ColorCoverage,
+  RecogniserResponse,
+} from "src/app/shared/auto-generated/apis";
 import { finalize, map } from "rxjs";
 import { MessageService } from "primeng/api";
 import { HttpClient } from "@angular/common/http";
@@ -619,20 +623,22 @@ export class ColorRecognizerComponent implements OnInit, AfterViewInit {
   }
 
   get isValidSelection(): boolean {
-    if (!this.selectedSelectionTool) return false;
-
-    if (
-      this.selectedSelectionTool.type === "RECTANGLE" ||
-      this.selectedSelectionTool.type === "ELLIPSE"
-    ) {
-      if (!this.selection.width() || !this.selection.height()) return false;
-    }
-
-    if (this.selectedSelectionTool.type === "FREE") {
-      if (!this.selection.points().length) return false;
-    }
-
     return true;
+
+    // if (!this.selectedSelectionTool) return false;
+
+    // if (
+    //   this.selectedSelectionTool.type === "RECTANGLE" ||
+    //   this.selectedSelectionTool.type === "ELLIPSE"
+    // ) {
+    //   if (!this.selection.width() || !this.selection.height()) return false;
+    // }
+
+    // if (this.selectedSelectionTool.type === "FREE") {
+    //   if (!this.selection.points().length) return false;
+    // }
+
+    // return true;
   }
 
   recognise() {
@@ -749,7 +755,9 @@ export class ColorRecognizerComponent implements OnInit, AfterViewInit {
         .pipe(
           map((res) => {
             this.colorCoverages = res.colorCoverages || [];
-            this.colorCoverages = this.colorCoverages.sort((a, b) => b.coveragePercentage! - a.coveragePercentage!);
+            this.colorCoverages = this.colorCoverages.sort(
+              (a, b) => b.coveragePercentage! - a.coveragePercentage!
+            );
 
             setTimeout(() => {
               this.matchColorTable.nativeElement.scrollIntoView({

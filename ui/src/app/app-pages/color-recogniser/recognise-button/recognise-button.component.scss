@@ -1,0 +1,26 @@
+button {
+  position: relative;
+  border-radius: 2rem;
+  letter-spacing: 0.1em;
+  transition: transform 0.1s;
+
+  strong {
+    position: relative;
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background: var(--blue-100);
+    transform: 1s;
+    border-radius: 50%;
+    left: var(--x);
+    top: var(--y);
+    transition: 1s, left 0s, top 0s;
+  }
+
+  &:hover::before {
+    width: 25vw;
+    height: 25vw;
+  }
+}

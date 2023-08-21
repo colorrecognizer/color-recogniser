@@ -1,3 +1,54 @@
 #cookieDialog div.p-dialog-footer {
   text-align: center !important;
 }
+// @import "primeflex/primeflex.scss";
+
+// @media (min-width: #{$lg}) {
+//   .trailing-pointer {
+//     position: absolute;
+//     width: 25px;
+//     height: 25px;
+//     border: 5px solid #0f0;
+//     border-radius: 50%;
+//     transform-origin: top;
+//     transform: translate(-50%, -50%) scale(0);
+//     pointer-events: none;
+//     animation: cursorAnimate 5s linear infinite;
+//     z-index: 2104;
+
+//     &.pointer-1 {
+//       transition: 0.05s;
+//     }
+
+//     &.pointer-2 {
+//       transition: 0.1s;
+//     }
+
+//     &.pointer-3 {
+//       transition: 0.15s;
+//     }
+
+//     &.pointer-4 {
+//       transition: 0.2s;
+//     }
+
+//     &.pointer-5 {
+//       transition: 0.25s;
+//     }
+//   }
+
+//   @keyframes cursorAnimate {
+//     0% {
+//       filter: drop-shadow(0 0 5px #0f0) drop-shadow(0 0 15px #0f0)
+//         drop-shadow(0 0 30px #0f0) hue-rotate(0deg);
+//     }
+//     100% {
+//       filter: drop-shadow(0 0 5px #0f0) drop-shadow(0 0 15px #0f0)
+//         drop-shadow(0 0 30px #0f0) hue-rotate(360deg);
+//     }
+//   }
+
+//   body:hover .trailing-pointer {
+//     transform: translate(-50%, -50%) scale(1);
+//   }
+// }

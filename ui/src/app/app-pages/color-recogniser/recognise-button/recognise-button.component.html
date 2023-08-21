@@ -1,11 +1,12 @@
 <button
-  pButton
+  #button
+  (mousemove)="onMouseMove($event)"
   class="p-button p-button-outlined justify-content-center gap-3 w-full"
   (click)="click()"
-  pTooltip="Recognise color in selection"
+  pTooltip="Recognize color in selection"
   tooltipPosition="top"
   [disabled]="disabled"
 >
   <img #logo src="assets/images/logo.png" alt="Logo" height="40" />
-  Recognise color
+  <strong> Recognize color </strong>
 </button>
