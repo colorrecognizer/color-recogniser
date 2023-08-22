@@ -10,11 +10,11 @@ body {
   background-color: var(--surface-ground);
   background-image: linear-gradient(
       to right,
-      var(--surface-card) 1px,
-      transparent 1px
+      var(--surface-card) 2px,
+      transparent 2px
     ),
-    linear-gradient(to bottom, var(--surface-card) 1px, transparent 1px);
-  background-size: 5rem 5rem;
+    linear-gradient(to bottom, var(--surface-card) 2px, transparent 2px);
+  background-size: 3rem 3rem;
   color: var(--text-color);
   padding: 0;
   margin: 0;
