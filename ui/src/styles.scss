@@ -10,10 +10,14 @@ body {
   background-color: var(--surface-ground);
   background-image: linear-gradient(
       to right,
-      var(--surface-card) 2px,
+      var(--background-line-color) 2px,
       transparent 2px
     ),
-    linear-gradient(to bottom, var(--surface-card) 2px, transparent 2px);
+    linear-gradient(
+      to bottom,
+      var(--background-line-color) 2px,
+      transparent 2px
+    );
   background-size: 3rem 3rem;
   color: var(--text-color);
   padding: 0;
@@ -22,6 +26,13 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/*
+background-color:  var(--surface-ground);
+opacity: 0.8;
+background-image: radial-gradient(circle at center center, var(--background-line-color),  var(--surface-ground)), repeating-radial-gradient(circle at center center, var(--background-line-color), var(--background-line-color), 10px, transparent 20px, transparent 10px);
+background-blend-mode: multiply;
+*/
 
 a {
   text-decoration: none;

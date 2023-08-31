@@ -22,9 +22,11 @@ def recognize():
     if not data or not isinstance(data, list):
         return jsonify({'error': 'Invalid input format. Expected an array of objects.'}), 400
 
+    n_clusters = int(request.args.get("num-colors"))
+
     # Process the input data (optional)
     sample = np.array([[color["red"], color["green"], color["blue"]] for color in data])
-    kmeans = KMeans(n_clusters=5, random_state=0).fit(sample)
+    kmeans = KMeans(n_clusters=n_clusters, random_state=0).fit(sample)
     centroid=kmeans.cluster_centers_
     labels=list(kmeans.labels_)
     percent=[]

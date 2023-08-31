@@ -6,6 +6,7 @@ import { FormlyFormOptions, FormlyFieldConfig } from "@ngx-formly/core";
 import { Subscription } from "rxjs";
 import { Color } from "src/app/shared/auto-generated/apis";
 import { ColorPickerTypeComponent } from "src/app/shared/components/formly-form/color-picker-type/color-picker-type.component";
+import { BackgroundChangeService } from "src/app/shared/services/background-change.service";
 import { ColorUtils } from "src/app/shared/utils";
 
 @Component({
@@ -45,7 +46,12 @@ export class ColorPalettesComponent implements OnDestroy {
   private routeSub: Subscription;
 
   /// Methods
-  constructor($title: Title, $route: ActivatedRoute, $meta: Meta) {
+  constructor(
+    $title: Title,
+    $route: ActivatedRoute,
+    $meta: Meta,
+    private $backgroundChange: BackgroundChangeService
+  ) {
     $title.setTitle("Color Palettes");
     $meta.addTags([
       {
@@ -56,7 +62,10 @@ export class ColorPalettesComponent implements OnDestroy {
     ]);
 
     this.routeSub = $route.params.subscribe((params) => {
-      if (!params["hex"]) return;
+      if (!params["hex"]) {
+        this.submit();
+        return;
+      }
 
       const color = ColorUtils.toColor(params["hex"]);
       this.model.color = {
@@ -71,6 +80,7 @@ export class ColorPalettesComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.routeSub.unsubscribe();
+    this.$backgroundChange.clear();
   }
 
   submit() {
@@ -79,5 +89,7 @@ export class ColorPalettesComponent implements OnDestroy {
       green: this.model.color.g,
       blue: this.model.color.b,
     });
+
+    this.$backgroundChange.setColor(this.color);
   }
 }

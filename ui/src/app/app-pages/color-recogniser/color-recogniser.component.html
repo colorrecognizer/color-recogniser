@@ -64,8 +64,8 @@
       ></div>
     </div>
 
-    <div class="flex flex-wrap align-items-center gap-3 sticky bottom-0">
-      <ng-container *ngIf="imageObj">
+    <ng-container *ngIf="imageObj">
+      <div class="flex flex-wrap align-items-center gap-3 sticky bottom-0">
         <p-button
           icon="pi pi-replay"
           (onClick)="setToDefault()"
@@ -137,8 +137,24 @@
             </div>
           </ng-template>
         </p-dropdown>
-      </ng-container>
-    </div>
+      </div>
+      <div class="flex justify-content-center align-items-center gap-3">
+        <label for="integeronly">Number of colors you want to recognize </label>
+        <p-inputNumber
+          [(ngModel)]="numColors"
+          [showButtons]="true"
+          buttonLayout="horizontal"
+          inputId="horizontal"
+          spinnerMode="horizontal"
+          [min]="1"
+          [max]="10"
+          [step]="1"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus"
+          inputStyleClass="w-3rem"
+        ></p-inputNumber>
+      </div>
+    </ng-container>
 
     <div>
       <app-recognise-button

@@ -117,7 +117,7 @@ public class ApiController {
 
             var mapper = new ObjectMapper();
             String jsonInput = mapper.writeValueAsString(colors);
-            String apiUrl = "http://localhost:5000/color/recognize"; // Replace with your actual API URL
+            String apiUrl = String.format("http://localhost:5000/color/recognize?num-colors=%d", recogniserRequest.numColors); // Replace with your actual API URL
             String jsonOutput = HttpUtils.post(apiUrl, jsonInput);
             List<Color> allColors = this.colorService.getAll();
             RecogniserResponse response = RecogniserResponse.builder()
@@ -126,14 +126,14 @@ public class ApiController {
 
             double[][] colorCoverages = mapper.readValue(jsonOutput, double[][].class);
 
-            for (int i = 0; i < colorCoverages.length; ++i) {
+            for (double[] coverage : colorCoverages) {
                 ColorCoverage colorCoverage = ColorCoverage.builder()
                         .color(Color.builder()
-                                .red((short) colorCoverages[i][0])
-                                .green((short) colorCoverages[i][1])
-                                .blue((short) colorCoverages[i][2])
+                                .red((short) coverage[0])
+                                .green((short) coverage[1])
+                                .blue((short) coverage[2])
                                 .build())
-                        .coveragePercentage(colorCoverages[i][3])
+                        .coveragePercentage(coverage[3])
                         .build();
 
                 double total = Math.sqrt(Math.pow(Math.max(colorCoverage.color.getRed(), 255 - colorCoverage.color.getRed()), 2)
@@ -141,7 +141,7 @@ public class ApiController {
                         + Math.pow(Math.max(colorCoverage.color.getBlue(), 255 - colorCoverage.color.getBlue()), 2)
                 );
 
-                colorCoverage.setColorMatches(new java.util.ArrayList<>(allColors.stream()
+                colorCoverage.setColorMatches(new ArrayList<>(allColors.stream()
                         .sorted((color1, color2) -> getDistance(colorCoverage.color, color1) - getDistance(colorCoverage.color, color2))
                         .limit(3)
                         .map(c -> ColorMatch.builder()
@@ -174,7 +174,7 @@ public class ApiController {
         private double minY;
         private double maxY;
 
-        private int kValue;
+        private int numColors;
 
         /**
          * Points for polygon. Assume that the polygon is not self-intersecting

@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   QueryList,
   ViewChild,
@@ -14,7 +15,7 @@ import {
   ColorCoverage,
   RecogniserResponse,
 } from "src/app/shared/auto-generated/apis";
-import { finalize, map } from "rxjs";
+import { catchError, finalize, map } from "rxjs";
 import { MessageService } from "primeng/api";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
@@ -22,6 +23,8 @@ import { DialogService } from "primeng/dynamicdialog";
 import { FileUpload } from "primeng/fileupload";
 import { Meta, Title } from "@angular/platform-browser";
 import { HowToMixComponent } from "src/app/shared/components/how-to-mix/how-to-mix.component";
+import { BackgroundChangeService } from "src/app/shared/services/background-change.service";
+import { ColorUtils } from "src/app/shared/utils";
 
 declare let Konva: any;
 declare let Mousetrap: any;
@@ -46,7 +49,9 @@ function getDistance(p1: { x: any; y: any }, p2: { x: any; y: any }) {
   templateUrl: "./color-recogniser.component.html",
   styleUrls: ["./color-recogniser.component.scss"],
 })
-export class ColorRecognizerComponent implements OnInit, AfterViewInit {
+export class ColorRecognizerComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   stage: any;
   layer: any;
   imageObj: any;
@@ -99,6 +104,7 @@ export class ColorRecognizerComponent implements OnInit, AfterViewInit {
   selectedColor?: Color;
   @ViewChild("imageUpload") imageUpload!: FileUpload;
   @ViewChildren("bubbles") bubbles!: QueryList<ElementRef<HTMLSpanElement>>;
+  numColors = 5;
 
   get imageZoom(): number {
     if (!this.konvaImage) return 1;
@@ -152,7 +158,8 @@ export class ColorRecognizerComponent implements OnInit, AfterViewInit {
     private $http: HttpClient,
     private $dialog: DialogService,
     private $title: Title,
-    $meta: Meta
+    $meta: Meta,
+    private $backgroundChange: BackgroundChangeService
   ) {
     this.$title.setTitle("Color Recognizer");
 
@@ -176,6 +183,10 @@ export class ColorRecognizerComponent implements OnInit, AfterViewInit {
           "Discover a world of vibrant colors with Color Recognizer. Our easy-to-use tool helps you recognize and explore colors in photos, making it perfect for kids, art teachers, artists, photographers, and designers. Unleash your creativity and unlock the palette of possibilities with our accurate color recognition tool.",
       },
     ]);
+  }
+
+  ngOnDestroy(): void {
+    this.$backgroundChange.clear();
   }
 
   ngOnInit(): void {
@@ -763,7 +774,7 @@ export class ColorRecognizerComponent implements OnInit, AfterViewInit {
                   };
                 })
               : [],
-          kvalue: 5,
+          numColors: this.numColors,
         })
       );
 
@@ -783,11 +794,18 @@ export class ColorRecognizerComponent implements OnInit, AfterViewInit {
               (a, b) => b.coveragePercentage! - a.coveragePercentage!
             );
 
+            if (this.colorCoverages[0]?.color) {
+              this.$backgroundChange.setColor(this.colorCoverages[0].color);
+            }
+
             setTimeout(() => {
               this.matchColorTable.nativeElement.scrollIntoView({
                 behavior: "smooth",
               });
             }, 100);
+          }),
+          catchError((e: Error) => {
+            throw e;
           }),
           finalize(() => {
             this.recogniseButtonDisabled = false;
