@@ -7,18 +7,22 @@ html {
 
 body {
   font-family: var(--font-family);
-  background-color: var(--surface-ground);
-  background-image: linear-gradient(
-      to right,
-      var(--background-line-color) 2px,
-      transparent 2px
+
+  background: linear-gradient(
+      45deg,
+      transparent 49%,
+      var(--background-line-color) 49% 51%,
+      transparent 51%
     ),
     linear-gradient(
-      to bottom,
-      var(--background-line-color) 2px,
-      transparent 2px
+      -45deg,
+      transparent 49%,
+      var(--background-line-color) 49% 51%,
+      transparent 51%
     );
-  background-size: 3rem 3rem;
+  background-size: 5em 5em;
+  background-color: var(--surface-200);
+
   color: var(--text-color);
   padding: 0;
   margin: 0;
@@ -26,13 +30,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-/*
-background-color:  var(--surface-ground);
-opacity: 0.8;
-background-image: radial-gradient(circle at center center, var(--background-line-color),  var(--surface-ground)), repeating-radial-gradient(circle at center center, var(--background-line-color), var(--background-line-color), 10px, transparent 20px, transparent 10px);
-background-blend-mode: multiply;
-*/
 
 a {
   text-decoration: none;

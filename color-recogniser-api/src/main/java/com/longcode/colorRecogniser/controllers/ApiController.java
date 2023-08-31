@@ -213,7 +213,7 @@ public class ApiController {
     }
 
     @PostMapping("/generate-tfn")
-    public ResponseEntity<String[]> generateTFN(@RequestBody String[] selectedDigits) {
+    public ResponseEntity<String[]> generateTFN(@RequestBody String[] selectedDigits, @RequestParam boolean startedWithZero) {
         int len;
         if (selectedDigits.length == 2) {
             len = RandomUtils.randIntRange(8, 9);
@@ -223,7 +223,7 @@ public class ApiController {
 
         String tfn;
         do {
-            tfn = randomizeBaseTFN(len);
+            tfn = randomizeBaseTFN(len, startedWithZero);
         } while (!validateTFN(tfn));
 
         return ResponseEntity.ok(new String[]{tfn});
@@ -251,7 +251,7 @@ public class ApiController {
         return checksum % 11 == 0;
     }
 
-    private String randomizeBaseTFN(int len) {
+    private String randomizeBaseTFN(int len, boolean startedWithZero) {
         String numericString = "0123456789";
         // create StringBuffer size of AlphaNumericString
         StringBuilder sb = new StringBuilder(len);
@@ -259,9 +259,14 @@ public class ApiController {
         for (int i = 0; i < len; i++) {
             // generate a random number between
             // 0 to AlphaNumericString variable length
-            int index
-                    = (int) (numericString.length()
-                    * Math.random());
+            int index;
+            if (i == 0) {
+                if (startedWithZero)
+                    index = 0;
+                else index = (int) ((Math.random() * (numericString.length() - 1)) + 1);
+            } else {
+                index = (int) (numericString.length() * Math.random());
+            }
 
             // add Character one by one in end of sb
             sb.append(numericString

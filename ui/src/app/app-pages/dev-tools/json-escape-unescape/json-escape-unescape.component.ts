@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { BackgroundChangeService } from "src/app/shared/services/background-change.service";
 
 @Component({
   selector: "app-json-escape-unescape",
@@ -10,7 +11,7 @@ export class JsonEscapeUnescapeComponent {
   destString = "";
   buttonsDisabled = false;
 
-  constructor() {}
+  constructor(private $backgroundChange: BackgroundChangeService) {}
 
   escape() {
     let output = "";
@@ -36,6 +37,7 @@ export class JsonEscapeUnescapeComponent {
     }
 
     this.destString = output;
+    this.$backgroundChange.randomize();
   }
 
   unescape() {
@@ -88,12 +90,14 @@ export class JsonEscapeUnescapeComponent {
     }
 
     this.destString = builder;
+    this.$backgroundChange.randomize();
   }
 
   beautify() {
     try {
       const obj = JSON.parse(this.srcString);
       this.destString = JSON.stringify(obj, null, 2);
+      this.$backgroundChange.randomize();
     } catch {
       throw Error("Invalid JSON format!");
     }

@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { MessageService } from "primeng/api";
 import { finalize } from "rxjs";
 import { ApiApi } from "src/app/shared/auto-generated/apis";
+import { BackgroundChangeService } from "src/app/shared/services/background-change.service";
 
 @Component({
   selector: "app-tfn-generator",
@@ -12,9 +13,14 @@ export class TfnGeneratorComponent {
   selectedDigits = ["9"];
   tfns: string[] = [];
   generateButtonDisabled = false;
+  startedWithZero = false;
 
   // Methods
-  constructor(private $api: ApiApi, private $message: MessageService) {
+  constructor(
+    private $api: ApiApi,
+    private $message: MessageService,
+    private $backgroundChange: BackgroundChangeService
+  ) {
     // $title.setTitle("TFN Generator");
   }
 
@@ -32,7 +38,7 @@ export class TfnGeneratorComponent {
   generate() {
     this.generateButtonDisabled = true;
     this.$api
-      .generateTfn(this.selectedDigits)
+      .generateTfn(this.startedWithZero, this.selectedDigits)
       .pipe(
         finalize(() => {
           this.generateButtonDisabled = false;
@@ -41,6 +47,7 @@ export class TfnGeneratorComponent {
       .subscribe((tfns) => {
         const tfn = tfns[0];
         this.tfns.unshift(tfn);
+        this.$backgroundChange.randomize();
       });
   }
 

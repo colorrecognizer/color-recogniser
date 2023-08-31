@@ -27,6 +27,15 @@
       ></p-checkbox>
       <label for="9-digit"> 9 digits </label>
     </div>
+
+    <div class="flex align-items-center gap-1">
+      <p-checkbox
+        [binary]="true"
+        [(ngModel)]="startedWithZero"
+        inputId="started-with-zero"
+      ></p-checkbox>
+      <label for="started-with-zero"> Starts with 0 </label>
+    </div>
   </div>
 
   <div class="flex flex-wrap gap-3">

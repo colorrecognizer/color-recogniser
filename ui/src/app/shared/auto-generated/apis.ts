@@ -1261,8 +1261,12 @@ export class ApiApi {
     /**
      * @return OK
      */
-    generateTfn(body: string[]): Observable<string[]> {
-        let url_ = this.baseUrl + "/api/generate-tfn";
+    generateTfn(startedWithZero: boolean, body: string[]): Observable<string[]> {
+        let url_ = this.baseUrl + "/api/generate-tfn?";
+        if (startedWithZero === undefined || startedWithZero === null)
+            throw new Error("The parameter 'startedWithZero' must be defined and cannot be null.");
+        else
+            url_ += "startedWithZero=" + encodeURIComponent("" + startedWithZero) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -1550,11 +1554,11 @@ export class User implements IUser {
     userStatus?: UserStatus;
     enabled?: boolean;
     authorities?: GrantedAuthority[];
-    credentialsNonExpired?: boolean;
     accountNonExpired?: boolean;
-    admin?: boolean;
-    user?: boolean;
+    credentialsNonExpired?: boolean;
     accountNonLocked?: boolean;
+    user?: boolean;
+    admin?: boolean;
 
     [key: string]: any;
 
@@ -1588,11 +1592,11 @@ export class User implements IUser {
                 for (let item of _data["authorities"])
                     this.authorities!.push(GrantedAuthority.fromJS(item));
             }
-            this.credentialsNonExpired = _data["credentialsNonExpired"];
             this.accountNonExpired = _data["accountNonExpired"];
-            this.admin = _data["admin"];
-            this.user = _data["user"];
+            this.credentialsNonExpired = _data["credentialsNonExpired"];
             this.accountNonLocked = _data["accountNonLocked"];
+            this.user = _data["user"];
+            this.admin = _data["admin"];
         }
     }
 
@@ -1624,11 +1628,11 @@ export class User implements IUser {
             for (let item of this.authorities)
                 data["authorities"].push(item.toJSON());
         }
-        data["credentialsNonExpired"] = this.credentialsNonExpired;
         data["accountNonExpired"] = this.accountNonExpired;
-        data["admin"] = this.admin;
-        data["user"] = this.user;
+        data["credentialsNonExpired"] = this.credentialsNonExpired;
         data["accountNonLocked"] = this.accountNonLocked;
+        data["user"] = this.user;
+        data["admin"] = this.admin;
         return data;
     }
 
@@ -1648,11 +1652,11 @@ export interface IUser {
     userStatus?: UserStatus;
     enabled?: boolean;
     authorities?: GrantedAuthority[];
-    credentialsNonExpired?: boolean;
     accountNonExpired?: boolean;
-    admin?: boolean;
-    user?: boolean;
+    credentialsNonExpired?: boolean;
     accountNonLocked?: boolean;
+    user?: boolean;
+    admin?: boolean;
 
     [key: string]: any;
 }
@@ -2029,16 +2033,16 @@ export interface ISortRequest {
 }
 
 export class PageUser implements IPageUser {
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     size?: number;
     content?: User[];
     number?: number;
     sort?: SortObject;
-    first?: boolean;
-    last?: boolean;
     numberOfElements?: number;
     pageable?: PageableObject;
+    first?: boolean;
+    last?: boolean;
     empty?: boolean;
 
     [key: string]: any;
@@ -2058,8 +2062,8 @@ export class PageUser implements IPageUser {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.totalElements = _data["totalElements"];
             this.totalPages = _data["totalPages"];
+            this.totalElements = _data["totalElements"];
             this.size = _data["size"];
             if (Array.isArray(_data["content"])) {
                 this.content = [] as any;
@@ -2068,10 +2072,10 @@ export class PageUser implements IPageUser {
             }
             this.number = _data["number"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
-            this.first = _data["first"];
-            this.last = _data["last"];
             this.numberOfElements = _data["numberOfElements"];
             this.pageable = _data["pageable"] ? PageableObject.fromJS(_data["pageable"]) : <any>undefined;
+            this.first = _data["first"];
+            this.last = _data["last"];
             this.empty = _data["empty"];
         }
     }
@@ -2089,8 +2093,8 @@ export class PageUser implements IPageUser {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["totalElements"] = this.totalElements;
         data["totalPages"] = this.totalPages;
+        data["totalElements"] = this.totalElements;
         data["size"] = this.size;
         if (Array.isArray(this.content)) {
             data["content"] = [];
@@ -2099,10 +2103,10 @@ export class PageUser implements IPageUser {
         }
         data["number"] = this.number;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
-        data["first"] = this.first;
-        data["last"] = this.last;
         data["numberOfElements"] = this.numberOfElements;
         data["pageable"] = this.pageable ? this.pageable.toJSON() : <any>undefined;
+        data["first"] = this.first;
+        data["last"] = this.last;
         data["empty"] = this.empty;
         return data;
     }
@@ -2116,16 +2120,16 @@ export class PageUser implements IPageUser {
 }
 
 export interface IPageUser {
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     size?: number;
     content?: User[];
     number?: number;
     sort?: SortObject;
-    first?: boolean;
-    last?: boolean;
     numberOfElements?: number;
     pageable?: PageableObject;
+    first?: boolean;
+    last?: boolean;
     empty?: boolean;
 
     [key: string]: any;
@@ -2134,10 +2138,10 @@ export interface IPageUser {
 export class PageableObject implements IPageableObject {
     offset?: number;
     sort?: SortObject;
-    paged?: boolean;
     unpaged?: boolean;
-    pageSize?: number;
+    paged?: boolean;
     pageNumber?: number;
+    pageSize?: number;
 
     [key: string]: any;
 
@@ -2158,10 +2162,10 @@ export class PageableObject implements IPageableObject {
             }
             this.offset = _data["offset"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
-            this.paged = _data["paged"];
             this.unpaged = _data["unpaged"];
-            this.pageSize = _data["pageSize"];
+            this.paged = _data["paged"];
             this.pageNumber = _data["pageNumber"];
+            this.pageSize = _data["pageSize"];
         }
     }
 
@@ -2180,10 +2184,10 @@ export class PageableObject implements IPageableObject {
         }
         data["offset"] = this.offset;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
-        data["paged"] = this.paged;
         data["unpaged"] = this.unpaged;
-        data["pageSize"] = this.pageSize;
+        data["paged"] = this.paged;
         data["pageNumber"] = this.pageNumber;
+        data["pageSize"] = this.pageSize;
         return data;
     }
 
@@ -2198,18 +2202,18 @@ export class PageableObject implements IPageableObject {
 export interface IPageableObject {
     offset?: number;
     sort?: SortObject;
-    paged?: boolean;
     unpaged?: boolean;
-    pageSize?: number;
+    paged?: boolean;
     pageNumber?: number;
+    pageSize?: number;
 
     [key: string]: any;
 }
 
 export class SortObject implements ISortObject {
     empty?: boolean;
-    sorted?: boolean;
     unsorted?: boolean;
+    sorted?: boolean;
 
     [key: string]: any;
 
@@ -2229,8 +2233,8 @@ export class SortObject implements ISortObject {
                     this[property] = _data[property];
             }
             this.empty = _data["empty"];
-            this.sorted = _data["sorted"];
             this.unsorted = _data["unsorted"];
+            this.sorted = _data["sorted"];
         }
     }
 
@@ -2248,8 +2252,8 @@ export class SortObject implements ISortObject {
                 data[property] = this[property];
         }
         data["empty"] = this.empty;
-        data["sorted"] = this.sorted;
         data["unsorted"] = this.unsorted;
+        data["sorted"] = this.sorted;
         return data;
     }
 
@@ -2263,8 +2267,8 @@ export class SortObject implements ISortObject {
 
 export interface ISortObject {
     empty?: boolean;
-    sorted?: boolean;
     unsorted?: boolean;
+    sorted?: boolean;
 
     [key: string]: any;
 }
@@ -2447,16 +2451,16 @@ export interface ILoginRequest {
 }
 
 export class PageColor implements IPageColor {
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     size?: number;
     content?: Color[];
     number?: number;
     sort?: SortObject;
-    first?: boolean;
-    last?: boolean;
     numberOfElements?: number;
     pageable?: PageableObject;
+    first?: boolean;
+    last?: boolean;
     empty?: boolean;
 
     [key: string]: any;
@@ -2476,8 +2480,8 @@ export class PageColor implements IPageColor {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.totalElements = _data["totalElements"];
             this.totalPages = _data["totalPages"];
+            this.totalElements = _data["totalElements"];
             this.size = _data["size"];
             if (Array.isArray(_data["content"])) {
                 this.content = [] as any;
@@ -2486,10 +2490,10 @@ export class PageColor implements IPageColor {
             }
             this.number = _data["number"];
             this.sort = _data["sort"] ? SortObject.fromJS(_data["sort"]) : <any>undefined;
-            this.first = _data["first"];
-            this.last = _data["last"];
             this.numberOfElements = _data["numberOfElements"];
             this.pageable = _data["pageable"] ? PageableObject.fromJS(_data["pageable"]) : <any>undefined;
+            this.first = _data["first"];
+            this.last = _data["last"];
             this.empty = _data["empty"];
         }
     }
@@ -2507,8 +2511,8 @@ export class PageColor implements IPageColor {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["totalElements"] = this.totalElements;
         data["totalPages"] = this.totalPages;
+        data["totalElements"] = this.totalElements;
         data["size"] = this.size;
         if (Array.isArray(this.content)) {
             data["content"] = [];
@@ -2517,10 +2521,10 @@ export class PageColor implements IPageColor {
         }
         data["number"] = this.number;
         data["sort"] = this.sort ? this.sort.toJSON() : <any>undefined;
-        data["first"] = this.first;
-        data["last"] = this.last;
         data["numberOfElements"] = this.numberOfElements;
         data["pageable"] = this.pageable ? this.pageable.toJSON() : <any>undefined;
+        data["first"] = this.first;
+        data["last"] = this.last;
         data["empty"] = this.empty;
         return data;
     }
@@ -2534,16 +2538,16 @@ export class PageColor implements IPageColor {
 }
 
 export interface IPageColor {
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     size?: number;
     content?: Color[];
     number?: number;
     sort?: SortObject;
-    first?: boolean;
-    last?: boolean;
     numberOfElements?: number;
     pageable?: PageableObject;
+    first?: boolean;
+    last?: boolean;
     empty?: boolean;
 
     [key: string]: any;

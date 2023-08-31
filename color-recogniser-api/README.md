@@ -5,6 +5,7 @@ git reset --hard
 git pull
 gradle bootRun
 gradle build
+sudo systemctl restart python-services
 sudo systemctl restart hrms
 sudo systemctl restart nginx
 https://66.175.233.233/v3/api-docs

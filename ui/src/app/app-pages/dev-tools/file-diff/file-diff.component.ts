@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { finalize, map } from "rxjs";
 import { ApiApi, Diff } from "src/app/shared/auto-generated/apis";
+import { BackgroundChangeService } from "src/app/shared/services/background-change.service";
 
 @Component({
   selector: "app-file-diff",
@@ -13,7 +14,10 @@ export class FileDiffComponent {
   file2 = "";
   diffs: Diff[] = [];
 
-  constructor(private $api: ApiApi) {}
+  constructor(
+    private $api: ApiApi,
+    private $backgroundChange: BackgroundChangeService
+  ) {}
 
   diff() {
     this.diffButtonDisabled = true;
@@ -22,6 +26,7 @@ export class FileDiffComponent {
       .pipe(
         map((items) => {
           this.diffs = items;
+          this.$backgroundChange.randomize();
         }),
         finalize(() => {
           this.diffButtonDisabled = false;
