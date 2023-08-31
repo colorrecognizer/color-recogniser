@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   HostListener,
@@ -18,7 +19,7 @@ import { ColorUtils, HSLColor } from "src/app/shared/utils";
   templateUrl: "./universal-gradient-palette.component.html",
   styleUrls: ["./universal-gradient-palette.component.scss"],
 })
-export class UniversalGradientPaletteComponent {
+export class UniversalGradientPaletteComponent implements AfterViewInit {
   @Input() cardCss = "";
   @Input() isDarkening = false;
 

@@ -24,7 +24,6 @@ import { FileUpload } from "primeng/fileupload";
 import { Meta, Title } from "@angular/platform-browser";
 import { HowToMixComponent } from "src/app/shared/components/how-to-mix/how-to-mix.component";
 import { BackgroundChangeService } from "src/app/shared/services/background-change.service";
-import { ColorUtils } from "src/app/shared/utils";
 
 declare let Konva: any;
 declare let Mousetrap: any;
