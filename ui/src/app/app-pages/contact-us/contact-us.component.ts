@@ -3,10 +3,8 @@ import { FormGroup } from "@angular/forms";
 import { FormlyFormOptions, FormlyFieldConfig } from "@ngx-formly/core";
 import { MessageService } from "primeng/api";
 import { finalize, map } from "rxjs";
-import {
-  ApiApi,
-  ContactUs,
-} from "src/app/shared/auto-generated/apis";
+import { ApiApi, ContactUs } from "src/app/shared/auto-generated/apis";
+import { BackgroundChangeService } from "src/app/shared/services/background-change.service";
 
 @Component({
   selector: "app-contact-us",
@@ -58,7 +56,11 @@ export class ContactUsComponent {
     },
   ];
 
-  constructor(private $api: ApiApi, private $message: MessageService) {}
+  constructor(
+    private $api: ApiApi,
+    private $message: MessageService,
+    private $backgroundChange: BackgroundChangeService
+  ) {}
 
   send() {
     this.form.disable();
@@ -71,6 +73,8 @@ export class ContactUsComponent {
             summary: "Message sent to our team!",
             detail: "Thank you for your support!",
           });
+
+          this.$backgroundChange.randomize();
         }),
         finalize(() => {
           this.form.enable();

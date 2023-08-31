@@ -11,6 +11,7 @@ import { SliderModule } from "primeng/slider";
 import { AnalogousPaletteComponent } from "./analogous-palette/analogous-palette.component";
 import { TetradicPaletteComponent } from "./tetradic-palette/tetradic-palette.component";
 import { FormlyFormModule } from "src/app/shared/components/formly-form/formly-form.module";
+import { UniversalGradientPaletteComponent } from './universal-gradient-palette/universal-gradient-palette.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { FormlyFormModule } from "src/app/shared/components/formly-form/formly-f
     LighteningMonochromaticPaletteComponent,
     AnalogousPaletteComponent,
     TetradicPaletteComponent,
+    UniversalGradientPaletteComponent,
   ],
   imports: [
     CommonModule,
