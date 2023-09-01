@@ -37,7 +37,9 @@
   --surface-ground:#323b47;
   --surface-section:#323b47;
   --surface-card:#2a323d;
-  --background-line-color:#2a323d1d;
+  --background-line-color-1:#2a323d4d;
+  --background-line-color-2:#2a323d3d;
+  --background-line-color-3:#2a323d2d;
   --surface-overlay:#2a323d;
   --surface-border:#3f4b5b;
   --surface-hover:rgba(255,255,255,.04);

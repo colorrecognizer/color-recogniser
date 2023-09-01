@@ -9,6 +9,7 @@ import anime from "animejs";
 import { map } from "rxjs";
 import { User } from "src/app/shared/auto-generated/apis";
 import { AuthService } from "src/app/shared/services/auth.service";
+import { BackgroundChangeService } from "src/app/shared/services/background-change.service";
 import { ThemeService } from "src/app/shared/services/theme.service";
 import { RouteEnum } from "src/app/shared/utils";
 
@@ -34,7 +35,8 @@ export class NavbarComponent {
   constructor(
     private $theme: ThemeService,
     private $auth: AuthService,
-    private $router: Router
+    private $router: Router,
+    private $backgroundChange: BackgroundChangeService,
   ) {
     $auth
       .getCurrentUser()

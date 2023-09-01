@@ -209,6 +209,8 @@ export class ColorRecognizerComponent
   }
 
   ngAfterViewInit(): void {
+    this.$backgroundChange.randomize();
+
     // by default Konva prevent some events when node is dragging
     // it improve the performance and work well for 95% of cases
     // we need to enable all events on Konva, even when we are dragging a node

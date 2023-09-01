@@ -2,6 +2,7 @@ import { DOCUMENT } from "@angular/common";
 import { Inject, Injectable } from "@angular/core";
 import { NgForage } from "ngforage";
 import { BehaviorSubject } from "rxjs";
+import { BackgroundChangeService } from "./background-change.service";
 
 const THEME_KEY = "settings_theme";
 const SYSTEM_THEME_USED_KEY = "settings_systemThemeUsed";
@@ -18,7 +19,8 @@ export class ThemeService {
 
   constructor(
     @Inject(DOCUMENT) private $document: Document,
-    private $ngf: NgForage
+    private $ngf: NgForage,
+    private $backgroundChange: BackgroundChangeService,
   ) {
     $ngf.getItem<boolean>(SYSTEM_THEME_USED_KEY).then((systemThemeUsed) => {
       this._systemThemeUsed = systemThemeUsed !== null ? systemThemeUsed : true;
@@ -50,6 +52,7 @@ export class ThemeService {
 
     await this.$ngf.setItem(THEME_KEY, this._theme);
     this.setTheme();
+    this.$backgroundChange.refresh();
   }
 
   private setTheme() {

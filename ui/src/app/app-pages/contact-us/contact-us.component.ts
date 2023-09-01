@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { AfterViewInit, Component } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { FormlyFormOptions, FormlyFieldConfig } from "@ngx-formly/core";
 import { MessageService } from "primeng/api";
@@ -11,7 +11,7 @@ import { BackgroundChangeService } from "src/app/shared/services/background-chan
   templateUrl: "./contact-us.component.html",
   styleUrls: ["./contact-us.component.scss"],
 })
-export class ContactUsComponent {
+export class ContactUsComponent implements AfterViewInit {
   form = new FormGroup({});
   model = ContactUs.fromJS({});
   options: FormlyFormOptions = {};
@@ -61,6 +61,10 @@ export class ContactUsComponent {
     private $message: MessageService,
     private $backgroundChange: BackgroundChangeService
   ) {}
+
+  ngAfterViewInit(): void {
+    this.$backgroundChange.randomize();
+  }
 
   send() {
     this.form.disable();

@@ -6,23 +6,9 @@ html {
 }
 
 body {
+  overflow-x: hidden;
+  position: relative;
   font-family: var(--font-family);
-
-  background: linear-gradient(
-      45deg,
-      transparent 49%,
-      var(--background-line-color) 49% 51%,
-      transparent 51%
-    ),
-    linear-gradient(
-      -45deg,
-      transparent 49%,
-      var(--background-line-color) 49% 51%,
-      transparent 51%
-    );
-  background-size: 5em 5em;
-  background-color: var(--surface-200);
-
   color: var(--text-color);
   padding: 0;
   margin: 0;
@@ -89,4 +75,38 @@ p-dynamicdialog .p-dialog {
 textarea {
   max-width: 100%;
   min-width: 100%;
+}
+
+body > div.background-container {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &.circle > div.background-block {
+    border-radius: 50%;
+  }
+
+  & > div.background-block {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: var(--background-line-color-1);
+    z-index: -1;
+
+    &:nth-child(3n + 1) {
+      background: var(--background-line-color-1);
+    }
+
+    &:nth-child(3n + 2) {
+      background: var(--background-line-color-2);
+    }
+
+    &:nth-child(3n + 3) {
+      background: var(--background-line-color-3);
+    }
+  }
 }

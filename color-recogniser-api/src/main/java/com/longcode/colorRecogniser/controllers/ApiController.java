@@ -141,14 +141,24 @@ public class ApiController {
                         + Math.pow(Math.max(colorCoverage.color.getBlue(), 255 - colorCoverage.color.getBlue()), 2)
                 );
 
-                colorCoverage.setColorMatches(new ArrayList<>(allColors.stream()
+                var colorMatches = new ArrayList<>(allColors.stream()
                         .sorted((color1, color2) -> getDistance(colorCoverage.color, color1) - getDistance(colorCoverage.color, color2))
                         .limit(3)
                         .map(c -> ColorMatch.builder()
                                 .color(c)
                                 .matchPercentage(1 - Math.sqrt(getDistance(colorCoverage.color, c)) / total)
                                 .build())
-                        .toList()));
+                        .toList());
+
+                if (!colorMatches.get(0).color.getHexValue().equals(colorCoverage.getColor().getHexValue())) {
+                    colorCoverage.getColor().setName("Unnamed");
+                    colorMatches.add(0, ColorMatch.builder()
+                            .color(colorCoverage.getColor())
+                            .matchPercentage(1)
+                            .build());
+                }
+
+                colorCoverage.setColorMatches(colorMatches);
 
                 response.getColorCoverages().add(colorCoverage);
             }

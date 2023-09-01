@@ -7,21 +7,39 @@ import { ColorUtils } from "../utils";
   providedIn: "root",
 })
 export class BackgroundChangeService {
-  private _color = "#ffffff1d";
+  private _color = "#fff";
 
   private _colorSubject = new BehaviorSubject<string>(this._color);
+  get colorSubject() {
+    return this._colorSubject;
+  }
 
   constructor() {
     this._colorSubject.subscribe((color) => {
       document.documentElement.style.setProperty(
-        "--background-line-color",
-        color
+        "--background-line-color-1",
+        `${color}4d`
+      );
+
+      document.documentElement.style.setProperty(
+        "--background-line-color-2",
+        `${color}3d`
+      );
+
+      document.documentElement.style.setProperty(
+        "--background-line-color-3",
+        `${color}2d`
       );
     });
   }
 
   setColor(color: Color) {
-    this._colorSubject.next(`${ColorUtils.getColorHex(color)}1d`);
+    this._colorSubject.next(ColorUtils.getColorHex(color));
+  }
+
+  refresh() {
+    const value = this._colorSubject.value;
+    this._colorSubject.next(value);
   }
 
   clear() {
@@ -35,6 +53,6 @@ export class BackgroundChangeService {
       color += letters[Math.floor(Math.random() * 16)];
     }
 
-    this._colorSubject.next(`${color}1d`);
+    this._colorSubject.next(color);
   }
 }
