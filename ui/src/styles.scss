@@ -90,6 +90,28 @@ body > div.background-container {
     border-radius: 50%;
   }
 
+  &.triangle > div.background-block {
+    // border-radius: 50%;
+    width: 0;
+    height: 0;
+
+    border-right: 28.8675px solid transparent;
+    border-left: 28.8675px solid transparent;
+    background: none !important;
+
+    &:nth-child(3n + 1) {
+      border-bottom: 50px solid var(--background-line-color-1);
+    }
+
+    &:nth-child(3n + 2) {
+      border-bottom: 50px solid var(--background-line-color-2);
+    }
+
+    &:nth-child(3n + 3) {
+      border-bottom: 50px solid var(--background-line-color-3);
+    }
+  }
+
   & > div.background-block {
     position: absolute;
     width: 50px;

@@ -49,7 +49,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.container = document.querySelector("body>div.background-container");
-    for (let i = 0; i < 100; ++i) {
+    for (let i = 0; i < 80; ++i) {
       const blocks = document.createElement("div");
       blocks.classList.add("background-block");
       this.container?.appendChild(blocks);
@@ -59,14 +59,24 @@ export class AppComponent implements OnInit, AfterViewInit {
       .pipe(
         delay(100),
         tap(() => {
-          this.container?.classList.toggle("circle");
+          if (this.container?.classList.contains("circle")) {
+            this.container?.classList.remove("circle");
+            this.container?.classList.add("triangle");
+          } else if (this.container?.classList.contains("triangle")) {
+            this.container?.classList.remove("triangle");
+          } else {
+            this.container?.classList.add("circle");
+          }
+
           const h = this.container?.clientHeight || 0;
-          const w = this.container?.clientWidth || 0;
+          const w = Math.max(1400, this.container?.clientWidth || 0);
           anime({
             targets: ".background-block",
             translateX: () => anime.random(-w / 2 + 250 / 2, w / 2 - 250 / 2),
             translateY: () => anime.random(-h / 2 + 250 / 2, h / 2 - 250 / 2),
             scale: () => anime.random(1, 5),
+            easing: "spring(1, 80, 10, 0)",
+            rotateZ: () => anime.random(-50, 50),
           });
         })
       )

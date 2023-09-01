@@ -20,6 +20,8 @@
     leaveToClass="hidden"
     leaveActiveClass="fadeout"
     [hideOnOutsideClick]="true"
+    [hideOnEscape]="true"
+    #kebab
   >
     <i class="pi pi-bars text-4xl"></i>
   </a>
@@ -37,6 +39,7 @@
           [routerLink]="homeUrl"
           routerLinkActive="text-900 surface-100"
           [routerLinkActiveOptions]="{ exact: true }"
+          (click)="dropdownOnClick()"
         >
           <i class="pi pi-search mr-2"></i>
           <span> Color Recognizer </span>
@@ -49,6 +52,7 @@
           [routerLink]="palettesUrl"
           routerLinkActive="text-900 surface-100"
           [routerLinkActiveOptions]="{ exact: true }"
+          (click)="dropdownOnClick()"
         >
           <i class="pi pi-table mr-2"></i>
           <span> Color Palettes </span>
@@ -61,6 +65,7 @@
           [routerLink]="devToolsUrl"
           routerLinkActive="text-900 surface-100"
           [routerLinkActiveOptions]="{ exact: true }"
+          (click)="dropdownOnClick()"
         >
           <i class="pi pi-wrench mr-2"></i>
           <span> Dev Tools </span>
@@ -73,6 +78,7 @@
           [routerLink]="contactUsUrl"
           routerLinkActive="text-900 surface-100"
           [routerLinkActiveOptions]="{ exact: true }"
+          (click)="dropdownOnClick()"
         >
           <i class="pi pi-phone mr-2"></i>
           <span> Contact Us </span>
@@ -85,6 +91,7 @@
           [routerLink]="colorManagementUrl"
           routerLinkActive="text-900 surface-100"
           [routerLinkActiveOptions]="{ exact: true }"
+          (click)="dropdownOnClick()"
         >
           <i class="pi pi-book mr-2"></i>
           <span>Color Management</span>

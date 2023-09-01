@@ -2,10 +2,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  QueryList,
   ViewChild,
+  ViewChildren,
 } from "@angular/core";
 import { Router } from "@angular/router";
 import anime from "animejs";
+import { StyleClass } from "primeng/styleclass";
 import { map } from "rxjs";
 import { User } from "src/app/shared/auto-generated/apis";
 import { AuthService } from "src/app/shared/services/auth.service";
@@ -31,12 +34,14 @@ export class NavbarComponent {
   palettesUrl = RouteEnum.ColorPalettes;
   devToolsUrl = RouteEnum.DevTools;
   contactUsUrl = RouteEnum.ContactUs;
+  @ViewChildren(StyleClass) toggleStyleClasses!: QueryList<StyleClass>;
+  @ViewChild("kebab") kebab!: ElementRef<HTMLAnchorElement>;
 
   constructor(
     private $theme: ThemeService,
     private $auth: AuthService,
     private $router: Router,
-    private $backgroundChange: BackgroundChangeService,
+    private $backgroundChange: BackgroundChangeService
   ) {
     $auth
       .getCurrentUser()
@@ -77,6 +82,14 @@ export class NavbarComponent {
 
   //   this.setLogoAnimation();
   // }
+
+  dropdownOnClick() {
+    if (!this.kebab.nativeElement.offsetParent) return;
+
+    const x = this.toggleStyleClasses.get(0);
+    if (!x) return;
+    x.leave();
+  }
 
   setLogoAnimation() {
     this.logoAnimation?.pause();

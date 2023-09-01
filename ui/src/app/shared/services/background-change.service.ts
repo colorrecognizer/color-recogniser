@@ -23,12 +23,12 @@ export class BackgroundChangeService {
 
       document.documentElement.style.setProperty(
         "--background-line-color-2",
-        `${color}3d`
+        `${color}2d`
       );
 
       document.documentElement.style.setProperty(
         "--background-line-color-3",
-        `${color}2d`
+        `${color}0d`
       );
     });
   }
