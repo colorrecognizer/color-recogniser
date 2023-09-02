@@ -792,7 +792,8 @@ export class ColorRecognizerComponent
           map((res) => {
             this.colorCoverages = res.colorCoverages || [];
             this.colorCoverages = this.colorCoverages.sort(
-              (a, b) => b.coveragePercentage! - a.coveragePercentage!
+              (a, b) =>
+                (b.coveragePercentage || 0) - (a.coveragePercentage || 0)
             );
 
             if (this.colorCoverages[0]?.color) {

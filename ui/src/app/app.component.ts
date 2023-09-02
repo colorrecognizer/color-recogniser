@@ -2,7 +2,6 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  HostListener,
   Inject,
   NgZone,
   OnInit,
@@ -69,7 +68,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           }
 
           const h = this.container?.clientHeight || 0;
-          const w = Math.max(1400, this.container?.clientWidth || 0);
+          const w = this.container?.clientWidth || 0;
           anime({
             targets: ".background-block",
             translateX: () => anime.random(-w / 2 + 250 / 2, w / 2 - 250 / 2),

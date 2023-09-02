@@ -3,6 +3,7 @@
 html {
   font-size: 1rem;
   height: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -95,27 +96,49 @@ body > div.background-container {
     width: 0;
     height: 0;
 
-    border-right: 28.8675px solid transparent;
-    border-left: 28.8675px solid transparent;
+    border-right: 11.547px solid transparent;
+    border-left: 11.547px solid transparent;
     background: none !important;
 
     &:nth-child(3n + 1) {
-      border-bottom: 50px solid var(--background-line-color-1);
+      border-bottom: 20px solid var(--background-line-color-1);
     }
 
     &:nth-child(3n + 2) {
-      border-bottom: 50px solid var(--background-line-color-2);
+      border-bottom: 20px solid var(--background-line-color-2);
     }
 
     &:nth-child(3n + 3) {
-      border-bottom: 50px solid var(--background-line-color-3);
+      border-bottom: 20px solid var(--background-line-color-3);
+    }
+
+    @media (min-width: #{$lg}) {
+      border-right: 28.8675px solid transparent;
+      border-left: 28.8675px solid transparent;
+
+      &:nth-child(3n + 1) {
+        border-bottom: 50px solid var(--background-line-color-1);
+      }
+  
+      &:nth-child(3n + 2) {
+        border-bottom: 50px solid var(--background-line-color-2);
+      }
+  
+      &:nth-child(3n + 3) {
+        border-bottom: 50px solid var(--background-line-color-3);
+      }
     }
   }
 
   & > div.background-block {
+    @media (min-width: #{$lg}) {
+      width: 50px;
+      height: 50px;
+    }
+
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 20px;
+    height: 20px;
     background: var(--background-line-color-1);
     z-index: -1;
 
