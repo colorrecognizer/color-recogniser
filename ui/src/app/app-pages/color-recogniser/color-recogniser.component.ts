@@ -679,7 +679,6 @@ export class ColorRecognizerComponent
       return;
     }
 
-    console.log(this.selection);
     this.colorCoverages.length = 0;
     this.recogniseButtonDisabled = true;
 
@@ -804,6 +803,8 @@ export class ColorRecognizerComponent
               this.matchColorTable.nativeElement.scrollIntoView({
                 behavior: "smooth",
               });
+
+              this.selection.visible(true);
             }, 100);
           }),
           catchError((e: Error) => {

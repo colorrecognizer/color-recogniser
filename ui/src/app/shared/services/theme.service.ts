@@ -20,7 +20,7 @@ export class ThemeService {
   constructor(
     @Inject(DOCUMENT) private $document: Document,
     private $ngf: NgForage,
-    private $backgroundChange: BackgroundChangeService,
+    private $backgroundChange: BackgroundChangeService
   ) {
     $ngf.getItem<boolean>(SYSTEM_THEME_USED_KEY).then((systemThemeUsed) => {
       this._systemThemeUsed = systemThemeUsed !== null ? systemThemeUsed : true;
@@ -52,10 +52,11 @@ export class ThemeService {
 
     await this.$ngf.setItem(THEME_KEY, this._theme);
     this.setTheme();
-    this.$backgroundChange.refresh();
   }
 
   private setTheme() {
+    this.$backgroundChange.refresh();
+
     this.theme.next(this._theme);
     const themeLink = this.$document.getElementById(
       "app-theme"
