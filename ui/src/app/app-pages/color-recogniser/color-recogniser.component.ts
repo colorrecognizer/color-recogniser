@@ -361,7 +361,7 @@ export class ColorRecognizerComponent
       (event.element.parentElement as any).style.top =
         selectionRect.height + selectionRect.top + scrollTop + "px";
       (event.element.parentElement as any).style.zIndex = 9999999;
-    });
+    }, 100);
   }
 
   private onImageDragLimitUpdated() {
