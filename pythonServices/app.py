@@ -4,4 +4,5 @@ app = create_app()
 
 if __name__ == '__main__':
     print(app.url_map)
-    app.run(debug=True)
+    app.config.from_object('settings')
+    app.run()
