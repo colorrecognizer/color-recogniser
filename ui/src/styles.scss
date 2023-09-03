@@ -118,11 +118,11 @@ body > div.background-container {
       &:nth-child(3n + 1) {
         border-bottom: 50px solid var(--background-line-color-1);
       }
-  
+
       &:nth-child(3n + 2) {
         border-bottom: 50px solid var(--background-line-color-2);
       }
-  
+
       &:nth-child(3n + 3) {
         border-bottom: 50px solid var(--background-line-color-3);
       }
@@ -153,4 +153,92 @@ body > div.background-container {
       background: var(--background-line-color-3);
     }
   }
+}
+
+.introjs-tooltip {
+  background-color: var(--surface-50) !important;
+
+  .introjs-dontShowAgain {
+    label {
+      background-color: var(--surface-50) !important;
+      color: var(--text-color) !important;
+    }
+  }
+
+  .introjs-arrow {
+    &.bottom {
+      border-top-color: var(--surface-50) !important;
+    }
+
+    &.top {
+      border-bottom-color: var(--surface-50) !important;
+    }
+
+    &.left,
+    &.left-bottom,
+    &.left-top {
+      border-right-color: var(--surface-50) !important;
+    }
+
+    &.right,
+    &.right-bottom,
+    &.right-top {
+      border-left-color: var(--surface-50) !important;
+    }
+  }
+
+  .introjs-dontShowAgain {
+    display: flex;
+    align-items: center;
+
+    input {
+      border: 1px solid var(--surface-border);
+      background: var(--surface-ground);
+      width: 20px;
+      height: 20px;
+      color: var(--text-color);
+      border-radius: 4px;
+      transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    }
+  }
+
+  .introjs-button {
+    color: var(--primary-color-text);
+    background: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    border-radius: 4px;
+    text-shadow: none !important;
+
+    &:hover {
+      background: var(--primary-color-2);
+      color: var(--primary-color-text);
+      border-color: var(--primary-color-2);
+    }
+
+    &:active {
+      background: var(--primary-color-3);
+      color: var(--primary-color-text);
+      border-color: var(--primary-color-3);
+    }
+  }
+
+  .introjs-progress {
+    margin-left: 20px !important;
+    margin-right: 20px !important;
+
+    .introjs-progressbar {
+      background-color: var(--primary-color) !important;
+    }
+  }
+
+  .introjs-prevbutton {
+    display: none;
+  }
+}
+
+.p-overlay {
+  z-index: 9999999 !important;
 }

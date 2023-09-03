@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  Inject,
   OnDestroy,
   OnInit,
   QueryList,
@@ -24,9 +25,12 @@ import { FileUpload } from "primeng/fileupload";
 import { Meta, Title } from "@angular/platform-browser";
 import { HowToMixComponent } from "src/app/shared/components/how-to-mix/how-to-mix.component";
 import { BackgroundChangeService } from "src/app/shared/services/background-change.service";
+import { DOCUMENT } from "@angular/common";
+import { Dropdown } from "primeng/dropdown";
 
 declare let Konva: any;
 declare let Mousetrap: any;
+declare let introJs: any;
 
 const BORDER_WIDTH = 4;
 const SCROLL_SCALE_DELTA = 1.01;
@@ -58,6 +62,10 @@ export class ColorRecognizerComponent
   @ViewChild("canvas") canvasDiv!: ElementRef<HTMLDivElement>;
   @ViewChild("matchColorTable", { static: false })
   matchColorTable!: ElementRef<HTMLDivElement>;
+
+  @ViewChild("selectionTool", { static: false })
+  selectionToolRef!: Dropdown;
+
   border = new Konva.Line({
     stroke: "black",
     strokeWidth: BORDER_WIDTH,
@@ -65,6 +73,19 @@ export class ColorRecognizerComponent
 
   panZoomLastCenter: any = null;
   panZoomLastDist = 0;
+
+  // Intro
+  intro: any;
+  @ViewChild("introStep1", { static: false })
+  introStep1!: ElementRef<HTMLDivElement>;
+  @ViewChild("introStep2", { static: false })
+  introStep2!: ElementRef<HTMLDivElement>;
+  @ViewChild("introStep3", { static: false })
+  introStep3!: ElementRef<HTMLDivElement>;
+  @ViewChild("introStep4", { static: false })
+  introStep4!: ElementRef<HTMLDivElement>;
+  @ViewChild("introStep5", { static: false })
+  introStep5!: ElementRef<HTMLDivElement>;
 
   selectionTools: SelectionTool[] = [
     {
@@ -158,7 +179,8 @@ export class ColorRecognizerComponent
     private $dialog: DialogService,
     private $title: Title,
     $meta: Meta,
-    private $backgroundChange: BackgroundChangeService
+    private $backgroundChange: BackgroundChangeService,
+    @Inject(DOCUMENT) private $document: Document
   ) {
     this.$title.setTitle("Color Recognizer");
 
@@ -269,6 +291,69 @@ export class ColorRecognizerComponent
           Math.random() * (30 - 10) + 10
         })`)
     );
+
+    // Intro
+    this.intro = introJs().setOptions({
+      dontShowAgain: true,
+      showProgress: true,
+      showBullets: false,
+      disableInteraction: false,
+      steps: [
+        {
+          title: "Welcome to ColorRecognizer!",
+          intro: "Hello there! 👋, let's start with a quick tutorial!",
+        },
+        {
+          title: "Step 1",
+          intro:
+            "Upload an image or drop one here before going to the next step.",
+          position: "right",
+          element: this.introStep1.nativeElement,
+        },
+        {
+          title: "Step 2",
+          intro: "Choose a selection tool.",
+          position: "left",
+          element: this.introStep1.nativeElement,
+        },
+        {
+          title: "Step 3",
+          intro: "Select an area to recognize colors.",
+          position: "right",
+          element: this.introStep1.nativeElement,
+        },
+        {
+          title: "Step 4",
+          intro: "Specify number of colors you want to recognize.",
+          position: "right",
+          element: this.introStep1.nativeElement,
+        },
+        {
+          title: "Step 5",
+          intro: "Click/tap the button to recognize colors.",
+          position: "top",
+          element: this.introStep5.nativeElement,
+        },
+      ],
+    });
+
+    this.intro.onbeforechange(() => {
+      if (this.intro._currentStep === 1) {
+        const nextButton = this.$document.querySelector(
+          ".introjs-nextbutton"
+        ) as any;
+        nextButton.style.visibility = "hidden";
+      } else if (this.intro._currentStep === 2) {
+        this.selectionToolRef.show();
+      }
+
+      if (this.imageObj) {
+        this.intro._introItems[2].element = this.introStep2.nativeElement;
+        this.intro._introItems[4].element = this.introStep4.nativeElement;
+      }
+    });
+
+    this.intro.start();
   }
 
   removeImage() {
@@ -278,6 +363,12 @@ export class ColorRecognizerComponent
       image: null,
     });
 
+    // Hide intro step1 next button
+    const nextButton = this.$document.querySelector(
+      ".introjs-nextbutton"
+    ) as any;
+    nextButton.style.visibility = "hidden";
+
     this.onCanvasResized();
   }
 
@@ -286,6 +377,12 @@ export class ColorRecognizerComponent
     const url = URL.createObjectURL(file);
     this.imageObj = new Image();
     this.imageObj.src = url;
+
+    // Show intro step1 next button
+    const nextButton = this.$document.querySelector(
+      ".introjs-nextbutton"
+    ) as any;
+    nextButton.style.visibility = "visible";
 
     this.imageObj.onload = () => {
       this.konvaImage.image(this.imageObj);

@@ -39,14 +39,16 @@
                 "input": "src/themes/dark/dark.scss",
                 "bundleName": "dark-theme",
                 "inject": false
-              }
+              },
+              "node_modules/intro.js/minified/introjs.min.css"
             ],
             "scripts": [
               "node_modules/konva/konva.js",
               "src/assets/js/keymaster.js",
               "node_modules/sweepline-intersections/dist/sweeplineIntersections.js",
               "node_modules/bentley-ottmann-intersections/dist/bentleyOttmannIntersections.js",
-              "node_modules/animejs/lib/anime.min.js"
+              "node_modules/animejs/lib/anime.min.js",
+              "node_modules/intro.js/minified/intro.min.js"
             ]
           },
           "configurations": {

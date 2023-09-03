@@ -29,6 +29,7 @@
     "bentley-ottmann-intersections": "^0.0.1",
     "firebase": "^9.22.0",
     "geojson": "^0.5.0",
+    "intro.js": "^7.2.0",
     "konva": "^9.0.2",
     "localforage": "^1.10.0",
     "ngforage": "^9.0.0",
