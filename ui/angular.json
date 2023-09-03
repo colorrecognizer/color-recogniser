@@ -48,7 +48,7 @@
               "node_modules/sweepline-intersections/dist/sweeplineIntersections.js",
               "node_modules/bentley-ottmann-intersections/dist/bentleyOttmannIntersections.js",
               "node_modules/animejs/lib/anime.min.js",
-              "node_modules/intro.js/minified/intro.min.js"
+              "node_modules/intro.js/intro.js"
             ]
           },
           "configurations": {

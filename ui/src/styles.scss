@@ -3,6 +3,7 @@
 html {
   font-size: 1rem;
   height: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -159,6 +160,8 @@ body > div.background-container {
   background-color: var(--surface-50) !important;
 
   .introjs-dontShowAgain {
+    padding-bottom: 20px;
+
     label {
       background-color: var(--surface-50) !important;
       color: var(--text-color) !important;
@@ -202,7 +205,8 @@ body > div.background-container {
     }
   }
 
-  .introjs-button {
+  .introjs-button,
+  .introjs-button:focus {
     color: var(--primary-color-text);
     background: var(--primary-color);
     border: 1px solid var(--primary-color);
@@ -237,8 +241,4 @@ body > div.background-container {
   .introjs-prevbutton {
     display: none;
   }
-}
-
-.p-overlay {
-  z-index: 9999999 !important;
 }

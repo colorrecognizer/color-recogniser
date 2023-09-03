@@ -76,6 +76,7 @@ export class ColorRecognizerComponent
 
   // Intro
   intro: any;
+  introStarted: any;
   @ViewChild("introStep1", { static: false })
   introStep1!: ElementRef<HTMLDivElement>;
   @ViewChild("introStep2", { static: false })
@@ -295,65 +296,23 @@ export class ColorRecognizerComponent
     // Intro
     this.intro = introJs().setOptions({
       dontShowAgain: true,
-      showProgress: true,
+      showProgress: false,
       showBullets: false,
       disableInteraction: false,
+      autoPosition: false,
+      showButtons: false,
       steps: [
-        {
-          title: "Welcome to ColorRecognizer!",
-          intro: "Hello there! 👋, let's start with a quick tutorial!",
-        },
         {
           title: "Step 1",
           intro:
             "Upload an image or drop one here before going to the next step.",
-          position: "right",
-          element: this.introStep1.nativeElement,
-        },
-        {
-          title: "Step 2",
-          intro: "Choose a selection tool.",
-          position: "left",
-          element: this.introStep1.nativeElement,
-        },
-        {
-          title: "Step 3",
-          intro: "Select an area to recognize colors.",
-          position: "right",
-          element: this.introStep1.nativeElement,
-        },
-        {
-          title: "Step 4",
-          intro: "Specify number of colors you want to recognize.",
-          position: "right",
-          element: this.introStep1.nativeElement,
-        },
-        {
-          title: "Step 5",
-          intro: "Click/tap the button to recognize colors.",
           position: "top",
-          element: this.introStep5.nativeElement,
+          element: this.introStep1.nativeElement,
         },
       ],
     });
 
-    this.intro.onbeforechange(() => {
-      if (this.intro._currentStep === 1) {
-        const nextButton = this.$document.querySelector(
-          ".introjs-nextbutton"
-        ) as any;
-        nextButton.style.visibility = "hidden";
-      } else if (this.intro._currentStep === 2) {
-        this.selectionToolRef.show();
-      }
-
-      if (this.imageObj) {
-        this.intro._introItems[2].element = this.introStep2.nativeElement;
-        this.intro._introItems[4].element = this.introStep4.nativeElement;
-      }
-    });
-
-    this.intro.start();
+    this.introStarted = this.intro.start();
   }
 
   removeImage() {
@@ -362,12 +321,6 @@ export class ColorRecognizerComponent
       height: 0,
       image: null,
     });
-
-    // Hide intro step1 next button
-    const nextButton = this.$document.querySelector(
-      ".introjs-nextbutton"
-    ) as any;
-    nextButton.style.visibility = "hidden";
 
     this.onCanvasResized();
   }
@@ -378,17 +331,37 @@ export class ColorRecognizerComponent
     this.imageObj = new Image();
     this.imageObj.src = url;
 
-    // Show intro step1 next button
-    const nextButton = this.$document.querySelector(
-      ".introjs-nextbutton"
-    ) as any;
-    nextButton.style.visibility = "visible";
-
     this.imageObj.onload = () => {
       this.konvaImage.image(this.imageObj);
 
       this.onCanvasResized();
+
+      // Intro
+      if (this.intro._currentStep === 0) {
+        setTimeout(() => {
+          this.selectionToolRef.show();
+          this.intro._introItems.push({
+            title: "Step 2",
+            intro: "Choose a selection tool.",
+            position: "top",
+            element: this.introStep2.nativeElement,
+          });
+
+          this.intro.nextStep();
+        }, 100);
+      }
     };
+  }
+
+  onSelectionShow(event: { element: HTMLDivElement }) {
+    setTimeout(() => {
+      const selectionRect =
+        this.selectionToolRef.el.nativeElement.firstChild.getBoundingClientRect();
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      (event.element.parentElement as any).style.top =
+        selectionRect.height + selectionRect.top + scrollTop + "px";
+      (event.element.parentElement as any).style.zIndex = 9999999;
+    });
   }
 
   private onImageDragLimitUpdated() {
@@ -605,6 +578,17 @@ export class ColorRecognizerComponent
   }
 
   onSelectionToolChanged() {
+    if (this.intro._currentStep === 1) {
+      this.intro._introItems.push({
+        title: "Step 3",
+        intro: "Select an area to recognize colors.",
+        position: "top",
+        element: this.introStep3.nativeElement,
+      });
+
+      this.intro.nextStep();
+    }
+
     this.konvaImage.draggable(false);
     this.stage.off("mousedown touchstart mousemove touchmove mouseup touchend");
 
@@ -727,6 +711,17 @@ export class ColorRecognizerComponent
 
         e.evt.preventDefault();
         isSelecting = false;
+
+        if (this.intro._currentStep === 2) {
+          this.intro._introItems.push({
+            title: "Step 4",
+            intro: "Click/tap the button to recognize colors.",
+            position: "top",
+            element: this.introStep4.nativeElement,
+          });
+
+          this.intro.nextStep();
+        }
       }
     );
   }
@@ -751,6 +746,10 @@ export class ColorRecognizerComponent
   }
 
   recognise() {
+    if (this.intro._currentStep === 3) {
+      this.intro.nextStep();
+    }
+
     if (!this.imageObj) {
       this.$message.add({
         severity: "warn",

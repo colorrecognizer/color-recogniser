@@ -23,38 +23,39 @@
   </div>
   <div
     class="w-full lg:w-6 surface-card p-3 lg:p-5 shadow-2 border-round-md flex flex-column gap-3"
-    #introStep1
   >
-    <p-fileUpload
-      #imageUpload
-      mode="advanced"
-      chooseLabel="Upload image"
-      accept="image/*"
-      [auto]="true"
-      [customUpload]="true"
-      (uploadHandler)="setImage($event.files[0])"
-      (onClear)="removeImage()"
-      (onRemove)="removeImage()"
-    >
-      <ng-template pTemplate="toolbar">
-        <div class="text-center">
-          <small>The image won't be uploaded to any server</small>
-        </div>
-      </ng-template>
-      <ng-template pTemplate="content" let-files>
-        <div
-          class="border-dashed border-round-md-xl surface-border flex flex-column align-items-center justify-content-center cursor-pointer"
-          style="height: 30rem"
-          *ngIf="!imageObj"
-          (click)="imageUpload.choose()"
-        >
-          <span> or </span>
-          <span class="text-xl">
-            <i class="pi pi-image"></i> Drop image here
-          </span>
-        </div>
-      </ng-template>
-    </p-fileUpload>
+    <div #introStep1>
+      <p-fileUpload
+        #imageUpload
+        mode="advanced"
+        chooseLabel="Upload image"
+        accept="image/*"
+        [auto]="true"
+        [customUpload]="true"
+        (uploadHandler)="setImage($event.files[0])"
+        (onClear)="removeImage()"
+        (onRemove)="removeImage()"
+      >
+        <ng-template pTemplate="toolbar">
+          <div class="text-center">
+            <small>The image won't be uploaded to any server</small>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="content" let-files>
+          <div
+            class="border-dashed border-round-md-xl surface-border flex flex-column align-items-center justify-content-center cursor-pointer"
+            style="height: 30rem"
+            *ngIf="!imageObj"
+            (click)="imageUpload.choose()"
+          >
+            <span> or </span>
+            <span class="text-xl">
+              <i class="pi pi-image"></i> Drop image here
+            </span>
+          </div>
+        </ng-template>
+      </p-fileUpload>
+    </div>
 
     <div class="grid grid-nogutter">
       <div
@@ -62,6 +63,7 @@
         #canvas
         id="canvas"
         (resized)="onCanvasResized()"
+        #introStep3
       ></div>
     </div>
 
@@ -99,6 +101,8 @@
             placeholder="Selection tool"
             (onChange)="onSelectionToolChanged()"
             appendTo="body"
+            (onShow)="onSelectionShow($event)"
+            tooltipPosition="bottom"
             #selectionTool
           >
             <ng-template pTemplate="selectedItem">
@@ -142,10 +146,7 @@
           </p-dropdown>
         </div>
       </div>
-      <div
-        class="flex justify-content-center align-items-center gap-3"
-        #introStep4
-      >
+      <div class="flex justify-content-center align-items-center gap-3">
         <label for="integeronly">Number of colors you want to recognize </label>
         <p-inputNumber
           [(ngModel)]="numColors"
@@ -163,7 +164,7 @@
       </div>
     </ng-container>
 
-    <div #introStep5>
+    <div #introStep4>
       <app-recognise-button
         *ngIf="isValidSelection"
         (clicked)="recognise()"
