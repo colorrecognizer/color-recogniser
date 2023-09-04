@@ -10,6 +10,14 @@
   --primary-color:#4dacff;
   --primary-color-2: #33a1ff;
   --primary-color-3: #0066ff;
+  --primary-color-4: #cb6dc5;
+  --primary-color-4-rgb: 203, 109, 197;
+  --primary-color-5: #ff77a5;
+  --primary-color-6: #ffd68a;
+  --primary-color-3-hover: #0052cc;
+  --primary-color-4-hover: #b842b0;
+  --primary-color-5-hover: #ff2c74;
+  --primary-color-6-hover: #ffba3b;
   --primary-color-text:#151515;
   --font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
   --surface-0: #323b47;

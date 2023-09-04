@@ -242,3 +242,77 @@ body > div.background-container {
     display: none;
   }
 }
+
+.p-inputnumber-button.p-inputnumber-button-down.p-button {
+  background: var(--primary-color-4);
+  border-color: var(--primary-color-4);
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(var(--primary-color-4-rgb), 0.5);
+  }
+}
+
+span.p-button.p-fileupload-choose,
+button.gradient {
+  background-image: linear-gradient(
+    to right,
+    var(--primary-color-3) 0%,
+    var(--primary-color-4) 50%,
+    var(--primary-color-5) 100%
+  ) !important;
+
+  background-size: 100%;
+  background-image: -webkit-linear-gradient(
+    to right,
+    var(--primary-color-3) 0%,
+    var(--primary-color-4) 50%,
+    var(--primary-color-5) 100%
+  );
+  background-image: linear-gradient(
+    to right,
+    var(--primary-color-3) 0%,
+    var(--primary-color-4) 50%,
+    var(--primary-color-5) 100%
+  );
+  position: relative;
+  z-index: 100;
+  &:before {
+    border-radius: inherit;
+    background-image: -webkit-linear-gradient(
+      to right,
+      var(--primary-color-5) 0%,
+      var(--primary-color-4) 50%,
+      var(--primary-color-3) 100%
+    );
+    background-image: linear-gradient(
+      to right,
+      var(--primary-color-5) 0%,
+      var(--primary-color-4) 50%,
+      var(--primary-color-3) 100%
+    );
+    content: "";
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    z-index: -100;
+    -moz-transition: opacity 0.5s ease-in-out;
+    -webkit-transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
+  }
+  &:hover {
+    &:before {
+      opacity: 1;
+    }
+  }
+
+  &:active {
+    // not part of the mixin, I just wanted to add for dramatic effect
+    &:before {
+      opacity: 0;
+    }
+  }
+}

@@ -67,7 +67,7 @@
       ></div>
     </div>
 
-    <ng-container *ngIf="imageObj">
+    <ng-container *ngIf="true || imageObj">
       <div class="flex flex-wrap align-items-center gap-3 sticky bottom-0">
         <p-button
           icon="pi pi-replay"
@@ -76,6 +76,7 @@
           label="Set to default"
           tooltipPosition="right"
           [disabled]="!canModifyImage"
+          styleClass="gradient"
         ></p-button>
 
         <p-inputNumber
@@ -90,6 +91,7 @@
           suffix="%"
           inputStyleClass="w-5rem"
           [disabled]="!canModifyImage"
+          [min]="50"
         ></p-inputNumber>
 
         <div #introStep2>
