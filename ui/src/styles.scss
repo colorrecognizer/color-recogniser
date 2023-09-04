@@ -243,17 +243,41 @@ body > div.background-container {
   }
 }
 
-.p-inputnumber-button.p-inputnumber-button-down.p-button {
+.p-inputnumber-button.p-inputnumber-button-down.p-button,
+.p-button.p-button-primary-4 {
   background: var(--primary-color-4);
   border-color: var(--primary-color-4);
+  border: 1px solid var(--primary-color-4);
+
+  &:hover {
+    background: var(--primary-color-4-hover);
+    border-color: var(--primary-color-4);
+  }
 
   &:focus {
     box-shadow: 0 0 0 0.2rem rgba(var(--primary-color-4-rgb), 0.5);
   }
 }
 
+.p-button.p-button-primary-5 {
+  background: var(--primary-color-5);
+  border-color: var(--primary-color-5);
+  border: 1px solid var(--primary-color-5);
+
+  &:hover {
+    background: var(--primary-color-5-hover);
+    border-color: var(--primary-color-5);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(var(--primary-color-5-rgb), 0.5);
+  }
+}
+
 span.p-button.p-fileupload-choose,
 button.gradient {
+  border: none;
+
   background-image: linear-gradient(
     to right,
     var(--primary-color-3) 0%,
@@ -315,4 +339,12 @@ button.gradient {
       opacity: 0;
     }
   }
+}
+
+.background-primary-4 {
+  background-color: var(--primary-color-4);
+}
+
+.background-primary-5 {
+  background-color: var(--primary-color-5);
 }
