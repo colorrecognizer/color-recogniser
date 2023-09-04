@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   Inject,
@@ -16,7 +17,7 @@ import {
   ColorCoverage,
   RecogniserResponse,
 } from "src/app/shared/auto-generated/apis";
-import { catchError, finalize, map } from "rxjs";
+import { map } from "rxjs";
 import { MessageService } from "primeng/api";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
@@ -181,7 +182,8 @@ export class ColorRecognizerComponent
     private $title: Title,
     $meta: Meta,
     private $backgroundChange: BackgroundChangeService,
-    @Inject(DOCUMENT) private $document: Document
+    @Inject(DOCUMENT) private $document: Document,
+    private $changeDetectorRef: ChangeDetectorRef
   ) {
     this.$title.setTitle("Color Recognizer");
 
@@ -312,7 +314,9 @@ export class ColorRecognizerComponent
       ],
     });
 
-    this.introStarted = this.intro.start();
+    setTimeout(() => {
+      this.introStarted = this.intro.start();
+    }, 100);
   }
 
   removeImage() {
@@ -899,18 +903,18 @@ export class ColorRecognizerComponent
               this.matchColorTable.nativeElement.scrollIntoView({
                 behavior: "smooth",
               });
-
-              this.selection.visible(true);
             }, 100);
-          }),
-          catchError((e: Error) => {
-            throw e;
-          }),
-          finalize(() => {
-            this.recogniseButtonDisabled = false;
           })
         )
-        .subscribe();
+        .subscribe({
+          error: (err) => {
+            throw err;
+          },
+          complete: () => {
+            this.recogniseButtonDisabled = false;
+            this.$changeDetectorRef.detectChanges();
+          },
+        });
     });
   }
 
