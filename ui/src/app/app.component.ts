@@ -75,7 +75,7 @@ export class AppComponent implements OnInit, AfterViewInit {
             translateY: () => anime.random(-h / 2, h / 2),
             scale: () => anime.random(1, 5),
             easing: "spring(1, 80, 10, 0)",
-            rotateZ: () => anime.random(-50, 50),
+            rotateZ: () => anime.random(-90, 90),
           });
         })
       )
