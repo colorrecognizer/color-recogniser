@@ -1,24 +1,4 @@
 <div #card [ngClass]="cardCss" class="flex flex-column gap-3">
   <h1 class="text-900 m-0">{{ label }}</h1>
-  <!-- <span>
-    <strong>Hue variation: </strong> {{ hueVariation | number : "1.0-0" }}
-  </span>
-  <p-slider
-    [min]="0"
-    [max]="180"
-    [step]="1"
-    [(ngModel)]="hueVariation"
-    class="w-full"
-  ></p-slider> -->
-  <div class="flex flex-wrap gap-1">
-    <div
-      *ngFor="let c of colors"
-      #grow
-      class="flex-grow-1 cursor-pointer border-round-md grow"
-      style="height: 5rem"
-      [ngStyle]="{ 'background-color': c.hexValue }"
-      (click)="showHowToMix(c)"
-    >
-    </div>
-  </div>
+  <app-base-pallete [colors]="colors"></app-base-pallete>
 </div>

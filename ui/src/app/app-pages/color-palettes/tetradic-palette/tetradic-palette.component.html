@@ -10,14 +10,5 @@
     [(ngModel)]="hueVariation"
     class="w-full"
   ></p-slider>
-  <div class="flex flex-wrap gap-1">
-    <div
-      *ngFor="let c of colors"
-      #grow
-      class="flex-grow-1 cursor-pointer border-round-md grow"
-      style="height: 5rem"
-      [ngStyle]="{ 'background-color': c.hexValue }"
-      (click)="showHowToMix(c)"
-    ></div>
-  </div>
+  <app-base-pallete [colors]="colors"></app-base-pallete>
 </div>

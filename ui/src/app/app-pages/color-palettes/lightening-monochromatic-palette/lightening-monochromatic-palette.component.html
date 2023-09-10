@@ -9,15 +9,8 @@
     [(ngModel)]="steps"
     [step]="1"
     class="w-full"
+    (onChange)="changeSteps()"
   ></p-slider>
-  <div class="flex flex-wrap gap-1">
-    <div
-      *ngFor="let e of [].constructor(steps); let i = index"
-      #grow
-      class="flex-grow-1 cursor-pointer grow border-round-md"
-      style="height: 5rem"
-      [ngStyle]="{ 'background-color': getColor(i) }"
-      (click)="showHowToMix(getColor(i))"
-    ></div>
-  </div>
+
+  <app-base-pallete [colors]="colors"></app-base-pallete>
 </div>
