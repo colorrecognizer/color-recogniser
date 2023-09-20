@@ -5,6 +5,9 @@ import { FormlyModule } from "@ngx-formly/core";
 import { ColorPickerTypeComponent } from "./color-picker-type/color-picker-type.component";
 import { ColorPickerModule } from "primeng/colorpicker";
 import { InputTextModule } from "primeng/inputtext";
+import { FieldsetModule } from "primeng/fieldset";
+import { SliderModule } from "primeng/slider";
+import { RgbPickerComponent } from "./color-picker-type/rgb-picker/rgb-picker.component";
 
 const modules = [
   ReactiveFormsModule,
@@ -26,8 +29,14 @@ const modules = [
 ];
 
 @NgModule({
-  declarations: [ColorPickerTypeComponent],
-  imports: [...modules, InputTextModule, FormsModule],
+  declarations: [ColorPickerTypeComponent, RgbPickerComponent],
+  imports: [
+    ...modules,
+    InputTextModule,
+    FormsModule,
+    FieldsetModule,
+    SliderModule,
+  ],
   exports: [...modules, ColorPickerTypeComponent],
 })
 export class FormlyFormModule {}

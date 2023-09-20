@@ -7,7 +7,7 @@ import { ColorUtils, HSLColor } from "src/app/shared/utils";
   templateUrl: "./lightening-monochromatic-palette.component.html",
   styleUrls: ["./lightening-monochromatic-palette.component.scss"],
 })
-export class LighteningMonochromaticPaletteComponent implements OnInit{
+export class LighteningMonochromaticPaletteComponent implements OnInit {
   @Input() cardCss = "";
   @Input() isDarkening = false;
 
@@ -21,6 +21,7 @@ export class LighteningMonochromaticPaletteComponent implements OnInit{
   @Input() set color(value: Color) {
     this._color = value;
     this.hsl = ColorUtils.toHSL(value);
+    this.changeSteps();
   }
 
   get color(): Color {
@@ -32,8 +33,7 @@ export class LighteningMonochromaticPaletteComponent implements OnInit{
   colors: Color[] = [];
 
   /// Methods
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit(): void {
     this.changeSteps();

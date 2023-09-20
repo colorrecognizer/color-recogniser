@@ -12,7 +12,8 @@ import { AnalogousPaletteComponent } from "./analogous-palette/analogous-palette
 import { TetradicPaletteComponent } from "./tetradic-palette/tetradic-palette.component";
 import { FormlyFormModule } from "src/app/shared/components/formly-form/formly-form.module";
 import { UniversalGradientPaletteComponent } from "./universal-gradient-palette/universal-gradient-palette.component";
-import { BasePalleteComponent } from './base-pallete/base-pallete.component';
+import { BasePalleteComponent } from "./base-pallete/base-pallete.component";
+import { PictureThreeColorComponent } from "./base-pallete/picture-three-color/picture-three-color.component";
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { BasePalleteComponent } from './base-pallete/base-pallete.component';
     TetradicPaletteComponent,
     UniversalGradientPaletteComponent,
     BasePalleteComponent,
+    PictureThreeColorComponent,
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from "@angular/core";
+import { ChangeDetectorRef, Component, OnDestroy } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { Meta, Title } from "@angular/platform-browser";
 import { ActivatedRoute } from "@angular/router";
@@ -50,7 +50,8 @@ export class ColorPalettesComponent implements OnDestroy {
     $title: Title,
     $route: ActivatedRoute,
     $meta: Meta,
-    private $backgroundChange: BackgroundChangeService
+    private $backgroundChange: BackgroundChangeService,
+    private $changeDetectorRef: ChangeDetectorRef
   ) {
     $title.setTitle("Color Palettes");
     $meta.addTags([
@@ -91,5 +92,6 @@ export class ColorPalettesComponent implements OnDestroy {
     });
 
     this.$backgroundChange.setColor(this.color);
+    // this.$changeDetectorRef.detectChanges();
   }
 }

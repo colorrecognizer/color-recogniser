@@ -23,6 +23,11 @@ export class BasePalleteComponent {
         color: color,
         showColorPalettesHidden: true,
       },
+      dismissableMask: true,
     });
+  }
+
+  get reversedColors() {
+    return this.colors.reverse();
   }
 }

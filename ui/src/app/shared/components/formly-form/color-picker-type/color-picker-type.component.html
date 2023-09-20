@@ -1,14 +1,15 @@
 <!-- <input type="input" [formControl]="formControl" [formlyAttributes]="field"> -->
 
-<div class="flex align-items-center gap-3">
-  <p-colorPicker
-    [(ngModel)]="model.color"
-    format="rgb"
-    (onChange)="changeColor($event)"
-  ></p-colorPicker>
+<div class="flex flex-wrap align-items-center gap-3">
+  <div
+    style="width: 3rem; height: 3rem"
+    [style]="{ background: hex }"
+    class="border-round border-1"
+  ></div>
 
-  <div>
-    <label for="hexValue"> Hex value: </label>
-    <input id="hexValue" pInputText type="text" [(ngModel)]="hex"/>
-  </div>
+  <p-fieldset legend="Hex value">
+    <input pInputText type="text" [(ngModel)]="hex" />
+  </p-fieldset>
+
+  <app-rgb-picker [model]="model" [(hex)]="hex" />
 </div>

@@ -32,4 +32,9 @@ export class UniversalGradientPaletteComponent {
 
   /// Methods
   constructor() {}
+
+  /**
+   * #FFFFFF lab(100%, 0%, 0%)
+   * #F9F871 hsl(60, 92%, 71%)
+   */
 }
