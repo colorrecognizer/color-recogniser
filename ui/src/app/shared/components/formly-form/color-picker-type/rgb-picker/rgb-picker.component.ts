@@ -7,6 +7,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { Slider } from "primeng/slider";
+import { ColorPickerChangeService } from "../color-picker-change.service";
 
 @Component({
   selector: "app-rgb-picker",
@@ -21,6 +22,8 @@ export class RgbPickerComponent implements AfterViewInit {
   @Output() hexChange = new EventEmitter<string>();
 
   @Input() model: any;
+
+  constructor(private $colorPickerChange: ColorPickerChangeService) {}
 
   ngAfterViewInit(): void {
     this.rgbRedSlider.el.nativeElement.firstElementChild.style.height =
@@ -69,22 +72,25 @@ export class RgbPickerComponent implements AfterViewInit {
       }
     );
 
-    this.rgbRedSlider.el.nativeElement.firstElementChild.lastElementChild.style.background = `#${this.model.color.r
-      .toString(16)
-      .padStart(2, "0")}0000`;
-    this.rgbGreenSlider.el.nativeElement.firstElementChild.lastElementChild.style.background = `#00${this.model.color.r
-      .toString(16)
-      .padStart(2, "0")}00`;
-    this.rgbBlueSlider.el.nativeElement.firstElementChild.lastElementChild.style.background = `#0000${this.model.color.r
-      .toString(16)
-      .padStart(2, "0")}`;
+    this.$colorPickerChange.colorSubject.subscribe(() => {
+      this.rgbRedSlider.el.nativeElement.firstElementChild.lastElementChild.style.background = `#${this.model.color.r
+        .toString(16)
+        .padStart(2, "0")}0000`;
+      this.rgbRedSlider.el.nativeElement.firstElementChild.lastElementChild.style.borderColor =
+        "#E8A392";
 
-    this.rgbRedSlider.el.nativeElement.firstElementChild.lastElementChild.style.borderColor =
-      "red";
-    this.rgbGreenSlider.el.nativeElement.firstElementChild.lastElementChild.style.borderColor =
-      "green";
-    this.rgbBlueSlider.el.nativeElement.firstElementChild.lastElementChild.style.borderColor =
-      "blue";
+      this.rgbGreenSlider.el.nativeElement.firstElementChild.lastElementChild.style.background = `#00${this.model.color.g
+        .toString(16)
+        .padStart(2, "0")}00`;
+      this.rgbGreenSlider.el.nativeElement.firstElementChild.lastElementChild.style.borderColor =
+        "#8BAF7F";
+
+      this.rgbBlueSlider.el.nativeElement.firstElementChild.lastElementChild.style.background = `#0000${this.model.color.b
+        .toString(16)
+        .padStart(2, "0")}`;
+      this.rgbBlueSlider.el.nativeElement.firstElementChild.lastElementChild.style.borderColor =
+        "#8774A6";
+    });
   }
 
   get rgbRed(): number {
@@ -95,12 +101,6 @@ export class RgbPickerComponent implements AfterViewInit {
     const g = this.model.color.g.toString(16).padStart(2, "0");
     const b = this.model.color.b.toString(16).padStart(2, "0");
     this.hexChange.emit(`#${r}${g}${b}`);
-
-    this.rgbRedSlider.el.nativeElement.firstElementChild.lastElementChild.style.background = `#${this.model.color.r
-      .toString(16)
-      .padStart(2, "0")}0000`;
-    this.rgbRedSlider.el.nativeElement.firstElementChild.lastElementChild.style.borderColor =
-      "red";
   }
 
   get rgbGreen(): number {
@@ -111,12 +111,6 @@ export class RgbPickerComponent implements AfterViewInit {
     const g = value.toString(16).padStart(2, "0");
     const b = this.model.color.b.toString(16).padStart(2, "0");
     this.hexChange.emit(`#${r}${g}${b}`);
-
-    this.rgbGreenSlider.el.nativeElement.firstElementChild.lastElementChild.style.background = `#00${this.model.color.g
-      .toString(16)
-      .padStart(2, "0")}00`;
-    this.rgbGreenSlider.el.nativeElement.firstElementChild.lastElementChild.style.borderColor =
-      "green";
   }
 
   get rgbBlue(): number {
@@ -127,11 +121,5 @@ export class RgbPickerComponent implements AfterViewInit {
     const g = this.model.color.g.toString(16).padStart(2, "0");
     const b = value.toString(16).padStart(2, "0");
     this.hexChange.emit(`#${r}${g}${b}`);
-
-    this.rgbBlueSlider.el.nativeElement.firstElementChild.lastElementChild.style.background = `#0000${this.model.color.r
-      .toString(16)
-      .padStart(2, "0")}`;
-    this.rgbBlueSlider.el.nativeElement.firstElementChild.lastElementChild.style.borderColor =
-      "blue";
   }
 }

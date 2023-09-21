@@ -1,42 +1,66 @@
 <p-fieldset legend="RGB">
   <div class="flex flex-column gap-3">
     <div class="flex align-items-center gap-3">
-      <p-slider
+      <div class="flex-grow-1">
+        <p-slider
+          [(ngModel)]="rgbRed"
+          [step]="1"
+          [min]="0"
+          [max]="255"
+          [animate]="true"
+          styleClass="min-w-5rem"
+          #rgbRedSlider
+        ></p-slider>
+      </div>
+      <p-inputNumber
+        styleClass="w-4rem"
         [(ngModel)]="rgbRed"
-        [step]="1"
         [min]="0"
         [max]="255"
-        [animate]="true"
-        styleClass="w-10rem"
-        #rgbRedSlider
-      ></p-slider>
-      <input class="w-4rem" type="text" pInputText [(ngModel)]="rgbRed" />
+        [allowEmpty]="false"
+      ></p-inputNumber>
     </div>
 
     <div class="flex align-items-center gap-3">
-      <p-slider
+      <div class="flex-grow-1">
+        <p-slider
+          [(ngModel)]="rgbGreen"
+          [step]="1"
+          [min]="0"
+          [max]="255"
+          [animate]="true"
+          styleClass="min-w-5rem"
+          #rgbGreenSlider
+        ></p-slider>
+      </div>
+      <p-inputNumber
+        styleClass="w-4rem"
         [(ngModel)]="rgbGreen"
-        [step]="1"
         [min]="0"
         [max]="255"
-        [animate]="true"
-        styleClass="w-10rem"
-        #rgbGreenSlider
-      ></p-slider>
-      <input class="w-4rem" type="text" pInputText [(ngModel)]="rgbGreen" />
+        [allowEmpty]="false"
+      ></p-inputNumber>
     </div>
 
     <div class="flex align-items-center gap-3">
-      <p-slider
+      <div class="flex-grow-1">
+        <p-slider
+          [(ngModel)]="rgbBlue"
+          [step]="1"
+          [min]="0"
+          [max]="255"
+          [animate]="true"
+          styleClass="min-w-5rem"
+          #rgbBlueSlider
+        ></p-slider>
+      </div>
+      <p-inputNumber
+        styleClass="w-4rem"
         [(ngModel)]="rgbBlue"
-        [step]="1"
         [min]="0"
         [max]="255"
-        [animate]="true"
-        styleClass="w-10rem"
-        #rgbBlueSlider
-      ></p-slider>
-      <input class="w-4rem" type="text" pInputText [(ngModel)]="rgbBlue" />
+        [allowEmpty]="false"
+      ></p-inputNumber>
     </div>
   </div>
 </p-fieldset>

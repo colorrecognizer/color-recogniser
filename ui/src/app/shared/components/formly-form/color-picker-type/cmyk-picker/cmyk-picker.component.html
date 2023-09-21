@@ -1,0 +1,90 @@
+<p-fieldset legend="CMYK">
+  <div class="flex flex-column gap-3">
+    <div class="flex align-items-center gap-3">
+      <div class="flex-grow-1">
+        <p-slider
+          [(ngModel)]="cmykCyan"
+          [step]="1"
+          [min]="0"
+          [max]="100"
+          [animate]="true"
+          styleClass="min-w-5rem"
+          #cmykCyanSlider
+        ></p-slider>
+      </div>
+      <p-inputNumber
+        styleClass="w-5rem"
+        [(ngModel)]="cmykCyan"
+        [min]="0"
+        [max]="100"
+        [allowEmpty]="false"
+        suffix="%"
+      ></p-inputNumber>
+    </div>
+
+    <div class="flex align-items-center gap-3">
+      <div class="flex-grow-1">
+        <p-slider
+          [(ngModel)]="cmykMagenta"
+          [step]="1"
+          [min]="0"
+          [max]="100"
+          [animate]="true"
+          styleClass="min-w-5rem"
+          #cmykMagentaSlider
+        ></p-slider>
+      </div>
+      <p-inputNumber
+        styleClass="w-5rem"
+        [(ngModel)]="cmykMagenta"
+        [min]="0"
+        [max]="100"
+        [allowEmpty]="false"
+        suffix="%"
+      ></p-inputNumber>
+    </div>
+
+    <div class="flex align-items-center gap-3">
+      <div class="flex-grow-1">
+        <p-slider
+          [(ngModel)]="cmykYellow"
+          [step]="1"
+          [min]="0"
+          [max]="100"
+          [animate]="true"
+          styleClass="min-w-5rem"
+          #cmykYellowSlider
+        ></p-slider>
+      </div>
+      <p-inputNumber
+        styleClass="w-5rem"
+        [(ngModel)]="cmykYellow"
+        [min]="0"
+        [max]="100"
+        [allowEmpty]="false"
+        suffix="%"
+      ></p-inputNumber>
+    </div>
+    <div class="flex align-items-center gap-3">
+      <div class="flex-grow-1">
+        <p-slider
+          [(ngModel)]="cmykBlack"
+          [step]="1"
+          [min]="0"
+          [max]="100"
+          [animate]="true"
+          styleClass="min-w-5rem"
+          #cmykBlackSlider
+        ></p-slider>
+      </div>
+      <p-inputNumber
+        styleClass="w-5rem"
+        [(ngModel)]="cmykBlack"
+        [min]="0"
+        [max]="100"
+        [allowEmpty]="false"
+        suffix="%"
+      ></p-inputNumber>
+    </div>
+  </div>
+</p-fieldset>

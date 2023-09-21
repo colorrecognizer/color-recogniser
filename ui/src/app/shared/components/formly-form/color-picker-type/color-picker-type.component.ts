@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { FieldType, FieldTypeConfig } from "@ngx-formly/core";
+import { ColorPickerChangeService } from "./color-picker-change.service";
 
 @Component({
   selector: "app-color-picker-type",
@@ -7,6 +8,10 @@ import { FieldType, FieldTypeConfig } from "@ngx-formly/core";
   styleUrls: ["./color-picker-type.component.scss"],
 })
 export class ColorPickerTypeComponent extends FieldType<FieldTypeConfig> {
+  constructor(private $colorPickerChange: ColorPickerChangeService) {
+    super();
+  }
+
   get hex(): string {
     const r = this.model.color.r.toString(16).padStart(2, "0");
     const g = this.model.color.g.toString(16).padStart(2, "0");
@@ -25,6 +30,8 @@ export class ColorPickerTypeComponent extends FieldType<FieldTypeConfig> {
         b: parseInt(value.substring(4, 6), 16),
       };
     }
+
+    this.$colorPickerChange.setColor(value);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

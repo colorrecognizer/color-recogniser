@@ -8,6 +8,9 @@ import { InputTextModule } from "primeng/inputtext";
 import { FieldsetModule } from "primeng/fieldset";
 import { SliderModule } from "primeng/slider";
 import { RgbPickerComponent } from "./color-picker-type/rgb-picker/rgb-picker.component";
+import { InputNumberModule } from "primeng/inputnumber";
+import { CmykPickerComponent } from "./color-picker-type/cmyk-picker/cmyk-picker.component";
+import { ColorPickerChangeService } from "./color-picker-type/color-picker-change.service";
 
 const modules = [
   ReactiveFormsModule,
@@ -29,14 +32,20 @@ const modules = [
 ];
 
 @NgModule({
-  declarations: [ColorPickerTypeComponent, RgbPickerComponent],
+  declarations: [
+    ColorPickerTypeComponent,
+    RgbPickerComponent,
+    CmykPickerComponent,
+  ],
   imports: [
     ...modules,
     InputTextModule,
     FormsModule,
     FieldsetModule,
     SliderModule,
+    InputNumberModule,
   ],
   exports: [...modules, ColorPickerTypeComponent],
+  providers: [ColorPickerChangeService],
 })
 export class FormlyFormModule {}

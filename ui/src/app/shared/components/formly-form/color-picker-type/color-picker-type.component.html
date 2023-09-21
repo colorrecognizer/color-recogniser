@@ -1,15 +1,20 @@
 <!-- <input type="input" [formControl]="formControl" [formlyAttributes]="field"> -->
 
-<div class="flex flex-wrap align-items-center gap-3">
+<div class="grid grid-nogutter align-items-center gap-3">
   <div
-    style="width: 3rem; height: 3rem"
+    style="min-height: 5rem; min-width: 5rem"
     [style]="{ background: hex }"
-    class="border-round border-1"
+    class="col border-round border-1"
   ></div>
-
-  <p-fieldset legend="Hex value">
-    <input pInputText type="text" [(ngModel)]="hex" />
-  </p-fieldset>
-
-  <app-rgb-picker [model]="model" [(hex)]="hex" />
+  <div class="col-fixed">
+    <p-fieldset legend="Hex value">
+      <input class="w-6rem" pInputText type="text" [(ngModel)]="hex" />
+    </p-fieldset>
+  </div>
+  <div class="col">
+    <app-rgb-picker [model]="model" [(hex)]="hex" />
+  </div>
+  <div class="col">
+    <app-cmyk-picker [model]="model" [(hex)]="hex" />
+  </div>
 </div>
