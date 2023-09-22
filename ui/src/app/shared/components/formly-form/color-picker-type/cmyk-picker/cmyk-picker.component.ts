@@ -162,7 +162,7 @@ export class CmykPickerComponent implements AfterViewInit {
     });
 
     const cmyk = ColorUtils.toCMYK(color);
-    return Math.floor((cmyk.cyan || 0) * 100);
+    return cmyk.cyan || 0;
   }
   set cmykCyan(value: number) {
     const color = new Color({
@@ -172,11 +172,25 @@ export class CmykPickerComponent implements AfterViewInit {
     });
 
     const cmyk = ColorUtils.toCMYK(color);
+
+    let m = cmyk.magenta,
+      y = cmyk.yellow;
+
+    if (value && cmyk.magenta && cmyk.yellow) {
+      if (cmyk.magenta > cmyk.yellow) {
+        m = cmyk.magenta;
+        y = 0;
+      } else {
+        m = 0;
+        y = cmyk.yellow;
+      }
+    }
+
     const newCmyk = new CMYKColor({
-      cyan: value / 100,
-      magenta: cmyk.magenta,
-      yellow: cmyk.yellow,
-      black: cmyk.black,
+      cyan: value,
+      magenta: m,
+      yellow: y,
+      black: cmyk.black === 100 ? 50 : cmyk.black,
     });
 
     this.hexChange.emit(ColorUtils.toHex("cmyk", newCmyk));
@@ -190,7 +204,7 @@ export class CmykPickerComponent implements AfterViewInit {
     });
 
     const cmyk = ColorUtils.toCMYK(color);
-    return Math.floor((cmyk.magenta || 0) * 100);
+    return cmyk.magenta || 0;
   }
   set cmykMagenta(value: number) {
     const color = new Color({
@@ -200,11 +214,24 @@ export class CmykPickerComponent implements AfterViewInit {
     });
 
     const cmyk = ColorUtils.toCMYK(color);
+    let c = cmyk.cyan,
+      y = cmyk.yellow;
+
+    if (value && cmyk.cyan && cmyk.yellow) {
+      if (cmyk.cyan > cmyk.yellow) {
+        c = cmyk.cyan;
+        y = 0;
+      } else {
+        c = 0;
+        y = cmyk.yellow;
+      }
+    }
+
     const newCmyk = new CMYKColor({
-      cyan: cmyk.cyan,
-      magenta: value / 100,
-      yellow: cmyk.yellow,
-      black: cmyk.black,
+      cyan: c,
+      magenta: value,
+      yellow: y,
+      black: cmyk.black === 100 ? 50 : cmyk.black,
     });
 
     this.hexChange.emit(ColorUtils.toHex("cmyk", newCmyk));
@@ -218,7 +245,7 @@ export class CmykPickerComponent implements AfterViewInit {
     });
 
     const cmyk = ColorUtils.toCMYK(color);
-    return Math.floor((cmyk.yellow || 0) * 100);
+    return cmyk.yellow || 0;
   }
   set cmykYellow(value: number) {
     const color = new Color({
@@ -228,11 +255,24 @@ export class CmykPickerComponent implements AfterViewInit {
     });
 
     const cmyk = ColorUtils.toCMYK(color);
+    let c = cmyk.cyan,
+      m = cmyk.magenta;
+
+    if (value && cmyk.cyan && cmyk.magenta) {
+      if (cmyk.cyan > cmyk.magenta) {
+        c = cmyk.cyan;
+        m = 0;
+      } else {
+        c = 0;
+        m = cmyk.magenta;
+      }
+    }
+
     const newCmyk = new CMYKColor({
-      cyan: cmyk.cyan,
-      magenta: cmyk.magenta,
-      yellow: value / 100,
-      black: cmyk.black,
+      cyan: c,
+      magenta: m,
+      yellow: value,
+      black: cmyk.black === 100 ? 50 : cmyk.black,
     });
 
     this.hexChange.emit(ColorUtils.toHex("cmyk", newCmyk));
@@ -246,7 +286,7 @@ export class CmykPickerComponent implements AfterViewInit {
     });
 
     const cmyk = ColorUtils.toCMYK(color);
-    return Math.floor((cmyk.black || 0) * 100);
+    return cmyk.black || 0;
   }
   set cmykBlack(value: number) {
     const color = new Color({
@@ -260,7 +300,7 @@ export class CmykPickerComponent implements AfterViewInit {
       cyan: cmyk.cyan,
       magenta: cmyk.magenta,
       yellow: cmyk.yellow,
-      black: value / 100,
+      black: value,
     });
 
     this.hexChange.emit(ColorUtils.toHex("cmyk", newCmyk));

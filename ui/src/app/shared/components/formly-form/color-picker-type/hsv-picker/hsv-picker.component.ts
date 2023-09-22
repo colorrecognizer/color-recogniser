@@ -149,10 +149,15 @@ export class HsvPickerComponent implements AfterViewInit {
     });
 
     const hsv = ColorUtils.toHSV(color);
+    let s = hsv.s,
+      v = hsv.v;
+    if (hsv.s === 0) s = 100;
+    if (hsv.v === 0) v = 100;
+
     const newHsv = {
       h: value,
-      s: hsv.s,
-      v: hsv.v,
+      s: s,
+      v: v,
     };
 
     this.hexChange.emit(ColorUtils.toHex("hsv", newHsv));
@@ -176,6 +181,10 @@ export class HsvPickerComponent implements AfterViewInit {
     });
 
     const hsv = ColorUtils.toHSV(color);
+    if (value && hsv.v === 0) {
+      hsv.v = 100;
+    }
+
     const newHsv = {
       h: hsv.h,
       s: value,

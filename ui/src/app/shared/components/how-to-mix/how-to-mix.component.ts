@@ -117,22 +117,22 @@ export class HowToMixComponent {
 
   get cyanPercentage(): number {
     const color = this.color.cmyk?.cyan || 0;
-    return Math.round(color * 100);
+    return color;
   }
 
   get magentaPercentage(): number {
     const color = this.color.cmyk?.magenta || 0;
-    return Math.round(color * 100);
+    return color;
   }
 
   get yellowPercentage(): number {
     const color = this.color.cmyk?.yellow || 0;
-    return Math.round(color * 100);
+    return color;
   }
 
   get blackPercentage(): number {
     const color = this.color.cmyk?.black || 0;
-    return Math.round(color * 100);
+    return color;
   }
 
   showColorPalettes() {

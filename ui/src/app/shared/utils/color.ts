@@ -33,7 +33,7 @@ export class ColorUtils {
         cyan: 0,
         magenta: 0,
         yellow: 0,
-        black: 1,
+        black: 100,
       });
     }
 
@@ -51,20 +51,20 @@ export class ColorUtils {
     computedY = (computedY - minCMY) / (1 - minCMY);
 
     return new CMYKColor({
-      cyan: computedC,
-      magenta: computedM,
-      yellow: computedY,
-      black: minCMY,
+      cyan: Math.round(100 * computedC),
+      magenta: Math.round(100 * computedM),
+      yellow: Math.round(100 * computedY),
+      black: Math.round(100 * minCMY),
     });
   }
 
   static toHex(type: ColorType, source: CMYKColor | HSLColor | HSVColor) {
     if (type === "cmyk") {
       source = <CMYKColor>source;
-      source.cyan = source.cyan || 0;
-      source.magenta = source.magenta || 0;
-      source.yellow = source.yellow || 0;
-      source.black = source.black || 0;
+      source.cyan = (source.cyan || 0) / 100;
+      source.magenta = (source.magenta || 0) / 100;
+      source.yellow = (source.yellow || 0) / 100;
+      source.black = (source.black || 0) / 100;
 
       const r = Math.round(255 * (1 - source.cyan) * (1 - source.black));
       const g = Math.round(255 * (1 - source.magenta) * (1 - source.black));
