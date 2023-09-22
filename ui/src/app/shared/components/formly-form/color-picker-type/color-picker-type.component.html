@@ -7,7 +7,7 @@
     class="col border-round border-1"
   ></div>
   <div class="col-fixed">
-    <p-fieldset legend="Hex value">
+    <p-fieldset legend="Hex value" [toggleable]="true">
       <div class="flex flex-column gap-3">
         <app-copy-to-clipboard-button
           [content]="hex"

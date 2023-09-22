@@ -34,7 +34,9 @@ export class ColorPickerTypeComponent
         .querySelectorAll("app-color-picker-type p-fieldset legend")
         .forEach((x) => {
           (x as any).style.background = this.hex;
-          (x as any).style.color = textColor;
+
+          if ((x as any).firstElementChild)
+            (x as any).firstElementChild.style.color = textColor;
         });
     });
   }
