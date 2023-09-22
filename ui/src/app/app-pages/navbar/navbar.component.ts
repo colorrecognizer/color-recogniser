@@ -9,7 +9,6 @@ import {
 import { Router } from "@angular/router";
 import anime from "animejs";
 import { StyleClass } from "primeng/styleclass";
-import { map } from "rxjs";
 import { User } from "src/app/shared/auto-generated/apis";
 import { AuthService } from "src/app/shared/services/auth.service";
 import { BackgroundChangeService } from "src/app/shared/services/background-change.service";
