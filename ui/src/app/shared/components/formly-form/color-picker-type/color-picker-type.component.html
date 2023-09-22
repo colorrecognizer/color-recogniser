@@ -1,6 +1,6 @@
 <!-- <input type="input" [formControl]="formControl" [formlyAttributes]="field"> -->
 
-<div class="grid grid-nogutter align-items-center gap-3">
+<div class="grid grid-nogutter align-items-stretch gap-3">
   <div
     style="min-height: 5rem; min-width: 5rem"
     [style]="{ background: hex }"
@@ -8,7 +8,12 @@
   ></div>
   <div class="col-fixed">
     <p-fieldset legend="Hex value">
-      <input class="w-6rem" pInputText type="text" [(ngModel)]="hex" />
+      <div class="flex flex-column gap-3">
+        <app-copy-to-clipboard-button
+          [content]="hex"
+        ></app-copy-to-clipboard-button>
+        <input class="w-6rem" pInputText type="text" [(ngModel)]="hex" />
+      </div>
     </p-fieldset>
   </div>
   <div class="col">
@@ -16,5 +21,8 @@
   </div>
   <div class="col">
     <app-cmyk-picker [model]="model" [(hex)]="hex" />
+  </div>
+  <div class="col">
+    <app-hsv-picker [model]="model" [(hex)]="hex" />
   </div>
 </div>

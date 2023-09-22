@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewEncapsulation } from "@angular/core";
 import { FieldType, FieldTypeConfig } from "@ngx-formly/core";
 import { ColorPickerChangeService } from "./color-picker-change.service";
 
@@ -6,6 +6,7 @@ import { ColorPickerChangeService } from "./color-picker-change.service";
   selector: "app-color-picker-type",
   templateUrl: "./color-picker-type.component.html",
   styleUrls: ["./color-picker-type.component.scss"],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ColorPickerTypeComponent extends FieldType<FieldTypeConfig> {
   constructor(private $colorPickerChange: ColorPickerChangeService) {

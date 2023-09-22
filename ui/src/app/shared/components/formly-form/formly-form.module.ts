@@ -11,6 +11,8 @@ import { RgbPickerComponent } from "./color-picker-type/rgb-picker/rgb-picker.co
 import { InputNumberModule } from "primeng/inputnumber";
 import { CmykPickerComponent } from "./color-picker-type/cmyk-picker/cmyk-picker.component";
 import { ColorPickerChangeService } from "./color-picker-type/color-picker-change.service";
+import { HsvPickerComponent } from "./color-picker-type/hsv-picker/hsv-picker.component";
+import { CopyToClipboardButtonModule } from "../copy-to-clipboard-button/copy-to-clipboard-button.module";
 
 const modules = [
   ReactiveFormsModule,
@@ -36,6 +38,7 @@ const modules = [
     ColorPickerTypeComponent,
     RgbPickerComponent,
     CmykPickerComponent,
+    HsvPickerComponent,
   ],
   imports: [
     ...modules,
@@ -44,6 +47,7 @@ const modules = [
     FieldsetModule,
     SliderModule,
     InputNumberModule,
+    CopyToClipboardButtonModule,
   ],
   exports: [...modules, ColorPickerTypeComponent],
   providers: [ColorPickerChangeService],

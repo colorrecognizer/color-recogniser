@@ -1,6 +1,8 @@
 <p-fieldset legend="CMYK">
   <div class="flex flex-column gap-3">
+    <app-copy-to-clipboard-button [content]="clipboardContent" />
     <div class="flex align-items-center gap-3">
+      <strong>C</strong>
       <div class="flex-grow-1">
         <p-slider
           [(ngModel)]="cmykCyan"
@@ -9,6 +11,7 @@
           [max]="100"
           [animate]="true"
           styleClass="min-w-5rem"
+          [disabled]="isBlack || (cmykMagenta > 0 && cmykYellow > 0)"
           #cmykCyanSlider
         ></p-slider>
       </div>
@@ -19,10 +22,12 @@
         [max]="100"
         [allowEmpty]="false"
         suffix="%"
+        [disabled]="isBlack || (cmykMagenta > 0 && cmykYellow > 0)"
       ></p-inputNumber>
     </div>
 
     <div class="flex align-items-center gap-3">
+      <strong>M</strong>
       <div class="flex-grow-1">
         <p-slider
           [(ngModel)]="cmykMagenta"
@@ -31,6 +36,7 @@
           [max]="100"
           [animate]="true"
           styleClass="min-w-5rem"
+          [disabled]="isBlack || (cmykCyan > 0 && cmykYellow > 0)"
           #cmykMagentaSlider
         ></p-slider>
       </div>
@@ -41,10 +47,12 @@
         [max]="100"
         [allowEmpty]="false"
         suffix="%"
+        [disabled]="isBlack || (cmykCyan > 0 && cmykYellow > 0)"
       ></p-inputNumber>
     </div>
 
     <div class="flex align-items-center gap-3">
+      <strong>Y</strong>
       <div class="flex-grow-1">
         <p-slider
           [(ngModel)]="cmykYellow"
@@ -53,6 +61,7 @@
           [max]="100"
           [animate]="true"
           styleClass="min-w-5rem"
+          [disabled]="isBlack || (cmykMagenta > 0 && cmykCyan > 0)"
           #cmykYellowSlider
         ></p-slider>
       </div>
@@ -63,9 +72,11 @@
         [max]="100"
         [allowEmpty]="false"
         suffix="%"
+        [disabled]="isBlack || (cmykMagenta > 0 && cmykCyan > 0)"
       ></p-inputNumber>
     </div>
     <div class="flex align-items-center gap-3">
+      <strong>K</strong>
       <div class="flex-grow-1">
         <p-slider
           [(ngModel)]="cmykBlack"

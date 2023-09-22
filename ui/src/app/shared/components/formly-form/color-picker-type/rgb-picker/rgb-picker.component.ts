@@ -122,4 +122,8 @@ export class RgbPickerComponent implements AfterViewInit {
     const b = value.toString(16).padStart(2, "0");
     this.hexChange.emit(`#${r}${g}${b}`);
   }
+
+  get clipboardContent(): string {
+    return `${this.rgbRed}, ${this.rgbGreen}, ${this.rgbBlue}`;
+  }
 }

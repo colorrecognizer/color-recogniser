@@ -3,7 +3,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnDestroy,
   Output,
   ViewChild,
 } from "@angular/core";
@@ -28,6 +27,10 @@ export class CmykPickerComponent implements AfterViewInit {
   @Input() model: any;
 
   constructor(private $colorPickerChange: ColorPickerChangeService) {}
+
+  get isBlack() {
+    return this.hex === "#000000";
+  }
 
   ngAfterViewInit(): void {
     this.cmykCyanSlider.el.nativeElement.firstElementChild.style.height =
@@ -261,5 +264,9 @@ export class CmykPickerComponent implements AfterViewInit {
     });
 
     this.hexChange.emit(ColorUtils.toHex("cmyk", newCmyk));
+  }
+
+  get clipboardContent(): string {
+    return `${this.cmykCyan}%, ${this.cmykMagenta}%, ${this.cmykYellow}%, ${this.cmykBlack}%`;
   }
 }

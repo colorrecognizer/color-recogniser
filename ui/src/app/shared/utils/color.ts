@@ -6,7 +6,13 @@ export interface HSLColor {
   l: number;
 }
 
-type ColorType = "rgb" | "cmyk" | "hsl";
+export interface HSVColor {
+  h: number;
+  s: number;
+  v: number;
+}
+
+type ColorType = "rgb" | "cmyk" | "hsl" | "hsv";
 
 export class ColorUtils {
   static toColor(hex: string): Color {
@@ -52,7 +58,7 @@ export class ColorUtils {
     });
   }
 
-  static toHex(type: ColorType, source: CMYKColor | HSLColor) {
+  static toHex(type: ColorType, source: CMYKColor | HSLColor | HSVColor) {
     if (type === "cmyk") {
       source = <CMYKColor>source;
       source.cyan = source.cyan || 0;
@@ -88,6 +94,46 @@ export class ColorUtils {
           red: Math.round(255 * f(0)),
           green: Math.round(255 * f(8)),
           blue: Math.round(255 * f(4)),
+        })
+      );
+    }
+
+    if (type === "hsv") {
+      source = <HSVColor>source;
+      let r, g, b;
+      const h = source.h / 360;
+      const s = source.s / 100;
+      const v = source.v / 100;
+      const i = Math.floor(h * 6);
+      const f = h * 6 - i;
+      const p = v * (1 - s);
+      const q = v * (1 - f * s);
+      const t = v * (1 - (1 - f) * s);
+      switch (i % 6) {
+        case 0:
+          (r = v), (g = t), (b = p);
+          break;
+        case 1:
+          (r = q), (g = v), (b = p);
+          break;
+        case 2:
+          (r = p), (g = v), (b = t);
+          break;
+        case 3:
+          (r = p), (g = q), (b = v);
+          break;
+        case 4:
+          (r = t), (g = p), (b = v);
+          break;
+        case 5:
+          (r = v), (g = p), (b = q);
+          break;
+      }
+      return ColorUtils.getColorHex(
+        new Color({
+          red: Math.round(255 * (r || 0)),
+          green: Math.round(255 * (g || 0)),
+          blue: Math.round(255 * (b || 0)),
         })
       );
     }
@@ -140,6 +186,57 @@ export class ColorUtils {
       h: 60 * h < 0 ? 60 * h + 360 : 60 * h,
       s: 100 * (s ? (l <= 0.5 ? s / (2 * l - s) : s / (2 - (2 * l - s))) : 0),
       l: (100 * (2 * l - s)) / 2,
+    };
+  }
+
+  /**
+   * The range of the resulting values is H: [0, 360], S: [0, 100], V: [0, 100].
+   * @param color The range of all input parameters is [0, 255].
+   */
+  static toHSV(color: Color): HSVColor {
+    if (
+      color.red === null ||
+      color.red === undefined ||
+      color.green === null ||
+      color.green === undefined ||
+      color.blue === null ||
+      color.blue === undefined
+    ) {
+      throw new Error("Invalid color");
+    }
+
+    const r = color.red;
+    const g = color.green;
+    const b = color.blue;
+    const max = Math.max(r, g, b),
+      min = Math.min(r, g, b),
+      d = max - min,
+      s = max === 0 ? 0 : d / max,
+      v = max / 255;
+    let h;
+
+    switch (max) {
+      case min:
+        h = 0;
+        break;
+      case r:
+        h = g - b + d * (g < b ? 6 : 0);
+        h /= 6 * d;
+        break;
+      case g:
+        h = b - r + d * 2;
+        h /= 6 * d;
+        break;
+      case b:
+        h = r - g + d * 4;
+        h /= 6 * d;
+        break;
+    }
+
+    return {
+      h: Math.round((h || 0) * 360),
+      s: Math.round(s * 100),
+      v: Math.round(v * 100),
     };
   }
 }

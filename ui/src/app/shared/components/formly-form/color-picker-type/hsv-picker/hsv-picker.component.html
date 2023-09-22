@@ -1,72 +1,72 @@
-<p-fieldset legend="RGB">
+<p-fieldset legend="HSV">
   <div class="flex flex-column gap-3">
-    <app-copy-to-clipboard-button
-      [content]="clipboardContent"
-    ></app-copy-to-clipboard-button>
-
+    <app-copy-to-clipboard-button [content]="clipboardContent"></app-copy-to-clipboard-button>
     <div class="flex align-items-center gap-3">
-      <strong>R</strong>
+      <strong>H</strong>
       <div class="flex-grow-1">
         <p-slider
-          [(ngModel)]="rgbRed"
+          [(ngModel)]="hue"
           [step]="1"
           [min]="0"
-          [max]="255"
+          [max]="359"
           [animate]="true"
           styleClass="min-w-5rem"
-          #rgbRedSlider
+          [disabled]="hsvValue === 0 || saturation === 0"
+          #hueSlider
         ></p-slider>
       </div>
       <p-inputNumber
-        styleClass="w-4rem"
-        [(ngModel)]="rgbRed"
+        styleClass="w-5rem"
+        [(ngModel)]="hue"
         [min]="0"
-        [max]="255"
+        [max]="359"
         [allowEmpty]="false"
+        suffix="&deg;"
       ></p-inputNumber>
     </div>
-
     <div class="flex align-items-center gap-3">
-      <strong>G</strong>
+      <strong>S</strong>
       <div class="flex-grow-1">
         <p-slider
-          [(ngModel)]="rgbGreen"
+          [(ngModel)]="saturation"
           [step]="1"
           [min]="0"
-          [max]="255"
+          [max]="100"
           [animate]="true"
           styleClass="min-w-5rem"
-          #rgbGreenSlider
+          [disabled]="hsvValue === 0"
+          #saturationSlider
         ></p-slider>
       </div>
       <p-inputNumber
-        styleClass="w-4rem"
-        [(ngModel)]="rgbGreen"
+        styleClass="w-5rem"
+        [(ngModel)]="saturation"
         [min]="0"
-        [max]="255"
+        [max]="100"
         [allowEmpty]="false"
+        suffix="%"
       ></p-inputNumber>
     </div>
-
     <div class="flex align-items-center gap-3">
-      <strong>B</strong>
+      <strong>V</strong>
       <div class="flex-grow-1">
         <p-slider
-          [(ngModel)]="rgbBlue"
+          [(ngModel)]="hsvValue"
           [step]="1"
           [min]="0"
-          [max]="255"
+          [max]="100"
           [animate]="true"
           styleClass="min-w-5rem"
-          #rgbBlueSlider
+          #hsvValueSlider
         ></p-slider>
       </div>
       <p-inputNumber
-        styleClass="w-4rem"
-        [(ngModel)]="rgbBlue"
+        styleClass="w-5rem"
+        [(ngModel)]="hsvValue"
         [min]="0"
-        [max]="255"
+        [max]="100"
         [allowEmpty]="false"
+        suffix="%"
       ></p-inputNumber>
     </div>
   </div>

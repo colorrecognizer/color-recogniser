@@ -43,10 +43,10 @@ export class NavbarComponent {
     private $router: Router,
     private $backgroundChange: BackgroundChangeService
   ) {
-    $auth
-      .getCurrentUser()
-      .pipe(map((user) => (this.currentUser = user)))
-      .subscribe();
+    // $auth
+    //   .getCurrentUser()
+    //   .pipe(map((user) => (this.currentUser = user)))
+    //   .subscribe();
 
     this.$theme.theme.subscribe((theme) => {
       this.themeIcon = theme === "light-theme" ? "pi pi-sun" : "pi pi-moon";
