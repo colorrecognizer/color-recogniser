@@ -2,7 +2,9 @@
   <div class="flex flex-column gap-3">
     <app-copy-to-clipboard-button [content]="clipboardContent" />
     <div class="flex align-items-center gap-3">
-      <strong>C</strong>
+      <div class="w-1rem">
+        <strong>C</strong>
+      </div>
       <div class="flex-grow-1">
         <p-slider
           [(ngModel)]="cmykCyan"
@@ -27,7 +29,9 @@
     </div>
 
     <div class="flex align-items-center gap-3">
-      <strong>M</strong>
+      <div class="w-1rem">
+        <strong>M</strong>
+      </div>
       <div class="flex-grow-1">
         <p-slider
           [(ngModel)]="cmykMagenta"
@@ -52,7 +56,9 @@
     </div>
 
     <div class="flex align-items-center gap-3">
-      <strong>Y</strong>
+      <div class="w-1rem">
+        <strong>Y</strong>
+      </div>
       <div class="flex-grow-1">
         <p-slider
           [(ngModel)]="cmykYellow"
@@ -76,7 +82,9 @@
       ></p-inputNumber>
     </div>
     <div class="flex align-items-center gap-3">
-      <strong>K</strong>
+      <div class="w-1rem">
+        <strong>K</strong>
+      </div>
       <div class="flex-grow-1">
         <p-slider
           [(ngModel)]="cmykBlack"

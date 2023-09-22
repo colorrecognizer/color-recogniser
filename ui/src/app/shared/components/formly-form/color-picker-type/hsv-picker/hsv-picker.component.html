@@ -1,8 +1,12 @@
 <p-fieldset legend="HSV">
   <div class="flex flex-column gap-3">
-    <app-copy-to-clipboard-button [content]="clipboardContent"></app-copy-to-clipboard-button>
+    <app-copy-to-clipboard-button
+      [content]="clipboardContent"
+    ></app-copy-to-clipboard-button>
     <div class="flex align-items-center gap-3">
-      <strong>H</strong>
+      <div class="w-1rem">
+        <strong>H</strong>
+      </div>
       <div class="flex-grow-1">
         <p-slider
           [(ngModel)]="hue"
@@ -25,7 +29,9 @@
       ></p-inputNumber>
     </div>
     <div class="flex align-items-center gap-3">
-      <strong>S</strong>
+      <div class="w-1rem">
+        <strong>S</strong>
+      </div>
       <div class="flex-grow-1">
         <p-slider
           [(ngModel)]="saturation"
@@ -48,7 +54,9 @@
       ></p-inputNumber>
     </div>
     <div class="flex align-items-center gap-3">
-      <strong>V</strong>
+      <div class="w-1rem">
+        <strong>V</strong>
+      </div>
       <div class="flex-grow-1">
         <p-slider
           [(ngModel)]="hsvValue"

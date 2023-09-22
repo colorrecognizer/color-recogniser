@@ -82,6 +82,12 @@ export class HsvPickerComponent implements AfterViewInit {
       });
 
       const hsv = ColorUtils.toHSV(color);
+      const borderColor = ColorUtils.toHex("hsv", {
+        h: (hsv.h + 180) % 360,
+        s: 100,
+        v: 100,
+      });
+
       this.hueSlider.el.nativeElement.firstElementChild.lastElementChild.style.background =
         ColorUtils.toHex("hsv", {
           h: hsv.h,
@@ -89,7 +95,7 @@ export class HsvPickerComponent implements AfterViewInit {
           v: 100,
         });
       this.hueSlider.el.nativeElement.firstElementChild.lastElementChild.style.borderColor =
-        "cyan";
+        borderColor;
 
       const sLow = ColorUtils.toHex("hsv", {
         h: hsv.h,
@@ -105,7 +111,7 @@ export class HsvPickerComponent implements AfterViewInit {
       this.saturationSlider.el.nativeElement.firstElementChild.lastElementChild.style.background =
         this.hex;
       this.saturationSlider.el.nativeElement.firstElementChild.lastElementChild.style.borderColor =
-        "cyan";
+        borderColor;
 
       const vLow = ColorUtils.toHex("hsv", {
         h: hsv.h,
@@ -121,7 +127,7 @@ export class HsvPickerComponent implements AfterViewInit {
       this.hsvValueSlider.el.nativeElement.firstElementChild.lastElementChild.style.background =
         this.hex;
       this.hsvValueSlider.el.nativeElement.firstElementChild.lastElementChild.style.borderColor =
-        "cyan";
+        borderColor;
     });
   }
 
