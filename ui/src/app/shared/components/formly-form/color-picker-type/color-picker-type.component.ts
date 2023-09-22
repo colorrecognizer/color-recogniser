@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from "@angular/core";
+import { AfterViewInit, Component, ViewEncapsulation } from "@angular/core";
 import { FieldType, FieldTypeConfig } from "@ngx-formly/core";
 import { ColorPickerChangeService } from "./color-picker-change.service";
 
@@ -8,9 +8,35 @@ import { ColorPickerChangeService } from "./color-picker-change.service";
   styleUrls: ["./color-picker-type.component.scss"],
   encapsulation: ViewEncapsulation.None,
 })
-export class ColorPickerTypeComponent extends FieldType<FieldTypeConfig> {
+export class ColorPickerTypeComponent
+  extends FieldType<FieldTypeConfig>
+  implements AfterViewInit
+{
   constructor(private $colorPickerChange: ColorPickerChangeService) {
     super();
+  }
+
+  ngAfterViewInit(): void {
+    this.$colorPickerChange.colorSubject.subscribe(() => {
+      let textColor: string;
+
+      // Counting the perceptive luminance - human eye favors green color...
+      const luminance =
+        (0.299 * this.model.color.r +
+          0.587 * this.model.color.g +
+          0.114 * this.model.color.b) /
+        255;
+
+      if (luminance > 0.5) textColor = "#212529"; // bright colors - black font
+      else textColor = "rgba(255, 255, 255, 0.87)"; // dark colors - white font
+
+      document
+        .querySelectorAll("app-color-picker-type p-fieldset legend")
+        .forEach((x) => {
+          (x as any).style.background = this.hex;
+          (x as any).style.color = textColor;
+        });
+    });
   }
 
   get hex(): string {
