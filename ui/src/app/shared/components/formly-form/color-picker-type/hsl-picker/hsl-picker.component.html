@@ -1,0 +1,79 @@
+<p-fieldset legend="HSL" [toggleable]="true">
+  <div class="flex flex-column gap-3">
+    <app-copy-to-clipboard-button
+      [content]="clipboardContent"
+    ></app-copy-to-clipboard-button>
+    <div class="flex align-items-center gap-3">
+      <div class="w-1rem">
+        <strong>H</strong>
+      </div>
+      <div class="flex-grow-1">
+        <p-slider
+          [(ngModel)]="hue"
+          [step]="1"
+          [min]="0"
+          [max]="359"
+          [animate]="true"
+          styleClass="min-w-5rem"
+          #hueSlider
+        ></p-slider>
+      </div>
+      <p-inputNumber
+        styleClass="w-5rem"
+        [(ngModel)]="hue"
+        [min]="0"
+        [max]="359"
+        [allowEmpty]="false"
+        suffix="&deg;"
+      ></p-inputNumber>
+    </div>
+    <div class="flex align-items-center gap-3">
+      <div class="w-1rem">
+        <strong>S</strong>
+      </div>
+      <div class="flex-grow-1">
+        <p-slider
+          [(ngModel)]="saturation"
+          [step]="1"
+          [min]="0"
+          [max]="100"
+          [animate]="true"
+          styleClass="min-w-5rem"
+          #saturationSlider
+        ></p-slider>
+      </div>
+      <p-inputNumber
+        styleClass="w-5rem"
+        [(ngModel)]="saturation"
+        [min]="0"
+        [max]="100"
+        [allowEmpty]="false"
+        suffix="%"
+      ></p-inputNumber>
+    </div>
+    <div class="flex align-items-center gap-3">
+      <div class="w-1rem">
+        <strong>L</strong>
+      </div>
+      <div class="flex-grow-1">
+        <p-slider
+          [(ngModel)]="hslValue"
+          [step]="1"
+          [min]="0"
+          [max]="100"
+          [animate]="true"
+          styleClass="min-w-5rem"
+          #hslValueSlider
+        ></p-slider>
+      </div>
+      <p-inputNumber
+        styleClass="w-5rem"
+        [(ngModel)]="hslValue"
+        [min]="0"
+        [max]="100"
+        [allowEmpty]="false"
+        suffix="%"
+      ></p-inputNumber>
+    </div>
+  </div>
+</p-fieldset>

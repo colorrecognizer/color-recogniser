@@ -84,16 +84,49 @@ export class ColorUtils {
       const s = source.s / 100;
       const l = source.l / 100;
       const h = source.h;
-      const k = (n: number) => (n + h / 30) % 12;
-      const a = s * Math.min(l, 1 - l);
-      const f = (n: number) =>
-        l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+
+      const c = (1 - Math.abs(2 * l - 1)) * s,
+        x = c * (1 - Math.abs(((h / 60) % 2) - 1)),
+        m = l - c / 2;
+
+      let r = 0,
+        g = 0,
+        b = 0;
+
+      if (0 <= h && h < 60) {
+        r = c;
+        g = x;
+        b = 0;
+      } else if (60 <= h && h < 120) {
+        r = x;
+        g = c;
+        b = 0;
+      } else if (120 <= h && h < 180) {
+        r = 0;
+        g = c;
+        b = x;
+      } else if (180 <= h && h < 240) {
+        r = 0;
+        g = x;
+        b = c;
+      } else if (240 <= h && h < 300) {
+        r = x;
+        g = 0;
+        b = c;
+      } else if (300 <= h && h < 360) {
+        r = c;
+        g = 0;
+        b = x;
+      }
+      r = Math.round((r + m) * 255);
+      g = Math.round((g + m) * 255);
+      b = Math.round((b + m) * 255);
 
       return ColorUtils.getColorHex(
         new Color({
-          red: Math.round(255 * f(0)),
-          green: Math.round(255 * f(8)),
-          blue: Math.round(255 * f(4)),
+          red: r,
+          green: g,
+          blue: b,
         })
       );
     }
@@ -172,20 +205,44 @@ export class ColorUtils {
     const r = color.red / 255;
     const g = color.green / 255;
     const b = color.blue / 255;
-    const l = Math.max(r, g, b);
-    const s = l - Math.min(r, g, b);
-    const h = s
-      ? l === r
-        ? (g - b) / s
-        : l === g
-        ? 2 + (b - r) / s
-        : 4 + (r - g) / s
-      : 0;
+    // Find greatest and smallest channel values
+    const cmin = Math.min(r, g, b),
+      cmax = Math.max(r, g, b),
+      delta = cmax - cmin;
+
+    let h = 0,
+      s = 0,
+      l = 0;
+
+    // Calculate hue
+    // No difference
+    if (delta == 0) h = 0;
+    // Red is max
+    else if (cmax == r) h = ((g - b) / delta) % 6;
+    // Green is max
+    else if (cmax == g) h = (b - r) / delta + 2;
+    // Blue is max
+    else h = (r - g) / delta + 4;
+
+    h = Math.round(h * 60);
+
+    // Make negative hues positive behind 360°
+    if (h < 0) h += 360;
+
+    // Calculate lightness
+    l = (cmax + cmin) / 2;
+
+    // Calculate saturation
+    s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+
+    // Multiply l and s by 100
+    s = +(s * 100).toFixed(1);
+    l = +(l * 100).toFixed(1);
 
     return {
-      h: 60 * h < 0 ? 60 * h + 360 : 60 * h,
-      s: 100 * (s ? (l <= 0.5 ? s / (2 * l - s) : s / (2 - (2 * l - s))) : 0),
-      l: (100 * (2 * l - s)) / 2,
+      h: h,
+      s: Math.round(s),
+      l: Math.round(l),
     };
   }
 

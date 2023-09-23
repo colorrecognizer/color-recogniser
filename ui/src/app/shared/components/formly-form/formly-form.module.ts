@@ -13,6 +13,7 @@ import { CmykPickerComponent } from "./color-picker-type/cmyk-picker/cmyk-picker
 import { ColorPickerChangeService } from "./color-picker-type/color-picker-change.service";
 import { HsvPickerComponent } from "./color-picker-type/hsv-picker/hsv-picker.component";
 import { CopyToClipboardButtonModule } from "../copy-to-clipboard-button/copy-to-clipboard-button.module";
+import { HslPickerComponent } from "./color-picker-type/hsl-picker/hsl-picker.component";
 
 const modules = [
   ReactiveFormsModule,
@@ -39,6 +40,7 @@ const modules = [
     RgbPickerComponent,
     CmykPickerComponent,
     HsvPickerComponent,
+    HslPickerComponent,
   ],
   imports: [
     ...modules,

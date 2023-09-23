@@ -7,19 +7,19 @@ import {
   ViewChild,
 } from "@angular/core";
 import { Slider } from "primeng/slider";
-import { ColorPickerChangeService } from "../color-picker-change.service";
 import { Color } from "src/app/shared/auto-generated/apis";
 import { ColorUtils } from "src/app/shared/utils";
+import { ColorPickerChangeService } from "../color-picker-change.service";
 
 @Component({
-  selector: "app-hsv-picker",
-  templateUrl: "./hsv-picker.component.html",
-  styleUrls: ["./hsv-picker.component.scss"],
+  selector: "app-hsl-picker",
+  templateUrl: "./hsl-picker.component.html",
+  styleUrls: ["./hsl-picker.component.scss"],
 })
-export class HsvPickerComponent implements AfterViewInit {
+export class HslPickerComponent implements AfterViewInit {
   @ViewChild("hueSlider") hueSlider!: Slider;
   @ViewChild("saturationSlider") saturationSlider!: Slider;
-  @ViewChild("hsvValueSlider") hsvValueSlider!: Slider;
+  @ViewChild("hslValueSlider") hslValueSlider!: Slider;
   @Input() hex!: string;
   @Output() hexChange = new EventEmitter<string>();
 
@@ -34,7 +34,7 @@ export class HsvPickerComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.hueSlider.el.nativeElement.firstElementChild.style.height =
       this.saturationSlider.el.nativeElement.firstElementChild.style.height =
-      this.hsvValueSlider.el.nativeElement.firstElementChild.style.height =
+      this.hslValueSlider.el.nativeElement.firstElementChild.style.height =
         "1rem";
 
     this.hueSlider.el.nativeElement.firstElementChild.style.background =
@@ -42,12 +42,12 @@ export class HsvPickerComponent implements AfterViewInit {
 
     this.hueSlider.el.nativeElement.firstElementChild.firstElementChild.style.borderRadius =
       this.saturationSlider.el.nativeElement.firstElementChild.firstElementChild.style.borderRadius =
-      this.hsvValueSlider.el.nativeElement.firstElementChild.firstElementChild.style.borderRadius =
+      this.hslValueSlider.el.nativeElement.firstElementChild.firstElementChild.style.borderRadius =
         "4px";
 
     this.hueSlider.el.nativeElement.firstElementChild.firstElementChild.style.background =
       this.saturationSlider.el.nativeElement.firstElementChild.firstElementChild.style.background =
-      this.hsvValueSlider.el.nativeElement.firstElementChild.firstElementChild.style.background =
+      this.hslValueSlider.el.nativeElement.firstElementChild.firstElementChild.style.background =
         "none";
 
     this.hueSlider.el.nativeElement.firstElementChild.lastElementChild.addEventListener(
@@ -66,10 +66,10 @@ export class HsvPickerComponent implements AfterViewInit {
       }
     );
 
-    this.hsvValueSlider.el.nativeElement.firstElementChild.lastElementChild.addEventListener(
+    this.hslValueSlider.el.nativeElement.firstElementChild.lastElementChild.addEventListener(
       "focus",
       () => {
-        this.hsvValueSlider.el.nativeElement.firstElementChild.lastElementChild.style.boxShadow =
+        this.hslValueSlider.el.nativeElement.firstElementChild.lastElementChild.style.boxShadow =
           "none";
       }
     );
@@ -81,31 +81,31 @@ export class HsvPickerComponent implements AfterViewInit {
         blue: this.model.color.b,
       });
 
-      const hsv = ColorUtils.toHSV(color);
-      const borderColor = ColorUtils.toHex("hsv", {
-        h: (hsv.h + 180) % 360,
+      const hsl = ColorUtils.toHSL(color);
+      const borderColor = ColorUtils.toHex("hsl", {
+        h: (hsl.h + 180) % 360,
         s: 100,
-        v: 100,
+        l: 50,
       });
 
       this.hueSlider.el.nativeElement.firstElementChild.lastElementChild.style.background =
-        ColorUtils.toHex("hsv", {
-          h: hsv.h,
+        ColorUtils.toHex("hsl", {
+          h: hsl.h,
           s: 100,
-          v: 100,
+          l: 50,
         });
       this.hueSlider.el.nativeElement.firstElementChild.lastElementChild.style.borderColor =
         borderColor;
 
-      const sLow = ColorUtils.toHex("hsv", {
-        h: hsv.h,
+      const sLow = ColorUtils.toHex("hsl", {
+        h: hsl.h,
         s: 0,
-        v: hsv.v,
+        l: hsl.l,
       });
-      const sHigh = ColorUtils.toHex("hsv", {
-        h: hsv.h,
+      const sHigh = ColorUtils.toHex("hsl", {
+        h: hsl.h,
         s: 100,
-        v: hsv.v,
+        l: hsl.l,
       });
       this.saturationSlider.el.nativeElement.firstElementChild.style.background = `linear-gradient(90deg,${sLow}, ${sHigh})`;
       this.saturationSlider.el.nativeElement.firstElementChild.lastElementChild.style.background =
@@ -113,21 +113,25 @@ export class HsvPickerComponent implements AfterViewInit {
       this.saturationSlider.el.nativeElement.firstElementChild.lastElementChild.style.borderColor =
         borderColor;
 
-      const vLow = ColorUtils.toHex("hsv", {
-        h: hsv.h,
-        s: hsv.s,
-        v: 0,
+      const lLow = ColorUtils.toHex("hsl", {
+        h: hsl.h,
+        s: 100,
+        l: 0,
       });
-      const vHigh = ColorUtils.toHex("hsv", {
-        h: hsv.h,
-        s: hsv.s,
-        v: 100,
+      const lHigh = ColorUtils.toHex("hsl", {
+        h: hsl.h,
+        s: 100,
+        l: 100,
       });
-      this.hsvValueSlider.el.nativeElement.firstElementChild.style.background = `linear-gradient(90deg,${vLow}, ${vHigh})`;
-      this.hsvValueSlider.el.nativeElement.firstElementChild.lastElementChild.style.background =
-        ColorUtils.getColorHex(color);
+      this.hslValueSlider.el.nativeElement.firstElementChild.style.background = `linear-gradient(90deg,${lLow}, ${lHigh})`;
+      this.hslValueSlider.el.nativeElement.firstElementChild.lastElementChild.style.background =
+        ColorUtils.toHex("hsl", {
+          h: 0,
+          s: 0,
+          l: hsl.l,
+        });
 
-      this.hsvValueSlider.el.nativeElement.firstElementChild.lastElementChild.style.borderColor =
+      this.hslValueSlider.el.nativeElement.firstElementChild.lastElementChild.style.borderColor =
         borderColor;
     });
   }
@@ -139,8 +143,8 @@ export class HsvPickerComponent implements AfterViewInit {
       blue: this.model.color.b,
     });
 
-    const hsv = ColorUtils.toHSV(color);
-    return Math.floor(hsv.h);
+    const hsl = ColorUtils.toHSL(color);
+    return Math.floor(hsl.h);
   }
   set hue(value: number) {
     const color = new Color({
@@ -149,19 +153,19 @@ export class HsvPickerComponent implements AfterViewInit {
       blue: this.model.color.b,
     });
 
-    const hsv = ColorUtils.toHSV(color);
-    let s = hsv.s,
-      v = hsv.v;
-    if (hsv.s === 0) s = 100;
-    if (hsv.v === 0) v = 100;
+    const hsl = ColorUtils.toHSL(color);
+    let s = hsl.s,
+      l = hsl.l;
+    if (hsl.s === 0) s = 100;
+    if (hsl.l === 0) l = 50;
 
-    const newHsv = {
+    const newHsl = {
       h: value,
       s: s,
-      v: v,
+      l: l,
     };
 
-    this.hexChange.emit(ColorUtils.toHex("hsv", newHsv));
+    this.hexChange.emit(ColorUtils.toHex("hsl", newHsl));
   }
 
   get saturation(): number {
@@ -171,8 +175,8 @@ export class HsvPickerComponent implements AfterViewInit {
       blue: this.model.color.b,
     });
 
-    const hsv = ColorUtils.toHSV(color);
-    return hsv.s;
+    const hsl = ColorUtils.toHSL(color);
+    return hsl.s;
   }
   set saturation(value: number) {
     const color = new Color({
@@ -181,50 +185,50 @@ export class HsvPickerComponent implements AfterViewInit {
       blue: this.model.color.b,
     });
 
-    const hsv = ColorUtils.toHSV(color);
-    if (value && hsv.v === 0) {
-      hsv.v = 100;
+    const hsl = ColorUtils.toHSL(color);
+    if (value && hsl.l === 0) {
+      hsl.l = 50;
     }
 
-    const newHsv = {
-      h: hsv.h,
+    const newHsl = {
+      h: hsl.h,
       s: value,
-      v: hsv.v,
+      l: hsl.l,
     };
 
-    this.hexChange.emit(ColorUtils.toHex("hsv", newHsv));
+    this.hexChange.emit(ColorUtils.toHex("hsl", newHsl));
   }
 
-  get hsvValue(): number {
+  get hslValue(): number {
     const color = new Color({
       red: this.model.color.r,
       green: this.model.color.g,
       blue: this.model.color.b,
     });
 
-    const hsv = ColorUtils.toHSV(color);
-    return hsv.v;
+    const hsl = ColorUtils.toHSL(color);
+    return hsl.l;
   }
-  set hsvValue(value: number) {
+  set hslValue(value: number) {
     const color = new Color({
       red: this.model.color.r,
       green: this.model.color.g,
       blue: this.model.color.b,
     });
 
-    const hsv = ColorUtils.toHSV(color);
-    const newHsv = {
-      h: hsv.h,
-      s: hsv.s,
-      v: value,
+    const hsl = ColorUtils.toHSL(color);
+    const newHsl = {
+      h: hsl.h,
+      s: hsl.s,
+      l: value,
     };
 
-    this.hexChange.emit(ColorUtils.toHex("hsv", newHsv));
+    this.hexChange.emit(ColorUtils.toHex("hsl", newHsl));
   }
 
   get clipboardContent(): string {
     return `${this.hue + String.fromCharCode(176)}, ${this.saturation}%, ${
-      this.hsvValue
+      this.hslValue
     }%`;
   }
 }
