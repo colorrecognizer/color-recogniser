@@ -183,7 +183,7 @@
     *ngIf="colorCoverages.length"
   >
     <p-accordion class="w-full">
-      <p-accordionTab *ngFor="let coverage of colorCoverages">
+      <p-accordionTab *ngFor="let coverage of colorCoverages; trackBy: trackByColorCoverages">
         <ng-template pTemplate="header">
           <div class="flex align-items-center gap-3 w-full">
             <p-colorPicker

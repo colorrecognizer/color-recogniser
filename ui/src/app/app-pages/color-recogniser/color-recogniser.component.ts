@@ -929,4 +929,8 @@ export class ColorRecognizerComponent
       },
     });
   }
+
+  trackByColorCoverages(index: number, colorCoverage: ColorCoverage) {
+    return colorCoverage.color;
+  }
 }
