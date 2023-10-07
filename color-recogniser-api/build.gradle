@@ -45,3 +45,18 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+tasks.register('runPython', Exec) {
+    workingDir '../pythonServices'
+
+    //on windows:
+    commandLine 'python', 'app.py'
+
+    //store the output instead of printing to the console:
+    standardOutput = new ByteArrayOutputStream()
+
+    //extension method stopTomcat.output() can be used to obtain the output:
+    ext.output = {
+        return standardOutput.toString()
+    }
+}
