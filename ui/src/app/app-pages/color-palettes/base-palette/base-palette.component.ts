@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { DialogService } from "primeng/dynamicdialog";
 import { Color } from "src/app/shared/auto-generated/apis";
 import { HowToMixComponent } from "src/app/shared/components/how-to-mix/how-to-mix.component";
@@ -8,6 +8,7 @@ import { ColorUtils } from "src/app/shared/utils";
   selector: "app-base-palette",
   templateUrl: "./base-palette.component.html",
   styleUrls: ["./base-palette.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BasePaletteComponent {
   @Input() colors: Color[] = [];

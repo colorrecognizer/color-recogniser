@@ -17,7 +17,7 @@ import {
   ColorCoverage,
   RecogniserResponse,
 } from "src/app/shared/auto-generated/apis";
-import { map } from "rxjs";
+import { BehaviorSubject, map } from "rxjs";
 import { MessageService } from "primeng/api";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
@@ -134,6 +134,7 @@ export class ColorRecognizerComponent
   chartOptions: any;
   chartPlugins: any[] = [ChartDataLabels];
   @ViewChild("chart") chart!: any;
+  private formDataSubject = new BehaviorSubject<any>(undefined);
 
   get imageZoom(): number {
     if (!this.konvaImage) return 1;
@@ -214,6 +215,113 @@ export class ColorRecognizerComponent
           "Discover a world of vibrant colors with Color Recognizer. Our easy-to-use tool helps you recognize and explore colors in photos, making it perfect for kids, art teachers, artists, photographers, and designers. Unleash your creativity and unlock the palette of possibilities with our accurate color recognition tool.",
       },
     ]);
+
+    this.formDataSubject.subscribe((formData) => {
+      if (!formData) return;
+
+      this.selection.visible(true);
+      this.$http
+        .post<RecogniserResponse>(
+          `${environment.apiUrl}/api/recognise`,
+          formData,
+          {
+            responseType: "json",
+          }
+        )
+        .pipe(
+          map((res) => {
+            this.colorCoverages = res.colorCoverages || [];
+            if (!this.colorCoverages.length) {
+              this.$message.add({
+                severity: "error",
+                summary: "Invalid selection",
+                detail:
+                  "The selected area contains all transparent pixels, please select again!",
+              });
+
+              return;
+            }
+
+            this.chartData = {
+              labels: this.colorCoverages.map(
+                (x) => `${x.color?.hexValue} (${x.color?.name})`
+              ),
+              datasets: [
+                {
+                  data: this.colorCoverages.map((x) => x.coveragePercentage),
+                  backgroundColor: this.colorCoverages.map(
+                    (x) => x.color?.hexValue
+                  ),
+                  hoverBackgroundColor: this.colorCoverages.map(
+                    (x) => x.color?.hexValue
+                  ),
+                  borderColor:
+                    this.documentStyle.getPropertyValue("--surface-500"),
+                  borderWidth: 1,
+                },
+              ],
+            };
+
+            this.chartOptions = {
+              plugins: {
+                legend: {
+                  display: false,
+                },
+                datalabels: {
+                  formatter: (value: any) => {
+                    return value + "%";
+                  },
+                  color: (context: any) => {
+                    return ColorUtils.getTextColorByBackground(
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                      this.colorCoverages.find(
+                        (x) =>
+                          x?.color?.hexValue ===
+                          context.dataset.backgroundColor[context.dataIndex]
+                      )!.color!
+                    );
+                  },
+                },
+                tooltip: {
+                  callbacks: {
+                    label: (context: any) => {
+                      let label = context.label || "";
+                      if (context.parsed !== null) {
+                        label += " " + context.parsed + "%";
+                      }
+                      return label;
+                    },
+                  },
+                },
+              },
+            };
+
+            this.colorCoverages = this.colorCoverages.sort(
+              (a, b) =>
+                (b.coveragePercentage || 0) - (a.coveragePercentage || 0)
+            );
+
+            if (this.colorCoverages[0]?.color) {
+              this.$backgroundChange.setColor(this.colorCoverages[0].color);
+            }
+
+            setTimeout(() => {
+              this.matchColorTable.nativeElement.scrollIntoView({
+                behavior: "smooth",
+              });
+            }, 100);
+          })
+        )
+        .subscribe({
+          error: (err) => {
+            throw err;
+          },
+          complete: () => {
+            this.recogniseButtonDisabled = false;
+            this.$changeDetectorRef.detectChanges();
+          },
+        });
+    });
   }
 
   ngOnDestroy(): void {
@@ -886,108 +994,7 @@ export class ColorRecognizerComponent
         })
       );
 
-      this.selection.visible(true);
-      this.$http
-        .post<RecogniserResponse>(
-          `${environment.apiUrl}/api/recognise`,
-          formData,
-          {
-            responseType: "json",
-          }
-        )
-        .pipe(
-          map((res) => {
-            this.colorCoverages = res.colorCoverages || [];
-            if (!this.colorCoverages.length) {
-              this.$message.add({
-                severity: "error",
-                summary: "Invalid selection",
-                detail:
-                  "The selected area contains all transparent pixels, please select again!",
-              });
-
-              return;
-            }
-
-            this.chartData = {
-              labels: this.colorCoverages.map(
-                (x) => `${x.color?.hexValue} (${x.color?.name})`
-              ),
-              datasets: [
-                {
-                  data: this.colorCoverages.map((x) => x.coveragePercentage),
-                  backgroundColor: this.colorCoverages.map(
-                    (x) => x.color?.hexValue
-                  ),
-                  hoverBackgroundColor: this.colorCoverages.map(
-                    (x) => x.color?.hexValue
-                  ),
-                  borderColor:
-                    this.documentStyle.getPropertyValue("--surface-500"),
-                  borderWidth: 1,
-                },
-              ],
-            };
-
-            this.chartOptions = {
-              plugins: {
-                legend: {
-                  display: false,
-                },
-                datalabels: {
-                  formatter: (value: any) => {
-                    return value + "%";
-                  },
-                  color: (context: any) => {
-                    return ColorUtils.getTextColorByBackground(
-                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                      this.colorCoverages.find(
-                        (x) =>
-                          x?.color?.hexValue ===
-                          context.dataset.backgroundColor[context.dataIndex]
-                      )!.color!
-                    );
-                  },
-                },
-                tooltip: {
-                  callbacks: {
-                    label: (context: any) => {
-                      let label = context.label || "";
-                      if (context.parsed !== null) {
-                        label += " " + context.parsed + "%";
-                      }
-                      return label;
-                    },
-                  },
-                },
-              },
-            };
-
-            this.colorCoverages = this.colorCoverages.sort(
-              (a, b) =>
-                (b.coveragePercentage || 0) - (a.coveragePercentage || 0)
-            );
-
-            if (this.colorCoverages[0]?.color) {
-              this.$backgroundChange.setColor(this.colorCoverages[0].color);
-            }
-
-            setTimeout(() => {
-              this.matchColorTable.nativeElement.scrollIntoView({
-                behavior: "smooth",
-              });
-            }, 100);
-          })
-        )
-        .subscribe({
-          error: (err) => {
-            throw err;
-          },
-          complete: () => {
-            this.recogniseButtonDisabled = false;
-            this.$changeDetectorRef.detectChanges();
-          },
-        });
+      this.formDataSubject.next(formData);
     });
   }
 

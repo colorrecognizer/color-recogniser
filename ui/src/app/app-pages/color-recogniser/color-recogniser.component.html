@@ -177,28 +177,28 @@
     <!-- <canvas id="uploadedCanvas"></canvas> -->
   </div>
 
-  <div
-    class="w-full lg:w-6 surface-card mt-3 lg:mt-5 p-3 lg:p-5 shadow-2 border-round-md lg:sticky top-0"
-    #matchColorTable
-    *ngIf="colorCoverages.length"
-  >
-    <app-base-palette
-      [colors]="colors"
-      [showColorPalettesHidden]="false"
-      [showColorName]="true"
-    ></app-base-palette>
-  </div>
+  <ng-container *ngIf="colorCoverages.length">
+    <div
+      class="w-full lg:w-6 surface-card mt-3 lg:mt-5 p-3 lg:p-5 shadow-2 border-round-md lg:sticky top-0"
+      #matchColorTable
+    >
+      <app-base-palette
+        [colors]="colors"
+        [showColorPalettesHidden]="false"
+        [showColorName]="true"
+      ></app-base-palette>
+    </div>
 
-  <div
-    class="w-full lg:w-6 surface-card mt-3 lg:mt-5 p-3 lg:p-5 shadow-2 border-round-md"
-    *ngIf="colorCoverages.length"
-  >
-    <p-chart
-      type="pie"
-      [data]="chartData"
-      [options]="chartOptions"
-      [plugins]="chartPlugins"
-      #chart
-    ></p-chart>
-  </div>
+    <div
+      class="w-full lg:w-6 surface-card mt-3 lg:mt-5 p-3 lg:p-5 shadow-2 border-round-md"
+    >
+      <p-chart
+        type="pie"
+        [data]="chartData"
+        [options]="chartOptions"
+        [plugins]="chartPlugins"
+        #chart
+      ></p-chart>
+    </div>
+  </ng-container>
 </div>
