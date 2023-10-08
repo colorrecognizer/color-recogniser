@@ -11,6 +11,8 @@ import { FileUploadModule } from "primeng/fileupload";
 import { AccordionModule } from "primeng/accordion";
 import { RecogniseButtonComponent } from "./recognise-button/recognise-button.component";
 import { HowToMixModule } from "src/app/shared/components/how-to-mix/how-to-mix.module";
+import { BasePaletteModule } from "../color-palettes/base-palette/base-palette.module";
+import { ChartModule } from "primeng/chart";
 
 @NgModule({
   declarations: [ColorRecognizerComponent, RecogniseButtonComponent],
@@ -24,6 +26,8 @@ import { HowToMixModule } from "src/app/shared/components/how-to-mix/how-to-mix.
     FileUploadModule,
     HowToMixModule,
     AccordionModule,
+    BasePaletteModule,
+    ChartModule,
   ],
 })
 export class ColorRecognizerModule {}

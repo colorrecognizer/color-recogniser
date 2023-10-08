@@ -296,4 +296,16 @@ export class ColorUtils {
       v: Math.round(v * 100),
     };
   }
+
+  static getTextColorByBackground(backgroundColor: Color): string {
+    // Counting the perceptive luminance - human eye favors green color...
+    const luminance =
+      (0.299 * (backgroundColor.red || 0) +
+        0.587 * (backgroundColor.green || 0) +
+        0.114 * (backgroundColor.blue || 0)) /
+      255;
+
+    if (luminance > 0.5) return "#212529"; // bright colors - black font
+    else return "rgba(255, 255, 255, 0.87)"; // dark colors - white font
+  }
 }

@@ -33,6 +33,8 @@ import { AngularFireAnalyticsModule } from "@angular/fire/compat/analytics";
 import { ScrollTopModule } from "primeng/scrolltop";
 import { FormlyFormModule } from "./shared/components/formly-form/formly-form.module";
 import { HowToMixModule } from "./shared/components/how-to-mix/how-to-mix.module";
+import { RouteReuseStrategy } from "@angular/router";
+import { CustomReuseStrategy } from "./shared/utils/custom-reuse-strategy";
 
 @NgModule({
   declarations: [AppComponent, PageNotFoundComponent],
@@ -89,6 +91,7 @@ import { HowToMixModule } from "./shared/components/how-to-mix/how-to-mix.module
     DynamicDialogRef,
     DynamicDialogConfig,
     AngularResizeEventModule,
+    { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
   ],
   bootstrap: [AppComponent],
   exports: [],

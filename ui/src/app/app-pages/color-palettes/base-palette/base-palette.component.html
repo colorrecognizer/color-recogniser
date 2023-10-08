@@ -1,0 +1,25 @@
+<div class="flex flex-column gap-3">
+  <div class="flex flex-wrap gap-1">
+    <div
+      *ngFor="let c of colors"
+      class="flex-grow-1 cursor-pointer border-round-md grow flex flex-column align-items-center justify-content-center border-1 border-500"
+      style="height: 5rem; min-width: 5rem"
+      [ngStyle]="{ 'background-color': c.hexValue }"
+      (click)="showHowToMix(c)"
+    >
+      <span [ngStyle]="{ color: getTextColorByBackground(c) }">
+        {{ c.hexValue }}
+      </span>
+      <span [ngStyle]="{ color: getTextColorByBackground(c) }">
+        {{ c.name }}
+      </span>
+    </div>
+  </div>
+  <!-- TODO -->
+  <!-- <div *ngIf="colors.length === 3">
+    <app-picture-three-color
+      [colors]="colors"
+      [reversed]="true"
+    ></app-picture-three-color>
+  </div> -->
+</div>

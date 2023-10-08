@@ -28,6 +28,8 @@ import { HowToMixComponent } from "src/app/shared/components/how-to-mix/how-to-m
 import { BackgroundChangeService } from "src/app/shared/services/background-change.service";
 import { DOCUMENT } from "@angular/common";
 import { Dropdown } from "primeng/dropdown";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import { ColorUtils } from "src/app/shared/utils";
 
 declare let Konva: any;
 declare let Mousetrap: any;
@@ -127,6 +129,11 @@ export class ColorRecognizerComponent
   @ViewChild("imageUpload") imageUpload!: FileUpload;
   @ViewChildren("bubbles") bubbles!: QueryList<ElementRef<HTMLSpanElement>>;
   numColors = 5;
+  documentStyle = getComputedStyle(document.documentElement);
+  chartData: any;
+  chartOptions: any;
+  chartPlugins: any[] = [ChartDataLabels];
+  @ViewChild("chart") chart!: any;
 
   get imageZoom(): number {
     if (!this.konvaImage) return 1;
@@ -211,6 +218,7 @@ export class ColorRecognizerComponent
 
   ngOnDestroy(): void {
     this.$backgroundChange.clear();
+    this.stage?.destroy();
   }
 
   ngOnInit(): void {
@@ -890,6 +898,71 @@ export class ColorRecognizerComponent
         .pipe(
           map((res) => {
             this.colorCoverages = res.colorCoverages || [];
+            if (!this.colorCoverages.length) {
+              this.$message.add({
+                severity: "error",
+                summary: "Invalid selection",
+                detail:
+                  "The selected area contains all transparent pixels, please select again!",
+              });
+
+              return;
+            }
+
+            this.chartData = {
+              labels: this.colorCoverages.map(
+                (x) => `${x.color?.hexValue} (${x.color?.name})`
+              ),
+              datasets: [
+                {
+                  data: this.colorCoverages.map((x) => x.coveragePercentage),
+                  backgroundColor: this.colorCoverages.map(
+                    (x) => x.color?.hexValue
+                  ),
+                  hoverBackgroundColor: this.colorCoverages.map(
+                    (x) => x.color?.hexValue
+                  ),
+                  borderColor:
+                    this.documentStyle.getPropertyValue("--surface-500"),
+                  borderWidth: 1,
+                },
+              ],
+            };
+
+            this.chartOptions = {
+              plugins: {
+                legend: {
+                  display: false,
+                },
+                datalabels: {
+                  formatter: (value: any) => {
+                    return value + "%";
+                  },
+                  color: (context: any) => {
+                    return ColorUtils.getTextColorByBackground(
+                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                      this.colorCoverages.find(
+                        (x) =>
+                          x?.color?.hexValue ===
+                          context.dataset.backgroundColor[context.dataIndex]
+                      )!.color!
+                    );
+                  },
+                },
+                tooltip: {
+                  callbacks: {
+                    label: (context: any) => {
+                      let label = context.label || "";
+                      if (context.parsed !== null) {
+                        label += " " + context.parsed + "%";
+                      }
+                      return label;
+                    },
+                  },
+                },
+              },
+            };
+
             this.colorCoverages = this.colorCoverages.sort(
               (a, b) =>
                 (b.coveragePercentage || 0) - (a.coveragePercentage || 0)
@@ -932,5 +1005,10 @@ export class ColorRecognizerComponent
 
   trackByColorCoverages(index: number, colorCoverage: ColorCoverage) {
     return colorCoverage.color;
+  }
+
+  get colors() {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return this.colorCoverages.map((x) => x.color!);
   }
 }

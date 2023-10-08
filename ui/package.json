@@ -27,6 +27,8 @@
     "angular-resize-event": "^3.2.0",
     "animejs": "^3.2.1",
     "bentley-ottmann-intersections": "^0.0.1",
+    "chart.js": "^3.9.0",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "firebase": "^9.22.0",
     "geojson": "^0.5.0",
     "intro.js": "^7.2.0",

@@ -2,14 +2,17 @@ import { Component, Input } from "@angular/core";
 import { DialogService } from "primeng/dynamicdialog";
 import { Color } from "src/app/shared/auto-generated/apis";
 import { HowToMixComponent } from "src/app/shared/components/how-to-mix/how-to-mix.component";
+import { ColorUtils } from "src/app/shared/utils";
 
 @Component({
-  selector: "app-base-pallete",
-  templateUrl: "./base-pallete.component.html",
-  styleUrls: ["./base-pallete.component.scss"],
+  selector: "app-base-palette",
+  templateUrl: "./base-palette.component.html",
+  styleUrls: ["./base-palette.component.scss"],
 })
-export class BasePalleteComponent {
+export class BasePaletteComponent {
   @Input() colors: Color[] = [];
+  @Input() showColorPalettesHidden = true;
+  @Input() showColorName = false;
 
   constructor(private $dialog: DialogService) {}
 
@@ -21,7 +24,7 @@ export class BasePalleteComponent {
       draggable: true,
       data: {
         color: color,
-        showColorPalettesHidden: true,
+        showColorPalettesHidden: this.showColorPalettesHidden,
       },
       dismissableMask: true,
     });
@@ -29,5 +32,9 @@ export class BasePalleteComponent {
 
   get reversedColors() {
     return this.colors.reverse();
+  }
+
+  getTextColorByBackground(color: Color): string {
+    return ColorUtils.getTextColorByBackground(color);
   }
 }

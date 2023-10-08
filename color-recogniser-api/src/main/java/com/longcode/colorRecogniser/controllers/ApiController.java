@@ -78,8 +78,6 @@ public class ApiController {
             double maxX = recogniserRequest.maxX;
             double minY = recogniserRequest.minY;
             double maxY = recogniserRequest.maxY;
-            double ar = 0, ag = 0, ab = 0;
-            int count = 0;
             List<Color> colors = new ArrayList<>();
 
             for (double px = minX; px < maxX; px += (maxX - minX) / STEPS) {
@@ -100,19 +98,27 @@ public class ApiController {
                     }
 
                     if (isInside) {
-                        ++count;
                         int clr = image.getRGB((int) px, (int) py);
                         int red = (clr & 0x00ff0000) >> 16;
                         int green = (clr & 0x0000ff00) >> 8;
                         int blue = clr & 0x000000ff;
+                        boolean isTransparent = ((clr >> 24) & 0xff) <= 1;
 
-                        colors.add(Color.builder()
-                                .red((short) red)
-                                .green((short) green)
-                                .blue((short) blue)
-                                .build());
+                        if (!isTransparent) {
+                            colors.add(Color.builder()
+                                    .red((short) red)
+                                    .green((short) green)
+                                    .blue((short) blue)
+                                    .build());
+                        }
                     }
                 }
+            }
+
+            if (colors.isEmpty()) {
+                return ResponseEntity.ok(RecogniserResponse.builder()
+                        .colorCoverages(List.of())
+                        .build());
             }
 
             var mapper = new ObjectMapper();
@@ -127,40 +133,38 @@ public class ApiController {
             double[][] colorCoverages = mapper.readValue(jsonOutput, double[][].class);
 
             for (double[] coverage : colorCoverages) {
-                ColorCoverage colorCoverage = ColorCoverage.builder()
-                        .color(Color.builder()
-                                .red((short) coverage[0])
-                                .green((short) coverage[1])
-                                .blue((short) coverage[2])
-                                .build())
-                        .coveragePercentage(coverage[3])
+                Color color = Color.builder()
+                        .red((short) coverage[0])
+                        .green((short) coverage[1])
+                        .blue((short) coverage[2])
                         .build();
 
-                double total = Math.sqrt(Math.pow(Math.max(colorCoverage.color.getRed(), 255 - colorCoverage.color.getRed()), 2)
-                        + Math.pow(Math.max(colorCoverage.color.getGreen(), 255 - colorCoverage.color.getGreen()), 2)
-                        + Math.pow(Math.max(colorCoverage.color.getBlue(), 255 - colorCoverage.color.getBlue()), 2)
-                );
+                ColorCoverage colorCoverage = ColorCoverage.builder()
+                        .color(color)
+                        .coveragePercentage(Math.round(coverage[3] * 100.0))
+                        .build();
 
-                var colorMatches = new ArrayList<>(allColors.stream()
-                        .sorted((color1, color2) -> getDistance(colorCoverage.color, color1) - getDistance(colorCoverage.color, color2))
-                        .limit(3)
-                        .map(c -> ColorMatch.builder()
-                                .color(c)
-                                .matchPercentage(1 - Math.sqrt(getDistance(colorCoverage.color, c)) / total)
-                                .build())
-                        .toList());
+                var matchedColor = allColors.stream()
+                        .min((color1, color2) -> getDistance(colorCoverage.color, color1) - getDistance(colorCoverage.color, color2))
+                        .orElseThrow();
 
-                if (!colorMatches.get(0).color.getHexValue().equals(colorCoverage.getColor().getHexValue())) {
-                    colorCoverage.getColor().setName("Unnamed");
-                    colorMatches.add(0, ColorMatch.builder()
-                            .color(colorCoverage.getColor())
-                            .matchPercentage(1)
-                            .build());
-                }
-
-                colorCoverage.setColorMatches(colorMatches);
-
+                color.setName(matchedColor.getName());
                 response.getColorCoverages().add(colorCoverage);
+            }
+
+            var subTotal = response.getColorCoverages().stream()
+                    .limit(response.getColorCoverages().size() - 1)
+                    .mapToDouble(ColorCoverage::getCoveragePercentage)
+                    .sum();
+
+            if (subTotal > 100.0) {
+                throw new ApiException("Proportion of colors is not correct.");
+            }
+
+            if (subTotal == 100.0) {
+                response.colorCoverages.remove(response.getColorCoverages().size() - 1);
+            } else {
+                response.colorCoverages.get(response.getColorCoverages().size() - 1).setCoveragePercentage(100.0 - subTotal);
             }
 
             return ResponseEntity.ok(response);
@@ -209,7 +213,7 @@ public class ApiController {
     private static class ColorCoverage {
         private Color color;
         private double coveragePercentage;
-        private List<ColorMatch> colorMatches;
+//        private List<ColorMatch> colorMatches;
     }
 
     @Builder

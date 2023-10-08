@@ -65,3 +65,26 @@
     width: calc(100% + 4rem);
   }
 }
+
+#canvas {
+  background-color: #fff;
+  opacity: 0.8;
+  background-image: repeating-linear-gradient(
+      45deg,
+      var(--gray-200) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--gray-200) 75%,
+      var(--gray-200)
+    ),
+    repeating-linear-gradient(
+      45deg,
+      var(--gray-200) 25%,
+      #fff 25%,
+      #fff 75%,
+      var(--gray-200) 75%,
+      var(--gray-200)
+    );
+  background-position: 0 0, 1rem 1rem;
+  background-size: 2rem 2rem;
+}

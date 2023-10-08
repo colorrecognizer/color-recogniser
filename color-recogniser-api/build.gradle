@@ -60,3 +60,18 @@ tasks.register('runPython', Exec) {
         return standardOutput.toString()
     }
 }
+
+tasks.register('generateTypescript', Exec) {
+    workingDir '..'
+
+    //on windows:
+    commandLine 'npx.cmd', 'nswag', 'run', 'swag.nswag'
+
+    //store the output instead of printing to the console:
+    standardOutput = new ByteArrayOutputStream()
+
+    //extension method stopTomcat.output() can be used to obtain the output:
+    ext.output = {
+        return standardOutput.toString()
+    }
+}
