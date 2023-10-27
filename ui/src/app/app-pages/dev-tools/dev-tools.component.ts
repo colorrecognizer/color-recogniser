@@ -20,6 +20,9 @@ export class DevToolsComponent implements AfterViewInit {
     {
       name: "JSON Escape / Unescape / Beautify",
     },
+    {
+      name: "Generate MD Table",
+    },
   ];
 
   activeIndex = environment.production ? 0 : 2;
