@@ -13,6 +13,7 @@ import { JsonEscapeUnescapeComponent } from "./json-escape-unescape/json-escape-
 import { HighlightModule } from "ngx-highlightjs";
 import { CopyToClipboardButtonModule } from "src/app/shared/components/copy-to-clipboard-button/copy-to-clipboard-button.module";
 import { AdCarouselModule } from "src/app/shared/components/ad-carousel/ad-carousel.module";
+import { GenerateMdTableComponent } from "./generate-md-table/generate-md-table.component";
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { AdCarouselModule } from "src/app/shared/components/ad-carousel/ad-carou
     TfnGeneratorComponent,
     FileDiffComponent,
     JsonEscapeUnescapeComponent,
+    GenerateMdTableComponent,
   ],
   imports: [
     CommonModule,
