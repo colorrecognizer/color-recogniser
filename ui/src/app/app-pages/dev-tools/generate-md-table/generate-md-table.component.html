@@ -1,1 +1,22 @@
-<p>generate-md-table works!</p>
+<p-table [value]="data" styleClass="p-datatable-gridlines">
+    <ng-template pTemplate="header">
+      <tr>
+        <th></th>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+        <th>4</th>
+        <th>5</th>
+      </tr>
+    </ng-template>
+    <ng-template let-item pTemplate="body">
+      <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.price}}</td>
+        <td>{{ item.description}}</td>
+        <td>{{ item.detail}}</td>
+        <td>{{ item.abc}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
