@@ -25,7 +25,7 @@ export class DevToolsComponent implements AfterViewInit {
     },
   ];
 
-  activeIndex = environment.production ? 0 : 2;
+  activeIndex = environment.production ? 0 : 3;
 
   constructor(
     private $title: Title,

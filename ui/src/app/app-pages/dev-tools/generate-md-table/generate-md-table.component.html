@@ -1,22 +1,48 @@
-<p-table [value]="data" styleClass="p-datatable-gridlines">
-    <ng-template pTemplate="header">
-      <tr>
-        <th></th>
-        <th>1</th>
-        <th>2</th>
-        <th>3</th>
-        <th>4</th>
-        <th>5</th>
-      </tr>
-    </ng-template>
-    <ng-template let-item pTemplate="body">
-      <tr>
-        <td>{{ item.id }}</td>
-        <td>{{ item.name }}</td>
-        <td>{{ item.price}}</td>
-        <td>{{ item.description}}</td>
-        <td>{{ item.detail}}</td>
-        <td>{{ item.abc}}</td>
-      </tr>
-    </ng-template>
-  </p-table>
+<button (click)="addNewColumn()" style="background-color: green;"> Add a column at last </button>
+<button (click)="addNewRow()" style="background-color: green;"> Add a row at last </button>
+<br />
+<button (click)="deleteLastColumn()" style="background-color:red;"> Delete a column at last </button>
+<button (click)="deleteLastRow()" style="background-color: red;"> Delete a row at last </button>
+
+<p-table
+  [value]="data"
+  styleClass="p-datatable-gridlines"
+  [tableStyle]="{ 'min-width': '50rem' }"
+>
+  <ng-template pTemplate="header">
+    <!-- First row -->
+    <tr>
+      <th>
+        <p-checkbox [binary]="true" inputId="binary"></p-checkbox>
+      </th>
+      <!-- Ko the (for let i = 0; i < getNumCols(); i++) -->
+      <!-- Su dung index as ... khi quan trong index trong array -->
+      <th *ngFor="let col of data[0]; index as colIndex">{{ colIndex + 1 }}</th>
+    </tr>
+  </ng-template>
+  <!-- let-item: belongs to primeNg -->
+  <!-- for each item -->
+  <!-- let-i="rowIndex": rowIndex of each row -->
+  <ng-template let-item let-rowIndex="rowIndex" pTemplate="body">
+    <tr>
+      <td>{{ rowIndex + 1 }}</td>
+      <ng-container *ngFor="let cell of item; index as colIndex">
+        <td pEditableColumn>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="item[colIndex].str"
+                class="w-full"
+              />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ item[colIndex].str }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+      </ng-container>
+    </tr>
+  </ng-template>
+</p-table>
