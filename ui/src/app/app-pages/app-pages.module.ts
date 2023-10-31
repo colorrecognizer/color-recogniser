@@ -7,6 +7,7 @@ import { NavbarModule } from "./navbar/navbar.module";
 import { FooterComponent } from "./footer/footer.component";
 import { RegularlyUsedPrimengModule } from "../shared/modules/regularly-used-primeng.module";
 import { TableModule } from "primeng/table";
+import { CheckboxModule } from "primeng/checkbox";
 @NgModule({
   declarations: [AppPagesComponent, FooterComponent],
   imports: [
@@ -15,6 +16,7 @@ import { TableModule } from "primeng/table";
     NavbarModule,
     RegularlyUsedPrimengModule,
     TableModule,
+    CheckboxModule,
   ],
 })
 export class AppPagesModule {}
