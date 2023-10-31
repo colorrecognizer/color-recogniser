@@ -1,17 +1,3 @@
-<button (click)="addNewColumn()" style="background-color: green">
-  Add a column at last
-</button>
-<button (click)="addNewRow()" style="background-color: green">
-  Add a row at last
-</button>
-<br />
-<button (click)="deleteLastColumn()" style="background-color: red">
-  Delete a column at last
-</button>
-<button (click)="deleteLastRow()" style="background-color: red">
-  Delete a row at last
-</button>
-
 <p-table
   [value]="data"
   styleClass="p-datatable-gridlines"
@@ -21,22 +7,33 @@
     <!-- First row -->
     <tr>
       <th>
-        <p-checkbox [binary]="true" inputId="binary"></p-checkbox>
+        <!-- <p-checkbox [binary]="true" inputId="binary"></p-checkbox> -->
       </th>
       <!-- Ko the (for let i = 0; i < getNumCols(); i++) -->
       <!-- Su dung index as ... khi quan trong index trong array -->
       <th *ngFor="let col of data[0]; index as colIndex">
-        <button (click)="addColumnPrevious(colIndex)">-</button>
-
-        {{ colIndex + 1 }}
-        <button (click)="addColumnAfter(colIndex)">+</button>
-        <button
-          (click)="deleteColumn(colIndex)"
-          style="background-color: red"
-          *ngIf="data[0].length > 1"
-        >
-          X
-        </button>
+        <div class="flex gap-1 align-items-center">
+          <p-button
+            (click)="addColumnPrevious(colIndex)"
+            icon="pi pi-chevron-left"
+            styleClass="p-button-sm"
+          ></p-button>
+          <span>
+            {{ colIndex + 1 }}
+          </span>
+          <p-button
+            icon="pi pi-chevron-right"
+            (click)="addColumnAfter(colIndex)"
+            styleClass="p-button-sm"
+          ></p-button>
+          <p-button
+            (click)="deleteColumn(colIndex)"
+            *ngIf="data[0].length > 1"
+            icon="pi pi-times"
+            styleClass="p-button-sm p-button-danger"
+          >
+          </p-button>
+        </div>
       </th>
       <!-- <button (click)="addColumnAfter(data[0].length)">+</button> -->
     </tr>
@@ -47,16 +44,28 @@
   <ng-template let-item let-rowIndex="rowIndex" pTemplate="body">
     <tr>
       <td>
-        <button (click)="addRowAbove(rowIndex)">+</button>
-        <button (click)="addRowBelow(rowIndex)">-</button>
-        {{ rowIndex + 1 }}
-        <button
-          (click)="deleteRow(rowIndex)"
-          style="background-color: red"
-          *ngIf="data.length > 1"
-        >
-          X
-        </button>
+        <div class="flex gap-1 align-items-center">
+          <p-button
+            icon="pi pi-chevron-up"
+            styleClass="p-button-sm"
+            (click)="addRowAbove(rowIndex)"
+          ></p-button>
+          <span>
+            {{ rowIndex + 1 }}
+          </span>
+          <p-button
+            icon="pi pi-chevron-down"
+            styleClass="p-button-sm"
+            (click)="addRowBelow(rowIndex)"
+          ></p-button>
+          <p-button
+            (click)="deleteRow(rowIndex)"
+            *ngIf="data.length > 1"
+            icon="pi pi-times"
+            styleClass="p-button-sm p-button-danger"
+          >
+          </p-button>
+        </div>
       </td>
       <ng-container *ngFor="let cell of item; index as colIndex">
         <td pEditableColumn>

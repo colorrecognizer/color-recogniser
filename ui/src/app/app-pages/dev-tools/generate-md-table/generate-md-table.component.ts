@@ -84,42 +84,6 @@ export class GenerateMdTableComponent {
   getNumCols() {
     return this.data[0].length;
   }
-
-  addNewColumn() {
-    this.data.forEach((row) => row.push({ str: "" }));
-  }
-
-  // this.data = [
-  //   ["hello", "mu"],
-  //   ["hi", "mc"],
-  //   ["bye", "ars"],
-  // ];
-
-  // this.data = [
-  //   ["hello", "mu"],
-  //   ["hi", "mc"],
-  //   ["bye", "ars"],
-  //   ["", ""]
-  // ];
-  addNewRow() {
-    const newRow = [];
-    for (let j = 0; j < this.getNumCols(); j++) {
-      newRow.push({ str: "" });
-    }
-    this.data.push(newRow);
-  }
-
-  deleteLastColumn() {
-    if (this.getNumCols() > 1) {
-      this.data.forEach((row) => row.pop());
-    }
-  }
-
-  deleteLastRow() {
-    if (this.getNumRows() > 1) {
-      this.data.pop();
-    }
-  }
 }
 
 interface MyString {
