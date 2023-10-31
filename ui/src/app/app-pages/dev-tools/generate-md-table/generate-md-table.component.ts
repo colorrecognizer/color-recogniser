@@ -49,6 +49,8 @@ export class GenerateMdTableComponent {
   // no primitive types
   data: MyString[][] = [];
 
+  markdownTable = "";
+
   constructor() {
     // rows
     for (let i = 0; i < 4; i++) {
@@ -83,6 +85,12 @@ export class GenerateMdTableComponent {
   // num cols = number of elements in the first row
   getNumCols() {
     return this.data[0].length;
+  }
+
+  generateMarkdownTable() {
+    this.markdownTable = this.data
+      .map((row) => `| ${row.map((cell) => cell.str).join(" | ")} |`)
+      .join("\n");
   }
 }
 
