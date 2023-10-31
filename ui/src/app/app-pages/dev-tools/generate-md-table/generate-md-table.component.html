@@ -30,7 +30,11 @@
 
         {{ colIndex + 1 }}
         <button (click)="addColumnAfter(colIndex)">+</button>
-        <button (click)="deleteColumn(colIndex)" style="background-color: red">
+        <button
+          (click)="deleteColumn(colIndex)"
+          style="background-color: red"
+          *ngIf="data[0].length > 1"
+        >
           X
         </button>
       </th>
@@ -46,7 +50,11 @@
         <button (click)="addRowAbove(rowIndex)">+</button>
         <button (click)="addRowBelow(rowIndex)">-</button>
         {{ rowIndex + 1 }}
-        <button (click)="deleteRow(rowIndex)" style="background-color: red">
+        <button
+          (click)="deleteRow(rowIndex)"
+          style="background-color: red"
+          *ngIf="data.length > 1"
+        >
           X
         </button>
       </td>
