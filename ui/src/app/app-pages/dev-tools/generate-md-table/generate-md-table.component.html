@@ -1,8 +1,16 @@
-<button (click)="addNewColumn()" style="background-color: green;"> Add a column at last </button>
-<button (click)="addNewRow()" style="background-color: green;"> Add a row at last </button>
+<button (click)="addNewColumn()" style="background-color: green">
+  Add a column at last
+</button>
+<button (click)="addNewRow()" style="background-color: green">
+  Add a row at last
+</button>
 <br />
-<button (click)="deleteLastColumn()" style="background-color:red;"> Delete a column at last </button>
-<button (click)="deleteLastRow()" style="background-color: red;"> Delete a row at last </button>
+<button (click)="deleteLastColumn()" style="background-color: red">
+  Delete a column at last
+</button>
+<button (click)="deleteLastRow()" style="background-color: red">
+  Delete a row at last
+</button>
 
 <p-table
   [value]="data"
@@ -17,7 +25,16 @@
       </th>
       <!-- Ko the (for let i = 0; i < getNumCols(); i++) -->
       <!-- Su dung index as ... khi quan trong index trong array -->
-      <th *ngFor="let col of data[0]; index as colIndex">{{ colIndex + 1 }}</th>
+      <th *ngFor="let col of data[0]; index as colIndex">
+        <button (click)="addColumnPrevious(colIndex)">-</button>
+
+        {{ colIndex + 1 }}
+        <button (click)="addColumnAfter(colIndex)">+</button>
+        <button (click)="deleteColumn(colIndex)" style="background-color: red">
+          X
+        </button>
+      </th>
+      <!-- <button (click)="addColumnAfter(data[0].length)">+</button> -->
     </tr>
   </ng-template>
   <!-- let-item: belongs to primeNg -->
@@ -25,7 +42,14 @@
   <!-- let-i="rowIndex": rowIndex of each row -->
   <ng-template let-item let-rowIndex="rowIndex" pTemplate="body">
     <tr>
-      <td>{{ rowIndex + 1 }}</td>
+      <td>
+        <button (click)="addRowAbove(rowIndex)">+</button>
+        <button (click)="addRowBelow(rowIndex)">-</button>
+        {{ rowIndex + 1 }}
+        <button (click)="deleteRow(rowIndex)" style="background-color: red">
+          X
+        </button>
+      </td>
       <ng-container *ngFor="let cell of item; index as colIndex">
         <td pEditableColumn>
           <p-cellEditor>
