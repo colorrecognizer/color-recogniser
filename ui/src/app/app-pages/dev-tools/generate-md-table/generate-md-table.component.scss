@@ -13,3 +13,11 @@
   width: 100%;
   height: 300px;
 }
+
+tr.selected-row {
+  background-color: black;
+}
+
+td.selected-column {
+  background-color: black;
+}

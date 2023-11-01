@@ -7,12 +7,17 @@
     <!-- First row -->
     <tr>
       <th>
-        <!-- <p-checkbox [binary]="true" inputId="binary"></p-checkbox> -->
+        <!-- <p-checkbox [binary]="true" inputId="selectAllRows"></p-checkbox> -->
       </th>
       <!-- Ko the (for let i = 0; i < getNumCols(); i++) -->
       <!-- Su dung index as ... khi quan trong index trong array -->
       <th *ngFor="let col of data[0]; index as colIndex">
         <div class="flex gap-1 align-items-center">
+          <p-checkbox
+            [binary]="true"
+            [inputId]="'selectColumn_' + colIndex"
+            (onChange)="toggleColumnSelection(colIndex)"
+          ></p-checkbox>
           <p-button
             (click)="addColumnPrevious(colIndex)"
             icon="pi pi-chevron-left"
@@ -42,9 +47,15 @@
   <!-- for each item -->
   <!-- let-i="rowIndex": rowIndex of each row -->
   <ng-template let-item let-rowIndex="rowIndex" pTemplate="body">
-    <tr>
+    <tr [ngClass]="{ 'selected-row': item.selected }">
       <td>
         <div class="flex gap-1 align-items-center">
+          <p-checkbox
+            [binary]="true"
+            [inputId]="'selectRow_' + rowIndex"
+            (onChange)="toggleRowSelection(rowIndex)"
+            [(ngModel)]="item.selected"
+          ></p-checkbox>
           <p-button
             icon="pi pi-chevron-up"
             styleClass="p-button-sm"
@@ -68,7 +79,10 @@
         </div>
       </td>
       <ng-container *ngFor="let cell of item; index as colIndex">
-        <td pEditableColumn>
+        <td
+          [ngClass]="{ 'selected-column': isSelectedColumn(colIndex) }"
+          pEditableColumn
+        >
           <p-cellEditor>
             <ng-template pTemplate="input">
               <input

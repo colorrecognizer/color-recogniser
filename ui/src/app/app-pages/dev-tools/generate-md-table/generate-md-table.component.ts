@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+
 @Component({
   selector: "app-generate-md-table",
   templateUrl: "./generate-md-table.component.html",
@@ -48,6 +49,8 @@ export class GenerateMdTableComponent {
 
   // no primitive types
   data: MyString[][] = [];
+  selectedRows: boolean[] = [];
+  selectedColumns: number[] = [];
 
   markdownTable = "";
 
@@ -85,6 +88,26 @@ export class GenerateMdTableComponent {
   // num cols = number of elements in the first row
   getNumCols() {
     return this.data[0].length;
+  }
+
+  toggleRowSelection(rowIndex: number) {
+    this.selectedRows[rowIndex] = !this.selectedRows[rowIndex];
+  }
+
+  isSelectedColumn(colIndex: number): boolean {
+    return this.selectedColumns.includes(colIndex);
+  }
+
+  toggleColumnSelection(colIndex: number) {
+    if (this.selectedColumns.includes(colIndex)) {
+      // Deselect the column
+      this.selectedColumns = this.selectedColumns.filter(
+        (index) => index !== colIndex
+      );
+    } else {
+      // Select the column
+      this.selectedColumns.push(colIndex);
+    }
   }
 
   generateMarkdownTable() {
