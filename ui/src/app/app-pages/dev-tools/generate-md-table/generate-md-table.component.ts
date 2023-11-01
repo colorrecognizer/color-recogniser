@@ -88,9 +88,29 @@ export class GenerateMdTableComponent {
   }
 
   generateMarkdownTable() {
-    this.markdownTable = this.data
-      .map((row) => `| ${row.map((cell) => cell.str).join(" | ")} |`)
-      .join("\n");
+    const markdownTable: string[] = [];
+    const columnWidths: any[] = [];
+
+    this.data.forEach((rowData) => {
+      rowData.forEach((cell, columnIndex) => {
+        if (
+          !columnWidths[columnIndex] ||
+          cell.str.length > columnWidths[columnIndex]
+        ) {
+          columnWidths[columnIndex] = cell.str.length;
+        }
+      });
+    });
+
+    this.data.forEach((rowData) => {
+      const row: string[] = [];
+      rowData.forEach((cell, colIndex) => {
+        row.push(`| ${cell.str} `.padEnd(columnWidths[colIndex] + 3));
+      });
+      markdownTable.push(row.join("") + "|");
+    });
+
+    this.markdownTable = markdownTable.join("\n");
   }
 }
 
