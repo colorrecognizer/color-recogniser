@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { CheckboxChangeEvent } from "primeng/checkbox";
 
 @Component({
   selector: "app-generate-md-table",
@@ -9,21 +10,21 @@ export class GenerateMdTableComponent {
   addColumnAfter(_colIndex: number) {
     if (_colIndex >= 0 && _colIndex <= this.data[0].length) {
       this.data.forEach((row) => {
-        row.splice(_colIndex + 1, 0, { str: "" });
+        row.splice(_colIndex + 1, 0, new MyString());
       });
     }
   }
 
   addColumnPrevious(_colIndex1: number) {
     this.data.forEach((row) => {
-      row.splice(_colIndex1, 0, { str: "" });
+      row.splice(_colIndex1, 0, new MyString());
     });
   }
 
   addRowAbove(rowIndex: number): void {
     const newRow = [];
     for (let i = 0; i < this.data[0].length; i++) {
-      newRow.push({ str: "" });
+      newRow.push(new MyString());
     }
 
     this.data.splice(rowIndex, 0, newRow);
@@ -32,7 +33,7 @@ export class GenerateMdTableComponent {
   addRowBelow(rowIndex: number): void {
     const newRow = [];
     for (let i = 0; i < this.data[0].length; i++) {
-      newRow.push({ str: "" });
+      newRow.push(new MyString());
     }
     this.data.splice(rowIndex + 1, 0, newRow);
   }
@@ -49,8 +50,6 @@ export class GenerateMdTableComponent {
 
   // no primitive types
   data: MyString[][] = [];
-  selectedRows: boolean[] = [];
-  selectedColumns: number[] = [];
 
   markdownTable = "";
 
@@ -60,9 +59,7 @@ export class GenerateMdTableComponent {
       // cols
       const arr = [];
       for (let j = 0; j < 4; j++) {
-        arr.push({
-          str: "",
-        });
+        arr.push(new MyString());
       }
 
       // arr = ["", "", "", ""]
@@ -90,26 +87,6 @@ export class GenerateMdTableComponent {
     return this.data[0].length;
   }
 
-  toggleRowSelection(rowIndex: number) {
-    this.selectedRows[rowIndex] = !this.selectedRows[rowIndex];
-  }
-
-  isSelectedColumn(colIndex: number): boolean {
-    return this.selectedColumns.includes(colIndex);
-  }
-
-  toggleColumnSelection(colIndex: number) {
-    if (this.selectedColumns.includes(colIndex)) {
-      // Deselect the column
-      this.selectedColumns = this.selectedColumns.filter(
-        (index) => index !== colIndex
-      );
-    } else {
-      // Select the column
-      this.selectedColumns.push(colIndex);
-    }
-  }
-
   generateMarkdownTable() {
     const markdownTable: string[] = [];
     const columnWidths: any[] = [];
@@ -135,8 +112,33 @@ export class GenerateMdTableComponent {
 
     this.markdownTable = markdownTable.join("\n");
   }
+
+  get allSelected(): boolean {
+    return this.data.every(row => row.every(cell => cell.selected));
+  }
+
+  set allSelected(checked: boolean) {
+    this.data.forEach(row => row.forEach(cell => cell.selected = checked));
+  }
+
+  isColumnSelected(colIndex: number) {
+    return this.data.every(row => row[colIndex].selected);
+  }
+
+  toggleColumnSelected(colIndex: number, event: CheckboxChangeEvent) {
+    this.data.forEach(row => row[colIndex].selected = !!event.checked);
+  }
+
+  isRowSelected(rowIndex: number) {
+    return this.data[rowIndex].every(cell => cell.selected);
+  }
+
+  toggleRowSelected(rowIndex: number, event: CheckboxChangeEvent) {
+    this.data[rowIndex].forEach(cell => cell.selected = !!event.checked);
+  }
 }
 
-interface MyString {
-  str: string;
+class MyString {
+  str = "";
+  selected = false;
 }
