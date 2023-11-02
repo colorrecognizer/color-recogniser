@@ -87,6 +87,28 @@ export class GenerateMdTableComponent {
     return this.data[0].length;
   }
 
+  alignSelectedCells(align: "left" | "center" | "right"): void {
+    const selectedCells = this.getSelectedCells();
+
+    selectedCells.forEach((cell) => {
+      cell.alignment = align;
+    });
+  }
+
+  getSelectedCells(): any[] {
+    const selectedCells: any[] = [];
+
+    this.data.forEach((rowData) => {
+      rowData.forEach((cell) => {
+        if (cell.selected) {
+          selectedCells.push(cell);
+        }
+      });
+    });
+
+    return selectedCells;
+  }
+
   generateMarkdownTable() {
     const markdownTable: string[] = [];
     const columnWidths: any[] = [];
@@ -114,27 +136,29 @@ export class GenerateMdTableComponent {
   }
 
   get allSelected(): boolean {
-    return this.data.every(row => row.every(cell => cell.selected));
+    return this.data.every((row) => row.every((cell) => cell.selected));
   }
 
   set allSelected(checked: boolean) {
-    this.data.forEach(row => row.forEach(cell => cell.selected = checked));
+    this.data.forEach((row) =>
+      row.forEach((cell) => (cell.selected = checked))
+    );
   }
 
   isColumnSelected(colIndex: number) {
-    return this.data.every(row => row[colIndex].selected);
+    return this.data.every((row) => row[colIndex].selected);
   }
 
   toggleColumnSelected(colIndex: number, event: CheckboxChangeEvent) {
-    this.data.forEach(row => row[colIndex].selected = !!event.checked);
+    this.data.forEach((row) => (row[colIndex].selected = !!event.checked));
   }
 
   isRowSelected(rowIndex: number) {
-    return this.data[rowIndex].every(cell => cell.selected);
+    return this.data[rowIndex].every((cell) => cell.selected);
   }
 
   toggleRowSelected(rowIndex: number, event: CheckboxChangeEvent) {
-    this.data[rowIndex].forEach(cell => cell.selected = !!event.checked);
+    this.data[rowIndex].forEach((cell) => (cell.selected = !!event.checked));
   }
 }
 

@@ -87,6 +87,7 @@
           <td
             [ngClass]="{ 'p-highlight': isColumnSelected(colIndex) }"
             pEditableColumn
+            [style.textAlign]="item[colIndex].alignment"
           >
             <p-cellEditor>
               <ng-template pTemplate="input">
@@ -116,6 +117,25 @@
     <app-copy-to-clipboard-button
       [content]="markdownTable"
     ></app-copy-to-clipboard-button>
+    <p-button
+      styleClass="p-button-primary"
+      label="Left Align"
+      (click)="alignSelectedCells('left')"
+    ></p-button>
+
+    <!-- Center Alignment Button -->
+    <p-button
+      styleClass="p-button-primary"
+      label="Center Align"
+      (click)="alignSelectedCells('center')"
+    ></p-button>
+
+    <!-- Right Alignment Button -->
+    <p-button
+      styleClass="p-button-primary"
+      label="Right Align"
+      (click)="alignSelectedCells('right')"
+    ></p-button>
   </div>
   <textarea
     pInputTextarea
