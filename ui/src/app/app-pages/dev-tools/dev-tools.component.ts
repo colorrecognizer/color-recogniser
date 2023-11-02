@@ -2,9 +2,8 @@ import { AfterViewInit, Component, OnDestroy } from "@angular/core";
 import { Meta, Title } from "@angular/platform-browser";
 import { TabViewChangeEvent } from "primeng/tabview";
 import { BackgroundChangeService } from "src/app/shared/services/background-change.service";
-import { environment } from "src/environments/environment";
 import { tabs } from "./tabs";
-import { ActivatedRoute, Route, Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 
 @Component({
