@@ -87,7 +87,7 @@ export class GenerateMdTableComponent {
     return this.data[0].length;
   }
 
-  alignSelectedCells(align: "left" | "center" | "right"): void {
+  alignSelectedCells(align: Alignment): void {
     const selectedCells = this.getSelectedCells();
 
     selectedCells.forEach((cell) => {
@@ -95,8 +95,8 @@ export class GenerateMdTableComponent {
     });
   }
 
-  getSelectedCells(): any[] {
-    const selectedCells: any[] = [];
+  getSelectedCells(): MyString[] {
+    const selectedCells: MyString[] = [];
 
     this.data.forEach((rowData) => {
       rowData.forEach((cell) => {
@@ -124,11 +124,53 @@ export class GenerateMdTableComponent {
       });
     });
 
-    this.data.forEach((rowData) => {
+    // temporary function (lambda function)
+    const getMaxLengthOfColumn = (colIndex: number) => {
+      // str?.length
+      // TH1: str = "abc" -> str.length = 3
+      // TH2: str = undefined -> str.length = undefined || 0 = 0
+      return Math.max(
+        ...this.data.map((row) => row[colIndex].str?.length || 0)
+      );
+    };
+
+    this.data.forEach((rowData, rowIndex) => {
       const row: string[] = [];
       rowData.forEach((cell, colIndex) => {
-        row.push(`| ${cell.str} `.padEnd(columnWidths[colIndex] + 3));
+        if (cell.alignment === "left") {
+          row.push(`| ${cell.str} `.padEnd(columnWidths[colIndex] + 3));
+        } else if (cell.alignment === "right") {
+          row.push("|" + `${cell.str} `.padStart(columnWidths[colIndex] + 2));
+        } else {
+          // TH1: maxLength even, currentLength even
+          // | 12345678 | (8 - 2) / 2 + 1
+          // |    12    |
+
+          // TH2: maxLength even, currentLength odd
+          // | 12345678 | (8 - 3) / 2 + 1
+          // |   123    | (8 - 3) / 2 + 2
+
+          // TH3: maxLength odd, currentLength even
+          // | 123456789 | (9 - 4) / 2 + 1
+          // |   1234    | (9 - 4) / 2 + 2
+
+          // TH4: maxLength odd, currentLength odd
+          // | 123456789 | (9 - 3) / 2 + 1
+          // |    123    | (9 - 3) / 2 + 1
+          const maxLength = getMaxLengthOfColumn(colIndex);
+          const curLength = cell.str.length;
+          if ((maxLength - curLength) % 2 === 0) {
+            const numSpaces = (maxLength - curLength) / 2 + 1;
+            const spaces = new Array(numSpaces + 1).join(" ");
+            row.push("|" + spaces + cell.str + spaces);
+          } else {
+            const numSpaces = Math.floor((maxLength - curLength) / 2) + 1;
+            const spaces = new Array(numSpaces + 1).join(" ");
+            row.push("|" + spaces + cell.str + spaces + " ");
+          }
+        }
       });
+
       markdownTable.push(row.join("") + "|");
     });
 
@@ -162,7 +204,10 @@ export class GenerateMdTableComponent {
   }
 }
 
+type Alignment = "left" | "center" | "right";
+
 class MyString {
   str = "";
   selected = false;
+  alignment: Alignment = "left";
 }
