@@ -28,7 +28,6 @@ import {
   DynamicDialogConfig,
   DynamicDialogRef,
 } from "primeng/dynamicdialog";
-import { AngularResizeEventModule } from "angular-resize-event";
 import { AngularFireAnalyticsModule } from "@angular/fire/compat/analytics";
 import { ScrollTopModule } from "primeng/scrolltop";
 import { FormlyFormModule } from "./shared/components/formly-form/formly-form.module";
@@ -90,7 +89,6 @@ import { CustomReuseStrategy } from "./shared/utils/custom-reuse-strategy";
     DialogService,
     DynamicDialogRef,
     DynamicDialogConfig,
-    AngularResizeEventModule,
     { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
   ],
   bootstrap: [AppComponent],

@@ -134,7 +134,7 @@ export class GenerateMdTableComponent {
       );
     };
 
-    this.data.forEach((rowData, rowIndex) => {
+    this.data.forEach((rowData) => {
       const row: string[] = [];
       rowData.forEach((cell, colIndex) => {
         if (cell.alignment === "left") {
