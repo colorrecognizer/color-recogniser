@@ -1,5 +1,7 @@
 version: 0.2
-
+env:
+  secrets-manager:
+    GOOGLE_APPLICATION_CREDENTIALS: arn:aws:secretsmanager:ap-southeast-2:141714874243:secret:prod/ColorRecognizer/GOOGLE_APPLICATION_CREDENTIALS-JokIDW
 phases:
   install:
     runtime-versions:
@@ -15,4 +17,4 @@ phases:
 
   post_build:
     commands:
-      - firebase deploy --project color-recogniser-b18e3
+      - firebase deploy --project color-recogniser-b18e3 --only hosting --token $GOOGLE_APPLICATION_CREDENTIALS
