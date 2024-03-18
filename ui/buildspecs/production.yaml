@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 12
+    commands:
+      - npm install -g firebase-tools
+
+  build:
+    commands:
+      - npm run build:production
+
+  deploy:
+    commands:
+      - firebase deploy
