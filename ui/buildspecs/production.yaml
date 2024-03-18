@@ -5,11 +5,12 @@ phases:
     runtime-versions:
       nodejs: 20
     commands:
+      - cd ui
+      - npm i
       - npm install -g firebase-tools
 
   build:
     commands:
-      - cd ui
       - npm run build:production
 
   post_build:
