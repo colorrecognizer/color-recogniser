@@ -47,3 +47,6 @@ Thumbs.db
 
 # VS Code
 .vscode
+
+# Environment files
+# src/environments/firebase.environment.ts

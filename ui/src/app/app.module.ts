@@ -19,7 +19,6 @@ import { AuthGuard } from "./shared/services/auth.guard";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { TokenInterceptor } from "./shared/services/token.interceptor";
 import { API_BASE_URL } from "./shared/auto-generated/apis";
-import { environment } from "src/environments/environment";
 import { ConfirmPopupModule } from "primeng/confirmpopup";
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { DialogModule } from "primeng/dialog";
@@ -34,6 +33,7 @@ import { FormlyFormModule } from "./shared/components/formly-form/formly-form.mo
 import { HowToMixModule } from "./shared/components/how-to-mix/how-to-mix.module";
 import { RouteReuseStrategy } from "@angular/router";
 import { CustomReuseStrategy } from "./shared/utils/custom-reuse-strategy";
+import { environment, firebaseConfig } from "src/environments";
 
 @NgModule({
   declarations: [AppComponent, PageNotFoundComponent],
@@ -43,7 +43,7 @@ import { CustomReuseStrategy } from "./shared/utils/custom-reuse-strategy";
     AppRoutingModule,
     RegularlyUsedPrimengModule,
     FormsModule,
-    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
     AngularFireAnalyticsModule,
     BackButtonModule,

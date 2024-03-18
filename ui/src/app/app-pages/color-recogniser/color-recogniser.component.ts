@@ -20,7 +20,7 @@ import {
 import { BehaviorSubject, map } from "rxjs";
 import { MessageService } from "primeng/api";
 import { HttpClient } from "@angular/common/http";
-import { environment } from "src/environments/environment";
+import { environment } from "src/environments";
 import { DialogService } from "primeng/dynamicdialog";
 import { FileUpload } from "primeng/fileupload";
 import { Meta, Title } from "@angular/platform-browser";
