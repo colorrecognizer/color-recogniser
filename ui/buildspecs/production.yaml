@@ -11,6 +11,6 @@ phases:
     commands:
       - npm run build:production
 
-  deploy:
+  post_build:
     commands:
       - firebase deploy
