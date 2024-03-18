@@ -15,4 +15,4 @@ phases:
 
   post_build:
     commands:
-      - firebase deploy
+      - firebase deploy --project color-recogniser-b18e3
