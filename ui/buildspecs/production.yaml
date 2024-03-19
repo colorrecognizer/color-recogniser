@@ -1,7 +1,7 @@
 version: 0.2
 env:
   secrets-manager:
-    GOOGLE_APPLICATION_CREDENTIALS_BASE64: arn:aws:secretsmanager:ap-southeast-2:141714874243:secret:prod/ColorRecognizer/GOOGLE_APPLICATION_CREDENTIALS-JokIDW
+    GOOGLE_APPLICATION_CREDENTIALS_BASE64: arn:aws:secretsmanager:ap-southeast-2:141714874243:secret:prod/ColorRecognizer/GOOGLE_APPLICATION_CREDENTIALS-JokIDW:GOOGLE_APPLICATION_CREDENTIALS
 phases:
   install:
     runtime-versions:
