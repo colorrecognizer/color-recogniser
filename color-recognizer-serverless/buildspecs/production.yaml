@@ -7,5 +7,4 @@ phases:
     commands:
       - cd color-recognizer-serverless
       - sam build
-      - aws cloudformation delete-stack --stack-name $StackName
       - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
