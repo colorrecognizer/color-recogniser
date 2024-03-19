@@ -7,7 +7,6 @@ phases:
     runtime-versions:
       nodejs: 20
     commands:
-      - echo $GOOGLE_APPLICATION_CREDENTIALS_BASE64
       - echo -n $GOOGLE_APPLICATION_CREDENTIALS_BASE64 | base64 -d > private-key.json
       - export GOOGLE_APPLICATION_CREDENTIALS="private-key.json"
       - cd ui
@@ -20,4 +19,4 @@ phases:
 
   post_build:
     commands:
-      - firebase deploy --project color-recogniser-b18e3 --only hosting --token $GOOGLE_APPLICATION_CREDENTIALS
+      - firebase deploy --project color-recogniser-b18e3 --only hosting
