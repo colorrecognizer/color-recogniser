@@ -23,7 +23,7 @@ Resources:
     Properties:
       CodeUri: recognize_color/
       Handler: app.lambda_handler
-      Runtime: python3.10
+      Runtime: python3.12
       Architectures:
         - x86_64
       Events:
