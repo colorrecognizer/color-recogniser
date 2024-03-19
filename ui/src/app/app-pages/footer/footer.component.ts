@@ -62,6 +62,10 @@ export class FooterComponent implements AfterViewInit {
     );
   }
 
+  get currentYear(): number {
+    return new Date().getFullYear();
+  }
+
   navigateToColorRecognizer() {
     this.$router.navigate([RouteEnum.HomePage]);
   }
