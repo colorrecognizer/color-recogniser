@@ -7,7 +7,7 @@ phases:
     runtime-versions:
       nodejs: 20
     commands:
-      - echo GOOGLE_APPLICATION_CREDENTIALS_BASE64
+      - echo $GOOGLE_APPLICATION_CREDENTIALS_BASE64
       - echo -n $GOOGLE_APPLICATION_CREDENTIALS_BASE64 | base64 -d > private-key.json
       - export GOOGLE_APPLICATION_CREDENTIALS="private-key.json"
       - cd ui
