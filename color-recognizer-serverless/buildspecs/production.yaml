@@ -8,4 +8,5 @@ phases:
       - cd color-recognizer-serverless
       - sam validate
       - sam build
+      - echo $StackName
       - sam deploy --no-confirm-changeset --stack-name $StackName
