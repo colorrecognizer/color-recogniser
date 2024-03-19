@@ -1,7 +1,7 @@
 version: 0.2
 env:
-  variables:
-    GOOGLE_APPLICATION_CREDENTIALS: "./ui/src/environments/firebase.json"
+  secrets-manager:
+    GOOGLE_APPLICATION_CREDENTIALS: arn:aws:secretsmanager:ap-southeast-2:141714874243:secret:prod/ColorRecognizer/GOOGLE_APPLICATION_CREDENTIALS-JokIDW
 phases:
   install:
     runtime-versions:
