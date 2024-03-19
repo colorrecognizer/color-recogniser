@@ -7,6 +7,8 @@ phases:
     runtime-versions:
       nodejs: 20
     commands:
+      - echo -n $GOOGLE_APPLICATION_CREDENTIALS | base64 -d > private-key.json
+      - export GOOGLE_APPLICATION_CREDENTIALS="private-key.json"
       - cd ui
       - npm i
       - npm install -g firebase-tools
