@@ -5,6 +5,7 @@ phases:
       nodejs: 20
     commands:
       - export GOOGLE_APPLICATION_CREDENTIALS="./src/environments/firebase.json"
+      - echo $GOOGLE_APPLICATION_CREDENTIALS
       - cd ui
       - npm i
       - npm install -g firebase-tools
