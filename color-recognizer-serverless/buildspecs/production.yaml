@@ -6,5 +6,6 @@ phases:
   build:
     commands:
       - cd color-recognizer-serverless
+      - sam validate
       - sam build
       - sam deploy --no-confirm-changeset
