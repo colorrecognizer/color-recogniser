@@ -17,4 +17,4 @@ phases:
 
   post_build:
     commands:
-      - firebase deploy --project color-recogniser-b18e3 --only hosting --token $GOOGLE_APPLICATION_CREDENTIALS
+      - firebase deploy --project color-recogniser-b18e3 --only hosting

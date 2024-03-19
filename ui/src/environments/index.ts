@@ -1,2 +1,4 @@
 export * from "./environment";
-export * from "./firebase.environment";
+
+import * as firebaseConfig from "./firebase.json";
+export { firebaseConfig };
