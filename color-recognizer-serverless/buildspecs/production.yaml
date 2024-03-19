@@ -9,4 +9,4 @@ phases:
       - sam validate
       - sam build
       - echo $StackName
-      - sam deploy --no-confirm-changeset --stack-name $StackName --config-file template.yaml
+      - sam deploy --no-confirm-changeset --stack-name $StackName
