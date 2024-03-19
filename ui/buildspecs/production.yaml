@@ -1,17 +1,11 @@
 version: 0.2
-env:
-  secrets-manager:
-    GOOGLE_APPLICATION_CREDENTIALS_BASE64: arn:aws:secretsmanager:ap-southeast-2:141714874243:secret:prod/ColorRecognizer/GOOGLE_APPLICATION_CREDENTIALS-JokIDW:GOOGLE_APPLICATION_CREDENTIALS
 phases:
   install:
     runtime-versions:
       nodejs: 20
     commands:
-      - echo -n $GOOGLE_APPLICATION_CREDENTIALS_BASE64 | base64 -d > private-key.json
-      - export GOOGLE_APPLICATION_CREDENTIALS="private-key.json"
       - cd ui
       - npm i
-      - npm install -g firebase-tools
 
   build:
     commands:
@@ -19,5 +13,4 @@ phases:
 
   post_build:
     commands:
-      - echo $GOOGLE_APPLICATION_CREDENTIALS
-      - firebase deploy --project color-recogniser-b18e3 --only hosting
+      - aws s3 sync ./dist/color-recogniser s3://www.https://colorrecognizer.io/ --acl 'public-read' --delete
