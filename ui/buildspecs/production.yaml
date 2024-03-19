@@ -9,6 +9,7 @@ phases:
 
   build:
     commands:
+      - aws s3 cp s3://color-recognizer-assets/firebase.json src/environments/
       - npm run build:production
 
   post_build:
