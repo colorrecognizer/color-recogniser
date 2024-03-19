@@ -1,13 +1,13 @@
 version: 0.2
 env:
   secrets-manager:
-    GOOGLE_APPLICATION_CREDENTIALS: arn:aws:secretsmanager:ap-southeast-2:141714874243:secret:prod/ColorRecognizer/GOOGLE_APPLICATION_CREDENTIALS-JokIDW
+    GOOGLE_APPLICATION_CREDENTIALS_BASE64: arn:aws:secretsmanager:ap-southeast-2:141714874243:secret:prod/ColorRecognizer/GOOGLE_APPLICATION_CREDENTIALS-JokIDW
 phases:
   install:
     runtime-versions:
       nodejs: 20
     commands:
-      - echo -n $GOOGLE_APPLICATION_CREDENTIALS | base64 -d > private-key.json
+      - echo -n $GOOGLE_APPLICATION_CREDENTIALS_BASE64 | base64 -d > private-key.json
       - export GOOGLE_APPLICATION_CREDENTIALS="private-key.json"
       - cd ui
       - npm i
