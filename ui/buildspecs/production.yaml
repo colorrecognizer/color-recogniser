@@ -13,4 +13,4 @@ phases:
 
   post_build:
     commands:
-      - aws s3 sync ./dist/color-recogniser s3://www.colorrecognizer.io/ --acl 'public-read' --delete
+      - aws s3 sync ./dist/color-recogniser s3://colorrecognizer.io/ --acl 'public-read' --delete
