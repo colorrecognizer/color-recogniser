@@ -1,12 +1,10 @@
 version: 0.2
-env:
-  secrets-manager:
-    GOOGLE_APPLICATION_CREDENTIALS: arn:aws:secretsmanager:ap-southeast-2:141714874243:secret:prod/ColorRecognizer/GOOGLE_APPLICATION_CREDENTIALS-JokIDW
 phases:
   install:
     runtime-versions:
       nodejs: 20
     commands:
+      - export GOOGLE_APPLICATION_CREDENTIALS="./src/environments/firebase.json"
       - cd ui
       - npm i
       - npm install -g firebase-tools
