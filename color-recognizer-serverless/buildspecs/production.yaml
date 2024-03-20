@@ -6,7 +6,5 @@ phases:
   build:
     commands:
       - cd color-recognizer-serverless
-      - sam validate
       - sam build
-      - echo $StackName
-      - sam deploy --no-confirm-changeset --stack-name $StackName
+      - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
