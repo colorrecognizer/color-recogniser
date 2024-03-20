@@ -3,10 +3,19 @@ phases:
   install:
     runtime-versions:
       python: 3.12
+    commands:
+      - echo 'setup AWS credentials..'
+      - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+      - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+      - aws configure set default_region $AWS_REGION
+      - aws configure set output json
+      - echo 'installing npm packages...'
   build:
     commands:
       - cd color-recognizer-serverless
       - sam validate
       - sam build
+  post_build:
+    commands:
       - echo $StackName
       - sudo sam deploy --no-confirm-changeset --stack-name $StackName
