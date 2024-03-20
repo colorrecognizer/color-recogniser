@@ -1,42 +1,59 @@
 import json
+import numpy as np
+from sklearn.cluster import KMeans
 
 # import requests
 
 
 def lambda_handler(event, context):
-    """Sample pure Lambda function
+    # Parse the JSON body from the event
+    try:
+        body = json.loads(event.get('body', ''))
+        if not body or not isinstance(body, list):
+            return {
+                'statusCode': 400,
+                'body': json.dumps({'error': 'Invalid input format. Expected an array of objects.'})
+            }
 
-    Parameters
-    ----------
-    event: dict, required
-        API Gateway Lambda Proxy Input Format
+        # Parse query string parameters for 'num-colors'
+        n_clusters = int(event['queryStringParameters'].get("num-colors", 2))
 
-        Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
+        # Process the input data
+        sample = np.array(
+            [[color["red"], color["green"], color["blue"]] for color in body])
+        kmeans = KMeans(n_clusters=n_clusters, random_state=0).fit(sample)
+        centroid = kmeans.cluster_centers_
+        labels = list(kmeans.labels_)
+        percent = []
+        for i in range(len(centroid)):
+            j = labels.count(i)
+            j /= len(labels)
+            c = [round(num, 0) for num in list(centroid[i])]
+            c.append(j)
+            percent.append(c)
 
-    context: object, required
-        Lambda Context runtime methods and attributes
+        merged_data = {}
 
-        Context doc: https://docs.aws.amazon.com/lambda/latest/dg/python-context-object.html
+        for item in percent:
+            key = tuple(item[:3])
+            value = item[-1]
+            if key in merged_data:
+                merged_data[key] += value
+            else:
+                merged_data[key] = value
 
-    Returns
-    ------
-    API Gateway Lambda Proxy Output Format: dict
+        result = [[*key, value] for key, value in merged_data.items()]
 
-        Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
-    """
-
-    # try:
-    #     ip = requests.get("http://checkip.amazonaws.com/")
-    # except requests.RequestException as e:
-    #     # Send some context about this error to Lambda Logs
-    #     print(e)
-
-    #     raise e
-
-    return {
-        "statusCode": 200,
-        "body": json.dumps({
-            "message": "hello world",
-            # "location": ip.text.replace("\n", "")
-        }),
-    }
+        # Return the processed data as the response
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json'
+            },
+            'body': json.dumps(result)
+        }
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': str(e)})
+        }
