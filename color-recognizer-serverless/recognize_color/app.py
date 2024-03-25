@@ -31,7 +31,7 @@ def lambda_handler(event, context):
     image = Image.open(io.BytesIO(image_bytes))
     print(image.size)
 
-    STEPS = 300
+    STEPS = 30
     minX = recogniser_request['minX']
     maxX = recogniser_request['maxX']
     minY = recogniser_request['minY']
