@@ -222,7 +222,7 @@ export class ColorRecognizerComponent
       this.selection.visible(true);
       this.$http
         .post<RecogniserResponse>(
-          `${environment.apiUrl}/api/recognise`,
+          `${environment.serverlessUrl}/recognize-color`,
           formData,
           {
             responseType: "json",
@@ -241,6 +241,15 @@ export class ColorRecognizerComponent
 
               return;
             }
+
+            this.colorCoverages = this.colorCoverages.map((x) => {
+              x.coveragePercentage = Math.round(x.coveragePercentage! * 100);
+              return x;
+            });
+
+            this.colorCoverages = this.colorCoverages.filter(
+              (x) => x.coveragePercentage
+            );
 
             this.chartData = {
               labels: this.colorCoverages.map(
@@ -968,34 +977,30 @@ export class ColorRecognizerComponent
       uploadedCanvas.height
     );
 
-    uploadedCanvas.toBlob((blob: any) => {
-      if (!this.selectedSelectionTool) return;
+    const base64 = uploadedCanvas.toDataURL();
+    if (!this.selectedSelectionTool) return;
 
-      const formData: FormData = new FormData();
-      formData.append("image", blob);
-      formData.append(
-        "recogniserRequest",
-        JSON.stringify({
-          selectionType: this.selectedSelectionTool.type,
-          minX: 0,
-          maxX: uploadedCanvas.width,
-          minY: 0,
-          maxY: uploadedCanvas.height,
-          points:
-            this.selectedSelectionTool.type === "FREE"
-              ? coordinates.map((c) => {
-                  return {
-                    x: (c.x - minx) / scale,
-                    y: (c.y - miny) / scale,
-                  };
-                })
-              : [],
-          numColors: this.numColors,
-        })
-      );
+    const formData: any = {};
+    formData.image = base64;
+    formData.recogniserRequest = {
+      selectionType: this.selectedSelectionTool.type,
+      minX: 0,
+      maxX: uploadedCanvas.width,
+      minY: 0,
+      maxY: uploadedCanvas.height,
+      points:
+        this.selectedSelectionTool.type === "FREE"
+          ? coordinates.map((c) => {
+              return {
+                x: (c.x - minx) / scale,
+                y: (c.y - miny) / scale,
+              };
+            })
+          : [],
+      numColors: this.numColors,
+    };
 
-      this.formDataSubject.next(formData);
-    });
+    this.formDataSubject.next(formData);
   }
 
   showHowToMix(color: any) {

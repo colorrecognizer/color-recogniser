@@ -8,7 +8,7 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 3
+    Timeout: 30
     MemorySize: 128
 
     Tracing: Active
@@ -17,6 +17,11 @@ Globals:
       LogFormat: JSON
   Api:
     TracingEnabled: true
+    Cors:
+      AllowMethods: "'POST, GET, OPTIONS, PUT, DELETE'"
+      AllowHeaders: "'*'"
+      AllowOrigin: "'*'"
+      AllowCredentials: true
 Resources:
   RecognizeColorFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction

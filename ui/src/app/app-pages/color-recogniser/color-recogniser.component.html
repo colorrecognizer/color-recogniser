@@ -170,7 +170,7 @@
       <app-recognise-button
         *ngIf="isValidSelection"
         (clicked)="recognise()"
-        [disabled]="recogniseButtonDisabled"
+        [disabled]="false && recogniseButtonDisabled"
       ></app-recognise-button>
     </div>
 

@@ -19,11 +19,13 @@ export class HttpErrorHandlerService implements ErrorHandler {
       try {
         const response = JSON.parse(error.response);
         error.message = response.reason;
-      // eslint-disable-next-line no-empty
+        // eslint-disable-next-line no-empty
       } catch {}
     }
 
-    const errorMessage = error.message || "Undefined error!";
+    const errorMessage =
+      error?.error?.message ?? error?.message ?? "Undefined error!";
+
     console.error(errorMessage); // Only show messages on console
 
     // Don't show messages for some specific errors
