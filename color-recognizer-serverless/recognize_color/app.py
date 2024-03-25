@@ -29,7 +29,6 @@ def lambda_handler(event, context):
     image_bytes = base64.b64decode(image)
 
     image = Image.open(io.BytesIO(image_bytes))
-    print(image.size)
 
     STEPS = 30
     minX = recogniser_request['minX']

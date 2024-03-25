@@ -57,7 +57,9 @@ def check_inside(poly, p):
   i = 0
   while True:
     # Forming a line from two consecutive points of poly
-    side = Line(poly[i], poly[(i + 1) % n])
+    side = Line(Point(poly[i]['x'], poly[i]['y']), Point(
+      poly[(i + 1) % n]['x'], poly[(i + 1) % n]['y']))
+
     if is_intersect(side, exline):  # If side intersects exline
       if direction(side.p1, p, side.p2) == 0:
         return on_line(side, p)
