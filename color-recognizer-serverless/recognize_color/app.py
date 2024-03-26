@@ -4,8 +4,10 @@ import numpy as np
 from sklearn.cluster import KMeans
 from colors import colors
 from PIL import Image
-from geometry import check_inside, Point
+from geometry import check_inside
 import io
+from shapely.geometry import Point
+from shapely.geometry.polygon import Polygon
 
 
 def lambda_handler(event, context):
@@ -30,13 +32,16 @@ def lambda_handler(event, context):
 
     image = Image.open(io.BytesIO(image_bytes))
 
-    STEPS = 30
+    STEPS = 100
     minX = recogniser_request['minX']
     maxX = recogniser_request['maxX']
     minY = recogniser_request['minY']
     maxY = recogniser_request['maxY']
     selection_type = recogniser_request['selectionType']
     points = recogniser_request["points"]
+
+    polygon = Polygon(map(lambda p: Point(p['x'], p['y']), points)
+                      ) if selection_type == 'FREE' else None
 
     clrs = []
 
@@ -52,7 +57,8 @@ def lambda_handler(event, context):
           is_inside = ((px - centerX) ** 2) / (mX ** 2) + \
               ((py - centerY) ** 2) / (mY ** 2) <= 1
         elif selection_type == 'FREE':
-          is_inside = check_inside(points, Point(px, py))
+          point = Point(px, py)
+          is_inside = polygon.contains(point)
 
         if is_inside:
           try:
