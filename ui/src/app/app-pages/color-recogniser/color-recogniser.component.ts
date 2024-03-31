@@ -76,6 +76,8 @@ export class ColorRecognizerComponent
 
   panZoomLastCenter: any = null;
   panZoomLastDist = 0;
+  moveImageTipText =
+    "You can zoom in/out the image by holding down \"ctrl\"/\"⌘\" while scrolling, or using two fingers on a touch device.";
 
   // Intro
   intro: any;
@@ -112,6 +114,7 @@ export class ColorRecognizerComponent
   selectedSelectionTool?: SelectionTool;
   canModifyImage = true;
   selection: any;
+  selection2: any;
   freeDrawingGroup: any;
   canvas: any;
   averageColor?: {
@@ -149,8 +152,7 @@ export class ColorRecognizerComponent
       this.$message.add({
         severity: "info",
         summary: "Tip",
-        detail:
-          "You can zoom in/out the image by holding down \"ctrl\"/\"⌘\" while scrolling, or using two fingers on a touch device.",
+        detail: this.moveImageTipText,
         life: 60000,
       });
       this.zoomTipShown = true;
@@ -220,6 +222,8 @@ export class ColorRecognizerComponent
       if (!formData) return;
 
       this.selection.visible(true);
+      this.selection2.visible(true);
+
       this.$http
         .post<RecogniserResponse>(
           `${environment.serverlessUrl}/recognize-color`,
@@ -387,10 +391,10 @@ export class ColorRecognizerComponent
         this.$message.add({
           severity: "info",
           summary: "Tip",
-          detail:
-            "You can move the image by holding down \"ctrl\"/\"⌘\" while dragging it, or using two fingers on a touch device.",
+          detail: this.moveImageTipText,
           life: 60000,
         });
+
         this.moveTipShown = true;
       }
     });
@@ -706,7 +710,73 @@ export class ColorRecognizerComponent
     this.konvaImage.scale({ x: 1, y: 1 });
   }
 
-  onSelectionToolChanged() {
+  /**
+   * Destroys the selections and clears the references.
+   */
+  private destroySelections(): void {
+    this.selection?.destroy();
+    this.selection = undefined;
+    this.selection2?.destroy();
+    this.selection2 = undefined;
+  }
+
+  private setSelections() {
+    if (!this.selectedSelectionTool) return;
+
+    switch (this.selectedSelectionTool.type) {
+      case "RECTANGLE":
+        this.selection = new Konva.Rect();
+        this.selection2 = new Konva.Rect();
+        break;
+      case "ELLIPSE":
+        this.selection = new Konva.Ellipse();
+        this.selection2 = new Konva.Ellipse();
+        break;
+      case "FREE":
+        this.selection = new Konva.Line({
+          points: [],
+          closed: true,
+          // round cap for smoother lines
+          lineCap: "round",
+          lineJoin: "round",
+        });
+
+        this.selection2 = new Konva.Line({
+          points: [],
+          closed: true,
+          // round cap for smoother lines
+          lineCap: "round",
+          lineJoin: "round",
+        });
+
+        break;
+    }
+
+    this.selection2.stroke("#000");
+    this.selection2.strokeWidth(BORDER_WIDTH);
+    this.selection2.opacity(0.5);
+    this.selection2.visible(false);
+    this.layer.add(this.selection2);
+
+    this.selection.stroke("#fff");
+    this.selection.dash([10, 10]);
+    this.selection.strokeWidth(BORDER_WIDTH);
+    this.selection2.opacity(0.5);
+    this.selection.visible(false);
+    this.layer.add(this.selection);
+  }
+
+  /**
+   * Handles the change event of the selection tool.
+   * If the current step of the intro is 1, adds a new intro item for step 3.
+   * Disables dragging on the Konva image and removes event listeners for mouse and touch events.
+   * Destroys any existing selections.
+   * If no selection tool is selected, enables image modification and sets the stage zoom.
+   * If a selection tool is selected, disables image modification and creates new selections.
+   * Handles mouse and touch events to create and update selections.
+   * If the current step of the intro is 2, adds a new intro item for step 4.
+   */
+  onSelectionToolChanged(): void {
     if (this.intro._currentStep === 1) {
       this.intro._introItems.push({
         title: "Step 3",
@@ -721,8 +791,7 @@ export class ColorRecognizerComponent
     this.konvaImage.draggable(false);
     this.stage.off("mousedown touchstart mousemove touchmove mouseup touchend");
 
-    this.selection?.destroy();
-    this.selection = undefined;
+    this.destroySelections();
 
     if (!this.selectedSelectionTool) {
       this.canModifyImage = true;
@@ -734,29 +803,7 @@ export class ColorRecognizerComponent
 
     this.canModifyImage = false;
 
-    switch (this.selectedSelectionTool.type) {
-      case "RECTANGLE":
-        this.selection = new Konva.Rect();
-        break;
-      case "ELLIPSE":
-        this.selection = new Konva.Ellipse();
-        break;
-      case "FREE":
-        this.selection = new Konva.Line({
-          points: [],
-          closed: true,
-          // round cap for smoother lines
-          lineCap: "round",
-          lineJoin: "round",
-        });
-
-        break;
-    }
-
-    this.selection.stroke("rgb(0,0,255)");
-    this.selection.strokeWidth(BORDER_WIDTH);
-    this.selection.visible(false);
-    this.layer.add(this.selection);
+    this.setSelections();
 
     let x1: number, y1: number, x2: number, y2: number;
     let isSelecting = false;
@@ -778,12 +825,17 @@ export class ColorRecognizerComponent
         y2 = this.stage.getPointerPosition().y;
 
         this.selection.visible(true);
+        this.selection2.visible(true);
 
         if (this.selectedSelectionTool.type === "FREE") {
           this.selection.points([x1, y1]);
+          this.selection2.points([x1, y1]);
         } else {
           this.selection.width(0);
+          this.selection2.width(0);
+
           this.selection.height(0);
+          this.selection2.height(0);
         }
       }
     );
@@ -806,6 +858,7 @@ export class ColorRecognizerComponent
 
         if (this.selectedSelectionTool.type === "FREE") {
           this.selection.points(this.selection.points().concat([x2, y2]));
+          this.selection2.points(this.selection2.points().concat([x2, y2]));
         } else {
           let x = 0,
             y = 0;
@@ -821,6 +874,13 @@ export class ColorRecognizerComponent
           }
 
           this.selection.setAttrs({
+            x: x,
+            y: y,
+            width: Math.abs(x2 - x1),
+            height: Math.abs(y2 - y1),
+          });
+
+          this.selection2.setAttrs({
             x: x,
             y: y,
             width: Math.abs(x2 - x1),
@@ -950,6 +1010,7 @@ export class ColorRecognizerComponent
     }
 
     this.selection.visible(false);
+    this.selection2.visible(false);
     this.layer.draw();
 
     //create a new canvas

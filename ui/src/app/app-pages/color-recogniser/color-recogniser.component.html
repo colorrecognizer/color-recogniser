@@ -67,6 +67,10 @@
       ></div>
     </div>
 
+    <small *ngIf="imageObj && canModifyImage">
+      {{ this.moveImageTipText }}</small
+    >
+
     <ng-container *ngIf="imageObj">
       <div class="flex flex-wrap align-items-center gap-3 sticky bottom-0">
         <p-button
@@ -94,7 +98,7 @@
           [min]="50"
         ></p-inputNumber>
 
-        <div #introStep2>
+        <div class="flex flex-wrap align-items-center gap-3" #introStep2>
           <p-dropdown
             [options]="selectionTools"
             [(ngModel)]="selectedSelectionTool"
@@ -146,6 +150,16 @@
               </div>
             </ng-template>
           </p-dropdown>
+
+          <button
+            *ngIf="selectedSelectionTool"
+            pButton
+            type="button"
+            icon="pi pi-times"
+            class="p-button-danger"
+            (click)="selectionTool.clear($event)"
+            label="Remove selection"
+          ></button>
         </div>
       </div>
       <div class="flex justify-content-center align-items-center gap-3">
