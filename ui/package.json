@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o",
-    "build:production": "ng build --configuration production --aot=false --output-hashing=media --sourceMap=true --extract-css=false --buildOptimizer=false",
+    "build:production": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint --fix",
