@@ -89,10 +89,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "color-recogniser:build:production"
+              "browserTarget": "color-recogniser:build:production"
             },
             "development": {
-              "buildTarget": "color-recogniser:build:development"
+              "browserTarget": "color-recogniser:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -100,7 +100,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "color-recogniser:build"
+            "browserTarget": "color-recogniser:build"
           }
         },
         "test": {
