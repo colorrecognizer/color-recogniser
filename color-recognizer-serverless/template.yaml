@@ -52,6 +52,21 @@ Resources:
             Path: /generate-tfn
             Method: post
 
+  DiffFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: diff/
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      Architectures:
+        - x86_64
+      Events:
+        GenerateTfn:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /diff
+            Method: post
+
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
     Properties:
@@ -87,3 +102,12 @@ Outputs:
   GenerateTfnFunctionIamRole:
     Description: Implicit IAM Role created for GenerateTfn function
     Value: !GetAtt GenerateTfnFunctionRole.Arn
+  DiffApi:
+    Description: API Gateway endpoint URL for Prod stage for Diff function
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/diff/"
+  DiffFunction:
+    Description: Diff Lambda Function ARN
+    Value: !GetAtt DiffFunction.Arn
+  DiffFunctionIamRole:
+    Description: Implicit IAM Role created for Diff function
+    Value: !GetAtt DiffFunctionRole.Arn
