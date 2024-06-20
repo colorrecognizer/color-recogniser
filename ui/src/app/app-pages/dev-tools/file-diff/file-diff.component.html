@@ -31,19 +31,19 @@
   <div id="diff">
     <ng-container *ngFor="let diff of diffs">
       <span
-        *ngIf="diff.operation === 'EQUAL'"
+        *ngIf="diff.operation === 0"
         [ngClass]="getClass(diff)"
         [innerText]="diff.text"
       >
       </span>
       <del
-        *ngIf="diff.operation === 'DELETE'"
+        *ngIf="diff.operation === -1"
         [ngClass]="getClass(diff)"
         [innerText]="diff.text"
       >
       </del>
       <ins
-        *ngIf="diff.operation === 'INSERT'"
+        *ngIf="diff.operation === 1"
         [ngClass]="getClass(diff)"
         [innerText]="diff.text"
       >
