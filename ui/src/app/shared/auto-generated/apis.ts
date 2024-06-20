@@ -1183,7 +1183,7 @@ export class ApiApi {
     }
 
     /**
-     * @param body (optional) 
+     * @param body (optional)
      * @return OK
      */
     recognise(recogniserRequest: string, body: Body | undefined): Observable<RecogniserResponse> {
@@ -1479,7 +1479,7 @@ export class ApiApi {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
                 result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
+
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -2870,7 +2870,7 @@ export type FilterRequestFieldType = "BOOLEAN" | "STRING";
 
 export type SortRequestDirection = "ASC" | "DESC";
 
-export type DiffOperation = "DELETE" | "INSERT" | "EQUAL";
+export type DiffOperation = -1 | 1 | 0;
 
 export interface FileParameter {
     data: any;

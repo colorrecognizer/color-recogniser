@@ -1,7 +1,9 @@
+import { HttpClient } from "@angular/common/http";
 import { Component } from "@angular/core";
 import { finalize, map } from "rxjs";
 import { ApiApi, Diff } from "src/app/shared/auto-generated/apis";
 import { BackgroundChangeService } from "src/app/shared/services/background-change.service";
+import { environment } from "src/environments";
 
 @Component({
   selector: "app-file-diff",
@@ -15,14 +17,17 @@ export class FileDiffComponent {
   diffs: Diff[] = [];
 
   constructor(
-    private $api: ApiApi,
-    private $backgroundChange: BackgroundChangeService
+    private $backgroundChange: BackgroundChangeService,
+    private $http: HttpClient
   ) {}
 
   diff() {
     this.diffButtonDisabled = true;
-    this.$api
-      .diff([this.file1, this.file2])
+    this.$http
+      .post<Diff[]>(`${environment.serverlessUrl}/diff`, [
+        this.file1,
+        this.file2,
+      ])
       .pipe(
         map((items) => {
           this.diffs = items;
@@ -37,11 +42,11 @@ export class FileDiffComponent {
 
   getClass(diff: Diff) {
     switch (diff.operation) {
-      case "DELETE":
+      case -1:
         return "bg-red-200";
-      case "EQUAL":
+      case 0:
         break;
-      case "INSERT":
+      case 1:
         return "bg-green-200";
     }
 
