@@ -37,6 +37,21 @@ Resources:
             Path: /recognize-color
             Method: post
 
+  GenerateTfnFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: generate_tfn/
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      Architectures:
+        - x86_64
+      Events:
+        GenerateTfn:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /generate-tfn
+            Method: post
+
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
     Properties:
@@ -63,3 +78,12 @@ Outputs:
   RecognizeColorFunctionIamRole:
     Description: Implicit IAM Role created for RecognizeColor function
     Value: !GetAtt RecognizeColorFunctionRole.Arn
+  GenerateTfnApi:
+    Description: API Gateway endpoint URL for Prod stage for GenerateTfn function
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/generate-tfn/"
+  GenerateTfnFunction:
+    Description: GenerateTfn Lambda Function ARN
+    Value: !GetAtt GenerateTfnFunction.Arn
+  GenerateTfnFunctionIamRole:
+    Description: Implicit IAM Role created for GenerateTfn function
+    Value: !GetAtt GenerateTfnFunctionRole.Arn

@@ -1,8 +1,10 @@
+import { HttpClient } from "@angular/common/http";
 import { Component } from "@angular/core";
 import { MessageService } from "primeng/api";
 import { finalize } from "rxjs";
 import { ApiApi } from "src/app/shared/auto-generated/apis";
 import { BackgroundChangeService } from "src/app/shared/services/background-change.service";
+import { environment } from "src/environments";
 
 @Component({
   selector: "app-tfn-generator",
@@ -17,9 +19,9 @@ export class TfnGeneratorComponent {
 
   // Methods
   constructor(
-    private $api: ApiApi,
     private $message: MessageService,
-    private $backgroundChange: BackgroundChangeService
+    private $backgroundChange: BackgroundChangeService,
+    private $http: HttpClient
   ) {
     // $title.setTitle("TFN Generator");
   }
@@ -37,8 +39,16 @@ export class TfnGeneratorComponent {
 
   generate() {
     this.generateButtonDisabled = true;
-    this.$api
-      .generateTfn(this.startedWithZero, this.selectedDigits)
+    this.$http
+      .post<string[]>(
+        `${environment.serverlessUrl}/generate-tfn`,
+        this.selectedDigits,
+        {
+          params: {
+            startedWithZero: this.startedWithZero,
+          },
+        }
+      )
       .pipe(
         finalize(() => {
           this.generateButtonDisabled = false;
