@@ -1,7 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Component } from "@angular/core";
 import { finalize, map } from "rxjs";
-import { Diff } from "src/app/shared/auto-generated/apis";
 import { BackgroundChangeService } from "src/app/shared/services/background-change.service";
 import { environment } from "src/environments";
 
@@ -14,7 +13,7 @@ export class FileDiffComponent {
   diffButtonDisabled = false;
   file1 = "";
   file2 = "";
-  diffs: Diff[] = [];
+  diffs: any[] = [];
 
   constructor(
     private $backgroundChange: BackgroundChangeService,
@@ -24,7 +23,7 @@ export class FileDiffComponent {
   diff() {
     this.diffButtonDisabled = true;
     this.$http
-      .post<Diff[]>(`${environment.serverlessUrl}/diff`, [
+      .post<any[]>(`${environment.serverlessUrl}/diff`, [
         this.file1,
         this.file2,
       ])
@@ -40,8 +39,8 @@ export class FileDiffComponent {
       .subscribe();
   }
 
-  getClass(diff: Diff) {
-    switch (diff.operation) {
+  getClass(diff: any) {
+    switch (diff[0]) {
       case -1:
         return "bg-red-200";
       case 0:
