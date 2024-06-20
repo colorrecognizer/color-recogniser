@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Component } from "@angular/core";
 import { finalize, map } from "rxjs";
-import { ApiApi, Diff } from "src/app/shared/auto-generated/apis";
+import { Diff } from "src/app/shared/auto-generated/apis";
 import { BackgroundChangeService } from "src/app/shared/services/background-change.service";
 import { environment } from "src/environments";
 
