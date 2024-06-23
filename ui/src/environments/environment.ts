@@ -1,7 +1,8 @@
 export const environment = {
   production: false,
   apiUrl: "https://www.colorrecogniser.com",
-  serverlessUrl: "http://localhost:3000",
+  serverlessUrl:
+    "https://xbgc7a3a0k.execute-api.ap-southeast-2.amazonaws.com/Prod",
   firebase: {
     apiKey: "AIzaSyCUuPeiEBlTpFtOmx4pYQ5WXJhZvdq4I5M",
     authDomain: "color-recogniser-b18e3.firebaseapp.com",
